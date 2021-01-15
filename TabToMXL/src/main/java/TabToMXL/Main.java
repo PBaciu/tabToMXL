@@ -7,6 +7,9 @@ public class Main {
 		System.out.println("Testing my branch");
 		for (int i = 0; i < 10; i++) {			
 			System.out.println("git is fun");
+    }
+		for (int j = 0; j < 10; j++) {
+			System.out.println("Creating a conflict");
 		}
 	}
 }
