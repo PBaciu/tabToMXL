@@ -3,3 +3,11 @@
 
 # Ignore Gradle build output directory
 build
+
+#Ingore IDE specific content (Eclipse and IntelliJ)
+.idea
+.settings
+bin
+.classpath
+.gitattributes
+.project
