@@ -16,15 +16,15 @@ import java.util.Scanner;
  */
 public class Parser {
 
-    private final Path path;
+    private final String path;
 
-    public Parser(Path path) {
+    public Parser(String path) {
         this.path = path;
     }
 
     public List<String> read_tab() {
         List<String> res = new ArrayList<>();
-        try (Scanner scanner = new Scanner(new File(String.valueOf(this.path)))){
+        try (Scanner scanner = new Scanner(new File(this.path))){
             while(scanner.hasNext()) {
                 res.add(scanner.nextLine());
             }
