@@ -22,7 +22,7 @@ public class Parser {
         this.path = path;
     }
 
-    public List<String> read_tab() {
+    public List<String> readTab() {
         List<String> res = new ArrayList<>();
         try (Scanner scanner = new Scanner(new File(this.path))){
             while(scanner.hasNext()) {
