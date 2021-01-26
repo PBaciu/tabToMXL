@@ -7,10 +7,7 @@ import java.util.List;
 
 public class Main {
 	public static void main(String[] args) {
-		Parser p = new Parser("src/main/java/TabToMXL/Let_Her_Go_Tab.txt");
-		List<String> result = p.readTab();
-		for (String line : result) {
-			System.out.println(line);
-		}
+		Parser p = new Parser("src/main/java/TabToMXL/Capricho_Arabe_Tab.txt");
+		p.readTab();
 	}
 }
