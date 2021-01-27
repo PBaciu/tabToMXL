@@ -1,13 +1,13 @@
 package TabToMXL;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+
 public class Main {
 	public static void main(String[] args) {
- 		System.out.println("HELOOOOOO!!!");
- 		System.out.println("new change");
- 		System.out.println("new change");
-		System.out.println("This is the change that was made for our lab session on Jan 20, 2021");
-		System.out.print("one line");
-		System.out.println("Next line");
-		System.out.println("Patrick's new line");
+		Parser p = new Parser("src/main/java/TabToMXL/Capricho_Arabe_Tab.txt");
+		p.readTab();
 	}
 }
