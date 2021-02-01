@@ -1,0 +1,32 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.root{
+	-fx-spacing: 30;
+	-fx-background-color: #5f1ac4;
+	-fx-text-background-color: #8fae92;
+	-fx-padding: 10;
+    -fx-border-style: solid inside;
+    -fx-border-width: 2;
+	-fx-border-insets: 5;
+	-fx-border-radius: 5;
+	-fx-border-color: white;
+}
+
+.my_customLabel{
+	-fx-font-size: 25px;
+	-fx-font-weight: bold;
+}
+
+.button{
+	-fx-font-family: "Arial";
+	-fx-font-size: 15px;
+	-fx-font-weight: bold;
+	-fx-background-color: linear-gradient(#8fae92,#93c0dc);
+	-fx-text-fill: #383640;
+	
+}
+
+.button:hover {
+	-fx-background-color: linear-gradient(#2a5058,#93c0dc);
+ 	-fx-text-fill: #ffffff;
+}

@@ -7,6 +7,7 @@ import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -16,12 +17,14 @@ import javafx.scene.text.Text;
 
 
 public class Main extends Application {
+	    Label lb;
+	    Button btn;
 	public static void main(String[] args){
 	    launch(args);
 	}
 
 	@Override
-	public void start(Stage primaryStage){
+	public void start(Stage primaryStage) throws Exception{
 
 	    Text droppedFile = new Text("File:");
 
