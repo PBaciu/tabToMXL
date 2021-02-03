@@ -8,4 +8,11 @@ public class TabLine {
     public TabLine(List<Bar> bars) {
         this.bars = bars;
     }
+
+    @Override
+    public String toString() {
+        return "TabLine{" +
+                "bars=" + bars +
+                '}';
+    }
 }
