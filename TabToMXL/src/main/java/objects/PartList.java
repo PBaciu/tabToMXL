@@ -17,35 +17,27 @@ public class PartList extends scoreInstrument{
 }
 
 class scoreInstrument {
-	private ArrayList<String> instrumentName;
-	private ArrayList<String> instrumentID;
+	private String instrumentName;
+	private String instrumentID;
 	
 	public scoreInstrument() {
-		instrumentName = new ArrayList<String>();
-		instrumentID = new ArrayList<String>();
+		instrumentName = new String();
+		instrumentID = new String();
 	}
 	
-	public ArrayList<String> getinstrumentName() {
+	public String getinstrumentName() {
 		return instrumentName;
 	}
 	
-	public ArrayList<String> getinstrumentID() {
+	public String getinstrumentID() {
 		return instrumentID;
 	}
 	
-	public void setinstrumentName(ArrayList<String> instrumentName) {
+	public void setinstrumentName(String instrumentName) {
 		this.instrumentName = instrumentName;
 	}
 	
-	public void setinstrumentID(ArrayList<String> instrumentID) {
+	public void setinstrumentID(String instrumentID) {
 		this.instrumentID = instrumentID;
-	}
-	
-	public void addinstrumentName(String instrumentName) {
-		this.instrumentName.add(instrumentName);
-	}
-	
-	public void addinstrumentID(String instrumentID) {
-		this.instrumentID.add(instrumentID);
 	}
 }

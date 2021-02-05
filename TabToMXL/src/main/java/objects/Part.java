@@ -128,7 +128,35 @@ class staffTuningLines extends staffDetails {
 }
 
 class Note {
+	private int duration;
+	private int voice;
+	private String type;
+	
+	private String stem;
+	private String notehead;
+	private int beamNumber;
+	private String beam;  //whether it begins, continue or end
+}
 
+class Unpitch {			//wait a minute why did I put a pitch and unpitch class again?
+	private String displayStep;
+	private int displayOctave;
+	
+	public String getDisplayStep() {
+		return displayStep;
+	}
+	
+	public void setDisplayStep(String displayStep) {
+		this.displayStep = displayStep;
+	}
+	
+	public int getDisplayOctave() {
+		return displayOctave;
+	}
+	
+	public void setDisplayOctave(int displayOctave) {
+		this.displayOctave = displayOctave;
+	}
 }
 
 class Pitch {
