@@ -13,8 +13,6 @@ public class PartList extends scoreInstrument{
 	
 	public void setPartName(String instrument) {
 		partName = instrument;
-		PartList obj = new PartList();
-		obj.
 	}
 }
 
