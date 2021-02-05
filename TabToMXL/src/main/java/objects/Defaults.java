@@ -12,4 +12,12 @@ public class Defaults {
 	private double rightMargin = 85.7252;
 	private double topMargin = 85.7252;
 	private double bottomMargin = 85.7252;
+	
+	private String fontFamily = "Edwin";
+	private int fontSize = 10;
+	
+	/*
+	 * Do I really need this class? 
+	 * We can just write the default directly into the file and just keep the page layout as portrait
+	 */
 }
