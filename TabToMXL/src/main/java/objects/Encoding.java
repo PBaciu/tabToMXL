@@ -10,13 +10,24 @@ public class Encoding {
 	private String type;
 	private String value;
 	
-;
-	
 	public String getToday() {
 		return today.toString();  
 	}
-	
 	public String getSoftware() {
 		return software;
 	}
+	
+	public String getattribute() {
+		return attribute;  
+	}
+	public String getelement() {
+		return element;
+	}
+	public String gettype() {
+		return type;  
+	}
+	public String getvalue() {
+		return value;
+	}
+	
 }

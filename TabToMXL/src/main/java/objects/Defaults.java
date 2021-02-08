@@ -20,4 +20,40 @@ public class Defaults {
 	 * Do I really need this class? 
 	 * We can just write the default directly into the file and just keep the page layout as portrait
 	 */
+	
+	public double getmillimeters() {
+		return millimeters;
+	}
+	public int gettenths() {
+		return tenths;
+	}
+	public double getpageHeight() {
+		return pageHeight;
+	}
+	public double getpageWidth() {
+		return pageWidth;
+	}
+	public String[] getpageMargin() {
+		return pageMargin;
+	}
+	
+	public double getleftMargin() {
+		return leftMargin;
+	}
+	public double getrightMargin() {
+		return rightMargin;
+	}
+	public double gettopMargin() {
+		return topMargin;
+	}
+	public double getbottomMargin() {
+		return bottomMargin;
+	}
+	
+	public String getfontFamily() {
+		return fontFamily;
+	}
+	public int getfontSize() {
+		return fontSize;
+	}
 }

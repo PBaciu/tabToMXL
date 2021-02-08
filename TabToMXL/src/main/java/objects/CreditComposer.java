@@ -7,4 +7,16 @@ public class CreditComposer {
 	private String justify = "right";
 	private String valign = "top";
 	
+	public double getdefaultX() {
+		return defaultX;
+	}
+	public double getdefaultY() {
+		return defaultY;
+	}
+	public String getjustify() {
+		return justify;
+	}
+	public String getvalign() {
+		return valign;
+	}
 }

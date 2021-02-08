@@ -1,12 +1,12 @@
 package objects;
 
-public class Part{
+public class Part_guitar{
 	
 	private String partID = "P1";
 	
 }
 
-class Measure extends Part {
+class Measure extends Part_guitar {
 	private int measureNumber;
 	
 	public int getmeasureNumber() {

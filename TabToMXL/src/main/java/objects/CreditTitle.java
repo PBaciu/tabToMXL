@@ -9,4 +9,20 @@ public class CreditTitle {		//is the credit class needed?
 	private int fontSize = 22;
 	
 	private String titleString;
+	
+	public double getdefaultX() {
+		return defaultX;
+	}
+	public double getdefaultY() {
+		return defaultY;
+	}
+	public String getjustify() {
+		return justify;
+	}
+	public String getvalign() {
+		return valign;
+	}
+	public int getfontSize() {
+		return fontSize;
+	}
 }
