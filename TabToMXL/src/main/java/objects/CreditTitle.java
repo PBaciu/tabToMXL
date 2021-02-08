@@ -8,4 +8,5 @@ public class CreditTitle {		//is the credit class needed?
 	private String valign = "top";
 	private int fontSize = 22;
 	
+	private String titleString;
 }
