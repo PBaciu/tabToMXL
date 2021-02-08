@@ -1,7 +1,5 @@
 package objects;
 
-import java.util.ArrayList;
-
 public class Part{
 	
 	private String partID = "P1";
