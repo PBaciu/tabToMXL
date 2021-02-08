@@ -4,6 +4,10 @@ public class Part_guitar{
 	
 	private String partID = "P1";
 	
+	public String getpartID() {
+		return partID;
+	}
+	
 }
 
 class Measure extends Part_guitar {
