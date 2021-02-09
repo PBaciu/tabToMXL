@@ -13,7 +13,10 @@ public class Convert {
 		String text = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
 					  "		<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd\">";
 		//trying to make code for conversion
-		for (int i = 0; i <= )
+		//idea1: create a loop and get the variable name for each beginning and ending
+		//idea2: brute force like write it all out, but its inefficient and bad (write line by line)
+		//idea3: use the textfile as a template
+		//for (int i = 0; i <= )
 		
 		
 		try {
