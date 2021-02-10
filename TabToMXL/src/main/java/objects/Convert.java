@@ -56,7 +56,7 @@ public class Convert {
 			Element scorePart = document.createElement("score-part");
 			partList.appendChild(scorePart);
 
-			// set an attribute to staff elementExperimenting with documentbuilder Forgot what that prof said about class again
+			// set an attribute to staff element
 			Attr attr = document.createAttribute("id");
 			attr.setValue("10");
 			partList.setAttributeNode(attr);
@@ -64,7 +64,7 @@ public class Convert {
 			// you can also use staff.setAttribute("id", "1") for this
 
 			// firstname element
-			Element firstName = document.createElement("firstname");
+			Element firstName = document.createElement("firstname");			//may have to either have a loop or an array of the objects in order to do this.
 			firstName.appendChild(document.createTextNode("James"));
 			partList.appendChild(firstName);
 
