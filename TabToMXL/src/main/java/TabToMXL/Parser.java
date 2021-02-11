@@ -23,7 +23,7 @@ public class Parser {
         this.path = path;
     }
 
-    public List<String> readTab() {
+    public TabLine readTab() {
 //        List<String> res = new ArrayList<>();
 //        try (Scanner scanner = new Scanner(new File(this.path))){
 //            while(scanner.hasNext()) {
@@ -106,7 +106,7 @@ public class Parser {
             }).map(notes -> new Bar(notes, beatsPerBar)).collect(Collectors.toList());
         });
         var tabLine = new TabLine(bars.flatMap(List::stream).collect(Collectors.toList()));
-        System.out.println(tabLine);
+        return tabLine;
 
 
 //        var lines = stuff.lines().collect(Collectors.toList());
@@ -146,6 +146,5 @@ public class Parser {
 //        }
 //
 //        System.out.println(bars);
-        return null;
     }
 }
