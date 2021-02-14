@@ -22,7 +22,7 @@ public class prettyFormat {
 		dbf.setValidating(false);
 		DocumentBuilder db = dbf.newDocumentBuilder();
 		Document doc = db.parse(new FileInputStream(new File("test.xml")));		//there will be an unformatted xml file in the system
-		System.out.println(((File) doc).getAbsolutePath());
+		//System.out.println(((File) doc).getAbsolutePath());
 		prettyPrint(doc);
 	}
 	

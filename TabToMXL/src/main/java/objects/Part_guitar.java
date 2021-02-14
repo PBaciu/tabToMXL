@@ -24,49 +24,9 @@ class Measure extends Part_guitar {
 
 class Attribute extends Measure {
 	private int divisions;
-	
-	public int getdivisions() {
-		return divisions;
-	}
-	
-	public void setdivisions(int divisions) {
-		this.divisions = divisions;
-	}
-}
-class key extends Attribute {
 	private int fifth;
-	
-	public int getFifth() {
-		return fifth;
-	}
-	
-	public void setFifth(int fifth) {
-		this.fifth = fifth;
-	}
-}
-
-class time extends Attribute {
 	private int beats;
 	private int beatType;
-	
-	public int getBeats() {
-		return beats;
-	}
-	
-	public int getBeatType() {
-		return beatType;
-	}
-	
-	public void setBeats(int beats) {
-		this.beats = beats;
-	}
-	
-	public void setBeatType(int beatType) {
-		this.beatType = beatType;
-	}
-}
-
-class clef extends Attribute {
 	private String sign;
 	private int line;
 	
@@ -84,6 +44,38 @@ class clef extends Attribute {
 	
 	public void setLine(int line) {
 		this.line = line;
+	}
+	
+	public int getBeats() {
+		return beats;
+	}
+	
+	public int getBeatType() {
+		return beatType;
+	}
+	
+	public void setBeats(int beats) {
+		this.beats = beats;
+	}
+	
+	public void setBeatType(int beatType) {
+		this.beatType = beatType;
+	}
+	
+	public int getFifth() {
+		return fifth;
+	}
+	
+	public void setFifth(int fifth) {
+		this.fifth = fifth;
+	}
+	
+	public int getdivisions() {
+		return divisions;
+	}
+	
+	public void setdivisions(int divisions) {
+		this.divisions = divisions;
 	}
 }
 
@@ -138,6 +130,63 @@ class Note {
 	private String notehead;
 	private int beamNumber;
 	private String beam;  //whether it begins, continue or end
+	
+	public int getDuration() {
+		return duration;
+	}
+	
+	public void setDuration(int duration) {
+		this.duration = duration;
+	}
+	
+	public int getVoice() {
+		return voice;
+	}
+	
+	public void getVoice(int voice) {
+		this.voice = voice;
+	}
+	
+	public String getType() {
+		return type;
+	}
+	
+	public void setType(String type) {
+		this.type = type;
+	}
+	
+	public String getStem() {
+		return stem;
+	}
+	
+	public void setStem(String stem) {
+		this.stem = stem;
+	}
+	
+	public String getNodehead() {
+		return notehead;
+	}
+	
+	public void setNodehead(String notehead) {
+		this.notehead = notehead;
+	}
+	
+	public int getBeamNumber() {
+		return beamNumber;
+	}
+	
+	public void setBeamNumber(int beamNumber) {
+		this.beamNumber = beamNumber;
+	}
+	
+	public String getBeam() {
+		return beam;
+	}
+	
+	public void setBeam(String beam) {
+		this.beam = beam;
+	}
+	
 }
 
 class Unpitch {			//wait a minute why did I put a pitch and unpitch class again?
