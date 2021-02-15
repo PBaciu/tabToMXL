@@ -50,30 +50,75 @@ public class Convert {
 
 			document = documentBuilder.newDocument();
 
-			Element score = document.createElement("score-partwise");	// root element
+			Element score = document.createElement("score-partwise");
 			document.appendChild(score);
 
-			Element partList = document.createElement("part-list");		//partlist element
+			Element partList = document.createElement("part-list");	
 			score.appendChild(partList);
 
-			Element scorePart = document.createElement("score-part");	//scorepart element and connect to partlist
+			Element scorePart = document.createElement("score-part");
 			partList.appendChild(scorePart);
-			Attr attr = document.createAttribute("id");		//add an id attribute to the scorepart element
+			Attr attr = document.createAttribute("id");
 			attr.setValue("P1");
 			scorePart.setAttributeNode(attr);
 
 			Element partName = document.createElement("part-name"); // may have to either have a loop or an array of the objects in order to do this.
-			partName.appendChild(document.createTextNode("INSTRUMENT")); // add instrument
+/*---->*/	partName.appendChild(document.createTextNode("INSTRUMENT")); // add instrument
 			scorePart.appendChild(partName);
 			
+			/*
+			for (drums) {
+			Element scoreInstrument = document.createElement("part-name"); // may have to either have a loop or an array of the objects in order to do this.
+//---->		scoreInstrument.appendChild(document.createTextNode("INSTRUMENT")); // add specific instrument
+			scorePart.appendChild(scoreInstrument);
 			
-			Element part = document.createElement("part");	//scorepart element and connect to partlist
+			}
+			 */
+			
+			
+			Element part = document.createElement("part");
 			score.appendChild(part);
-			Attr partNum = document.createAttribute("id");		//add an id attribute to the scorepart element
+			Attr partNum = document.createAttribute("id");
 			partNum.setValue("P1");
 			part.setAttributeNode(partNum);
 			
-			/*for() {			//create a for loop for each measure then another for loop for each notes in the measure
+			/*for() {			//create a for loop for each measure then another for loop for each notes and staff-tuning(guitar) in the measure
+				Element measure = document.createElement("measure");
+				part.appendChild(measure);
+				Attr num = document.createAttribute("number");	
+//---->			num.setValue(MeasureNUM);				//Add Measure number here
+				measure.setAttributeNode(num);
+				
+				Element attributes = document.createElement("attributes");
+				measure.appendChild(attributes);
+				
+				Element divisions = document.createElement("divisions");
+//---->			divisions.appendChild(document.createTextNode(divisionNum));	//input devision number
+				attributes.appendChild(divisions);
+				
+				Element key = document.createElement("key");
+				attributes.appendChild(key);
+				Element fifths = document.createElement("fifths");
+//---->			fifths.appendChild(document.createTextNode(fifthNum));			//input fifth number
+ 				key.appendChild(fifths);
+			
+				Element time = document.createElement("time");
+				attributes.appendChild(time);
+				Element beats = document.createElement("beats");
+//---->			beats.appendChild(document.createTextNode(fifthNum));			//input beats number
+ 				time.appendChild(beats);
+ 				Element beatType = document.createElement("beat-type");
+//---->			beatType.appendChild(document.createTextNode(fifthNum));			//input beatType number
+ 				time.appendChild(beatType);
+ 				
+ 				Element clef = document.createElement("clef");
+				attributes.appendChild(clef);
+				Element sign = document.createElement("sign");
+//---->			sign.appendChild(document.createTextNode(signature));			//input sign String
+ 				clef.appendChild(sign);
+ 				Element line = document.createElement("beat-type");
+//---->			line.appendChild(document.createTextNode(lineNum));			//input line number
+ 				clef.appendChild(line);
 				
 			}*/
 			
