@@ -50,29 +50,32 @@ public class Convert {
 
 			document = documentBuilder.newDocument();
 
-			// root element
-			Element score = document.createElement("score-partwise");
+			Element score = document.createElement("score-partwise");	// root element
 			document.appendChild(score);
 
-			// employee element
-			Element partList = document.createElement("part-list");
+			Element partList = document.createElement("part-list");		//partlist element
 			score.appendChild(partList);
 
-			Element scorePart = document.createElement("score-part");
+			Element scorePart = document.createElement("score-part");	//scorepart element and connect to partlist
 			partList.appendChild(scorePart);
-
-			// set an attribute to staff element
-			Attr attr = document.createAttribute("id");
+			Attr attr = document.createAttribute("id");		//add an id attribute to the scorepart element
 			attr.setValue("P1");
 			scorePart.setAttributeNode(attr);
 
-			// you can also use staff.setAttribute("id", "1") for this
-
-			// partName element
-			Element partName = document.createElement("part-name"); // may have to either have a loop or an array of the
-																	// objects in order to do this.
-			partName.appendChild(document.createTextNode("James")); // add instrument
-			partList.appendChild(partName);
+			Element partName = document.createElement("part-name"); // may have to either have a loop or an array of the objects in order to do this.
+			partName.appendChild(document.createTextNode("INSTRUMENT")); // add instrument
+			scorePart.appendChild(partName);
+			
+			
+			Element part = document.createElement("part");	//scorepart element and connect to partlist
+			score.appendChild(part);
+			Attr partNum = document.createAttribute("id");		//add an id attribute to the scorepart element
+			partNum.setValue("P1");
+			part.setAttributeNode(partNum);
+			
+			/*for() {			//create a for loop for each measure then another for loop for each notes in the measure
+				
+			}*/
 			
 			// create the xml file
 			// transform the DOM Object to an XML File
@@ -80,7 +83,6 @@ public class Convert {
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource domSource = new DOMSource(document);
 			StreamResult streamResult = new StreamResult(new File(xmlFilePath));
-			
 			
 			
 			
