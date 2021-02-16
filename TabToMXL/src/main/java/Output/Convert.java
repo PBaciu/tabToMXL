@@ -1,4 +1,4 @@
-package objects;
+package Output;
 
 import java.io.BufferedReader;
 import java.io.File;
