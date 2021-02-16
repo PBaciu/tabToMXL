@@ -62,7 +62,7 @@ public class Parser {
         });
         var beatsPerBar = beats.chars().limit(barDelimiterIndex.get()).filter(c -> c == '|').count();
         var grouped = mapped.groupBy(intermediaryGarbage -> intermediaryGarbage.col);
-        System.out.println(grouped);
+        System.out.println(grouped);														//prints out each row
         var bars = grouped.values().stream().map(list -> {
             return list.stream().map(intermediaryGarbage -> {
                 var matches = Pattern.compile("([\\dhpb\\[\\]/])*")
@@ -105,6 +105,7 @@ public class Parser {
                 }).collect(Collectors.toList());
             }).map(notes -> new Bar(notes, beatsPerBar)).collect(Collectors.toList());
         });
+
         var tabLine = new TabLine(bars.flatMap(List::stream).collect(Collectors.toList()));
         return tabLine;
 
