@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="900.0" style="-fx-background-color: #a0a7cc#a0a7cc #a0a7cc#a0a7cc;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SampleController2">
+   <children>
+      <Button fx:id="chooseFile" layoutX="55.0" layoutY="250.0" mnemonicParsing="false" onAction="#ButtonAction" prefHeight="40.0" prefWidth="120.0" text="Browse" />
+      <ListView fx:id="listView" layoutX="55.0" layoutY="84.0" prefHeight="150.0" prefWidth="785.0" />
+      <Label layoutX="55.0" layoutY="32.0" prefHeight="40.0" prefWidth="263.0" text="Choose File/Drag and Drop">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="55.0" layoutY="319.0" text="Copy/Paste Tablature">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <TextArea fx:id="textArea" layoutX="55.0" layoutY="361.0" prefHeight="260.0" prefWidth="785.0">
+         <font>
+            <Font name="Courier New" size="13.0" />
+         </font></TextArea>
+      <Button fx:id="upload" layoutX="55.0" layoutY="638.0" mnemonicParsing="false" onAction="#UploadAction" prefHeight="40.0" prefWidth="120.0" text="Upload" />
+      <Button fx:id="convert" layoutX="346.0" layoutY="678.0" mnemonicParsing="false" onAction="#ConvertAction" prefHeight="50.0" prefWidth="215.0" text="Convert" />
+   </children>
+</AnchorPane>
