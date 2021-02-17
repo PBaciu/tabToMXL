@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="rootPane" prefHeight="750.0" prefWidth="850.0" style="-fx-background-color: #a0a7cc#a0a7cc #a0a7cc#a0a7cc #a0a7cc#a0a7cc #a0a7cc#a0a7cc;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SampleController3">
+   <children>
+      <ProgressBar fx:id="progressBar" layoutX="226.0" layoutY="360.0" prefHeight="30.0" prefWidth="400.0" progress="0.0" AnchorPane.bottomAnchor="360.0" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="225.0" AnchorPane.topAnchor="360.0" />
+      <Label layoutX="386.0" layoutY="401.0" prefHeight="44.0" prefWidth="79.0" text="Loading" AnchorPane.bottomAnchor="305.0" AnchorPane.leftAnchor="385.0" AnchorPane.rightAnchor="385.0" AnchorPane.topAnchor="401.0">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <ProgressIndicator fx:id="progressIndicator" layoutX="635.0" layoutY="360.0" prefHeight="70.0" prefWidth="40.0" progress="0.0" />
+   </children>
+</AnchorPane>
