@@ -28,7 +28,7 @@ public class SampleController implements Initializable{
 	}
 	private void makeFadeOut() {
 		FadeTransition fadeTransition = new FadeTransition();
-		fadeTransition.setDuration(Duration.millis(1000));
+		fadeTransition.setDuration(Duration.millis(500));
 		fadeTransition.setNode(rootPane);
 		fadeTransition.setFromValue(1);
 		fadeTransition.setToValue(0);

@@ -24,18 +24,30 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class SampleController4 implements Initializable {
+public class SampleController3 implements Initializable {
 	
 	String musicXML = "";
 	
 	@FXML
 	private AnchorPane rootPane;
 	
-	Stage curStage = (Stage) rootPane.getScene().getWindow();
+	//Stage curStage = (Stage) rootPane.getScene().getWindow();
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		rootPane.setOpacity(0);
+		makeFade();
+	}
+	
+	private void makeFade() {
+		FadeTransition fadeTransition = new FadeTransition();
+		fadeTransition.setDuration(Duration.millis(500));
+		fadeTransition.setNode(rootPane);
+		fadeTransition.setFromValue(0);
+		fadeTransition.setToValue(1);
+	
+		fadeTransition.play();
+		
 	}
 	
 	@FXML
@@ -55,11 +67,11 @@ public class SampleController4 implements Initializable {
         fileChooser.getExtensionFilters().add(extFilter);
 
         //Show save file dialog
-        File file = fileChooser.showSaveDialog(curStage);
+        //File file = fileChooser.showSaveDialog(curStage);
 
-        if (file != null) {
-            saveTextToFile(musicXML, file);
-        }
+        //if (file != null) {
+        //    saveTextToFile(musicXML, file);
+        //}
 	}
 	
 	public void ViewAction(ActionEvent event) {
@@ -89,7 +101,7 @@ public class SampleController4 implements Initializable {
             writer.println(content);
             writer.close();
         } catch (IOException ex) {
-            Logger.getLogger(SampleController4.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SampleController3.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

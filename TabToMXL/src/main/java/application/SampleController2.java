@@ -47,7 +47,7 @@ public class SampleController2 implements Initializable {
 
 	private void makeFade() {
 		FadeTransition fadeTransition = new FadeTransition();
-		fadeTransition.setDuration(Duration.millis(1000));
+		fadeTransition.setDuration(Duration.millis(500));
 		fadeTransition.setNode(rootPane);
 		fadeTransition.setFromValue(0);
 		fadeTransition.setToValue(1);
@@ -114,14 +114,28 @@ public class SampleController2 implements Initializable {
 	}
 	
 	public void ConvertAction(ActionEvent event) {
-		loadNextScene();
+		makeFadeOut();
 	}
 	
-	
+	private void makeFadeOut() {
+		FadeTransition fadeTransition = new FadeTransition();
+		fadeTransition.setDuration(Duration.millis(500));
+		fadeTransition.setNode(rootPane);
+		fadeTransition.setFromValue(1);
+		fadeTransition.setToValue(0);
+		fadeTransition.setOnFinished(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				loadNextScene();
+				
+			}
+		});
+		fadeTransition.play();
+	}
 	
 	private void loadNextScene() {
 		try {
-			Parent secondView = FXMLLoader.load(getClass().getResource("/application/Sample4.fxml"));
+			Parent secondView = FXMLLoader.load(getClass().getResource("/application/Sample3.fxml"));
 			Scene newScene = new Scene(secondView);
 			//scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			Stage curStage = (Stage) rootPane.getScene().getWindow();
