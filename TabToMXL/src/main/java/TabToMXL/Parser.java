@@ -1,10 +1,7 @@
 package TabToMXL;
 
 
-import Models.Bar;
-import Models.GuitarString;
-import Models.Note;
-import Models.NoteRelationship;
+import Models.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +23,7 @@ public class Parser {
         this.path = path;
     }
 
-    public List<String> readTab() {
+    public TabLine readTab() {
 //        List<String> res = new ArrayList<>();
 //        try (Scanner scanner = new Scanner(new File(this.path))){
 //            while(scanner.hasNext()) {
@@ -55,7 +52,6 @@ public class Parser {
         var beats = lines.get(1);
         AtomicInteger barDelimiterIndex = new AtomicInteger(-1);
 
-
         var subListStuff = new FunctionalList<>(lines.subList(2, lines.size() - 1));
         var mapped = subListStuff.flatMapIndexed((row, line) -> {
             var firstPipeIndex = line.indexOf('|');
@@ -66,7 +62,7 @@ public class Parser {
         });
         var beatsPerBar = beats.chars().limit(barDelimiterIndex.get()).filter(c -> c == '|').count();
         var grouped = mapped.groupBy(intermediaryGarbage -> intermediaryGarbage.col);
-        System.out.println(grouped);
+        System.out.println(grouped);														//prints out each row
         var bars = grouped.values().stream().map(list -> {
             return list.stream().map(intermediaryGarbage -> {
                 var matches = Pattern.compile("([\\dhpb\\[\\]/])*")
@@ -97,11 +93,21 @@ public class Parser {
                         return new Note(frets, intermediaryGarbage.label, false, frets.size() == 1 ? null : IntStream.range(0, frets.size() - 1)
                                 .mapToObj(i -> NoteRelationship.PULLOFF).collect(Collectors.toList()));
                     }
+                    //slide eg. 5/9
+                    if (match.matches("^[\\d/]+$")) {
+                        var frets = Arrays.stream(match.split("/")).map(Integer::parseInt).collect(Collectors.toList());
+                        return new Note(frets, intermediaryGarbage.label, false, frets.size() == 1 ? null : IntStream.range(0, frets.size() - 1)
+                                .mapToObj(i -> NoteRelationship.SLIDE).collect(Collectors.toList()));
+                    }
+
+                    //TODO Handle cases of mixed hammeron, pullofs, bends and slides
                     return null;
                 }).collect(Collectors.toList());
             }).map(notes -> new Bar(notes, beatsPerBar)).collect(Collectors.toList());
         });
-        bars.forEach(System.out::println);
+
+        var tabLine = new TabLine(bars.flatMap(List::stream).collect(Collectors.toList()));
+        return tabLine;
 
 
 //        var lines = stuff.lines().collect(Collectors.toList());
@@ -141,6 +147,5 @@ public class Parser {
 //        }
 //
 //        System.out.println(bars);
-        return null;
     }
 }
