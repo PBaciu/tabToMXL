@@ -31,6 +31,8 @@ public class SampleController3 implements Initializable {
 	@FXML
 	private AnchorPane rootPane;
 	
+	FileChooser fileChooser = new FileChooser();
+	
 	//Stage curStage = (Stage) rootPane.getScene().getWindow();
 	
 	@Override
@@ -60,19 +62,27 @@ public class SampleController3 implements Initializable {
 	private TextArea textArea;
 	
 	public void SaveAction(ActionEvent event) {
-		FileChooser fileChooser = new FileChooser();
-		 
-        //Set extension filter for text files
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
-        fileChooser.getExtensionFilters().add(extFilter);
-
-        //Show save file dialog
-        //File file = fileChooser.showSaveDialog(curStage);
-
-        //if (file != null) {
-        //    saveTextToFile(musicXML, file);
-        //}
+	
+		File file = fileChooser.showSaveDialog(new Stage());
+		
+		if(file != null) {
+			saveSystem(file,textArea.getText());	
+			
+		}
 	}
+	
+	
+	public void saveSystem(File file, String content) {
+		try {
+			PrintWriter printWriter = new PrintWriter(file);
+			printWriter.write(content);
+			printWriter.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	
 	public void ViewAction(ActionEvent event) {
 		File sampleFile = new File(getClass().getResource("SampleMXLFile").getFile());
@@ -94,14 +104,5 @@ public class SampleController3 implements Initializable {
 		}
 	}
 	
-	private void saveTextToFile(String content, File file) {
-        try {
-            PrintWriter writer;
-            writer = new PrintWriter(file);
-            writer.println(content);
-            writer.close();
-        } catch (IOException ex) {
-            Logger.getLogger(SampleController3.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+	
 }
