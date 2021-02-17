@@ -7,10 +7,14 @@ import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class SampleController3 implements Initializable {
@@ -44,4 +48,17 @@ public class SampleController3 implements Initializable {
 	public void BarAction(ActionEvent event) {
 		//progressBar.
 	}
+	
+	private void loadNextScene() {
+		try {
+			Parent secondView = FXMLLoader.load(getClass().getResource("/application/Sample4.fxml"));
+			Scene newScene = new Scene(secondView);
+			//scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			Stage curStage = (Stage) rootPane.getScene().getWindow();
+			curStage.setScene(newScene);
+			curStage.show();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+ 	}
 }
