@@ -42,7 +42,6 @@ public class SampleController2 implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		rootPane.setOpacity(0);
 		makeFade();
-		progressBar.setProgress(0.0);
 		
 	}
 
@@ -98,22 +97,10 @@ public class SampleController2 implements Initializable {
 		else {
 			System.out.println("No File Chosen");
 		}
-		
-		Thread th = new Thread(new bg_Thread());
-		th.start();
+
 	}
 	
-	class bg_Thread implements Runnable {
-
-		@Override
-		public void run() {
-			// TODO Auto-generated method stub
-			for( int i=0; i<=100;i++) {
-				progressBar.setProgress(1/100.0);
-				
-		}	
-		}
-	}
+	
 	
 	public void UploadAction(ActionEvent event) {
 		if(textArea.getText() != "") {
@@ -127,24 +114,10 @@ public class SampleController2 implements Initializable {
 	}
 	
 	public void ConvertAction(ActionEvent event) {
-		makeFadeOut();
+		loadNextScene();
 	}
 	
-	private void makeFadeOut() {
-		FadeTransition fadeTransition = new FadeTransition();
-		fadeTransition.setDuration(Duration.millis(1000));
-		fadeTransition.setNode(rootPane);
-		fadeTransition.setFromValue(1);
-		fadeTransition.setToValue(0);
-		fadeTransition.setOnFinished(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				loadNextScene();
-				
-			}
-		});
-		fadeTransition.play();
-	}
+	
 	
 	private void loadNextScene() {
 		try {

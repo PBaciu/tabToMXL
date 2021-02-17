@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="rootPane" prefHeight="750.0" prefWidth="850.0" style="-fx-background-color: #a0a7cc#a0a7cc;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SampleController">
+<StackPane fx:id="rootPane" prefHeight="800.0" prefWidth="900.0" style="-fx-background-color: #a0a7cc#a0a7cc;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SampleController">
    <children>
       <Label alignment="CENTER" graphicTextGap="7.0" prefHeight="141.0" prefWidth="229.0" text="TAB2MXL" textAlignment="CENTER" StackPane.alignment="CENTER">
          <font>
