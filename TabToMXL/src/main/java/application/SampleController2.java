@@ -18,6 +18,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
@@ -34,10 +35,15 @@ public class SampleController2 implements Initializable {
 	@FXML
 	private AnchorPane rootPane;
 	
+	@FXML
+	private ProgressBar progressBar;
+	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		rootPane.setOpacity(0);
 		makeFade();
+		progressBar.setProgress(0.0);
+		
 	}
 
 	private void makeFade() {
@@ -92,6 +98,21 @@ public class SampleController2 implements Initializable {
 		else {
 			System.out.println("No File Chosen");
 		}
+		
+		Thread th = new Thread(new bg_Thread());
+		th.start();
+	}
+	
+	class bg_Thread implements Runnable {
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			for( int i=0; i<=100;i++) {
+				progressBar.setProgress(1/100.0);
+				
+		}	
+		}
 	}
 	
 	public void UploadAction(ActionEvent event) {
@@ -127,7 +148,7 @@ public class SampleController2 implements Initializable {
 	
 	private void loadNextScene() {
 		try {
-			Parent secondView = FXMLLoader.load(getClass().getResource("/application/Sample3.fxml"));
+			Parent secondView = FXMLLoader.load(getClass().getResource("/application/Sample4.fxml"));
 			Scene newScene = new Scene(secondView);
 			//scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			Stage curStage = (Stage) rootPane.getScene().getWindow();
