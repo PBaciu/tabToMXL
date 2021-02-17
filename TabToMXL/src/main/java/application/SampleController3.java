@@ -65,8 +65,20 @@ public class SampleController3 implements Initializable {
 	
 		File file = fileChooser.showSaveDialog(new Stage());
 		
+		File sampleFile = new File(getClass().getResource("SampleMXLFile").getFile());
+		//File sampleFile = new File(getClass().getResource("/application/SampleMXLFile").getFile());{
+		if(sampleFile != null) {
+			try (Scanner scanner = new Scanner(sampleFile)) {
+		        while (scanner.hasNextLine())
+		        	musicXML = musicXML + scanner.nextLine() + "\n";
+		            //System.out.println(scanner.nextLine());
+		    } catch (FileNotFoundException e) {
+		        e.printStackTrace();
+		    }
+		}
+		
 		if(file != null) {
-			saveSystem(file,textArea.getText());	
+			saveSystem(file,musicXML);	
 			
 		}
 	}
