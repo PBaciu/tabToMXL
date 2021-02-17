@@ -75,7 +75,7 @@ public class SampleController3 implements Initializable {
 	}
 	
 	public void ViewAction(ActionEvent event) {
-		File sampleFile = new File(getClass().getClassLoader().getResource("SampleMXLFile").getFile());
+		File sampleFile = new File(getClass().getResource("SampleMXLFile").getFile());
 		//File sampleFile = new File(getClass().getResource("/application/SampleMXLFile").getFile());{
 		if(sampleFile != null) {
 			try (Scanner scanner = new Scanner(sampleFile)) {
