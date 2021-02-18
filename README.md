@@ -38,7 +38,7 @@ Outlined below are instructions for setting up the project in Eclipse.
 
   #### Running the project
   
-  1. You should now see the Package Explorer on the left hand side of the window.<br /> 
+  1. The Package Explorer should now appear on the left hand side of the window.<br /> 
   ![image](https://user-images.githubusercontent.com/77293069/108299292-2b317400-716c-11eb-89c3-d4977be688ed.png)<br /><br />
   2. Right click on the project 'TabToMXL' and navigate to Gradle -> Refresh Gradle Project. <br />
   ![image](https://user-images.githubusercontent.com/77293069/108299368-4dc38d00-716c-11eb-871c-232e43ad03ff.png)<br /><br />
