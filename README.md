@@ -50,6 +50,20 @@ Outlined below are instructions for setting up the project in Eclipse.
   ![image](https://user-images.githubusercontent.com/77293069/108300509-6fbe0f00-716e-11eb-9127-87d455b108d6.png)<br /><br />
   6. TabToMXL is now set up to run on your system. You can run the project in the future by clicking the run button on the top bar menu.<br />
   ![image](https://user-images.githubusercontent.com/77293069/108300643-b3b11400-716e-11eb-9086-c8810172aa1f.png)<br /><br />
- 
+
+# Usage
+Our application currently consists of three pages
+  #### Welcome Page
+  This page is a simple welcome page. It will be customized in the future.<br />
+  ![image](https://user-images.githubusercontent.com/77293069/108305546-338fac00-7178-11eb-8b37-24e8cab917cf.png)<br /><br />
+  
+  #### Input Page
+  This page allows the insertion of text via a .txt file or copied text. <br />
+  ![image](https://user-images.githubusercontent.com/77293069/108305639-705ba300-7178-11eb-840f-87d10623fcb0.png)<br /><br />
+  
+  #### Output Page
+  This page allows the user to view the resulting xml and gives the option to save the file.<br />
+  ![image](https://user-images.githubusercontent.com/77293069/108305689-8ff2cb80-7178-11eb-8836-2b6fe2374cd4.png)<br /><br />
+  
 # Issues
 In case of any problems, please open an issue on this github page, or email Patrick at baciupat@my.yorku.ca
