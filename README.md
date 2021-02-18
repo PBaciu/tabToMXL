@@ -12,10 +12,10 @@ The parser is a work in progress and no matter what input tab is submitted, one 
 # Setup
 Outlined below are instructions for setting up the project in both IntelliJ and Eclipse.
 
-  ## Eclipse
+  ### Eclipse
   1. Download the zip file from this repository.
   2. Unzip the file using some file extractor software.
   3. Open the folder TabToMXL in your IDE.
   4. Right click on the project, then go to Gradle -> Refresh Gradle  
   
-  ## IntelliJ  
+  ### IntelliJ  
