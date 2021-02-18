@@ -52,4 +52,4 @@ Outlined below are instructions for setting up the project in Eclipse.
   ![image](https://user-images.githubusercontent.com/77293069/108300643-b3b11400-716e-11eb-9086-c8810172aa1f.png)<br /><br />
  
 # Issues
-In case of issues, please open an Issue on the git page, or email Patrick at baciupat@my.yorku.ca
+In case of any problems, please open an issue on this github page, or email Patrick at baciupat@my.yorku.ca
