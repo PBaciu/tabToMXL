@@ -18,5 +18,4 @@ Outlined below are instructions for setting up the project in both IntelliJ and 
   3. Open the folder TabToMXL in your IDE.
   4. Right click on the project, then go to Gradle -> Refresh Gradle  
   
-  # IntelliJ
-  ![Screenshot](
+  # IntelliJ  
