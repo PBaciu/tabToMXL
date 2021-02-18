@@ -1,16 +1,19 @@
 plugins {
+    id 'java'
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.8'
 }
+
+group 'org.jfx'
+version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    // Use JUnit test framework
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
 
 test {
@@ -21,15 +24,15 @@ test {
 }
 
 javafx {
-    version = "15"
+    version = "15.0.1"
     modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
 run {
     if (javafx.platform.classifier == 'win') {
-        // Temporal fix for Eclipse with JDK 1.8 and Windows 
+        // Temporal fix for Eclipse with JDK 1.8 and Windows
         systemProperty "java.library.path", "C:\\tmp"
     }
 }
 
-mainClassName = 'TabToMXL.Main'
+mainClassName = 'org.jfx.Main'

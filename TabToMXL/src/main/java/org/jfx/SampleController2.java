@@ -1,9 +1,10 @@
-package application;
+package org.jfx;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import java.util.Scanner;
@@ -21,7 +22,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -30,7 +30,7 @@ public class SampleController2 implements Initializable {
 
 	String info1 = "";
 	String info2 = "";
-	ArrayList<String> info = new ArrayList();
+	ArrayList<String> info = new ArrayList<>();
 	
 	@FXML
 	private AnchorPane rootPane;
@@ -66,7 +66,7 @@ public class SampleController2 implements Initializable {
 	private Button convert;
 	
 	@FXML
-	private ListView listView;
+	private ListView<String> listView;
 	
 	@FXML
 	private TextArea textArea;
@@ -135,7 +135,7 @@ public class SampleController2 implements Initializable {
 	
 	private void loadNextScene() {
 		try {
-			Parent secondView = FXMLLoader.load(getClass().getResource("/application/Sample3.fxml"));
+			Parent secondView = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("org.jfx/Sample3.fxml")));
 			Scene newScene = new Scene(secondView);
 			//scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			Stage curStage = (Stage) rootPane.getScene().getWindow();

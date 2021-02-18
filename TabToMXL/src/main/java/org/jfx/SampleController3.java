@@ -1,9 +1,10 @@
-package application;
+package org.jfx;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.net.URL;
@@ -39,6 +40,7 @@ public class SampleController3 implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		rootPane.setOpacity(0);
 		makeFade();
+		this.ViewResult();
 	}
 	
 	private void makeFade() {
@@ -65,7 +67,7 @@ public class SampleController3 implements Initializable {
 	
 		File file = fileChooser.showSaveDialog(new Stage());
 		
-		File sampleFile = new File(getClass().getResource("SampleMXLFile").getFile());
+		File sampleFile = new File(Objects.requireNonNull(getClass().getClassLoader().getResource("org.jfx/SampleMXLFile").getFile()));
 		//File sampleFile = new File(getClass().getResource("/application/SampleMXLFile").getFile());{
 		if(sampleFile != null) {
 			try (Scanner scanner = new Scanner(sampleFile)) {
@@ -96,8 +98,8 @@ public class SampleController3 implements Initializable {
 	}
 	
 	
-	public void ViewAction(ActionEvent event) {
-		File sampleFile = new File(getClass().getResource("SampleMXLFile").getFile());
+	public void ViewResult() {
+		File sampleFile = new File(Objects.requireNonNull(getClass().getClassLoader().getResource("org.jfx/SampleMXLFile").getFile()));
 		//File sampleFile = new File(getClass().getResource("/application/SampleMXLFile").getFile());{
 		if(sampleFile != null) {
 			try (Scanner scanner = new Scanner(sampleFile)) {
