@@ -32,6 +32,7 @@ Outlined below are instructions for setting up the project in both IntelliJ and 
   ![image](https://user-images.githubusercontent.com/77293069/108300326-1f46b180-716e-11eb-8925-7008c3550c0e.png)<br /><br />
   9. Click Add and rename the configuration from 'task' to 'run', by clicking on the name. Then, select 'Workspace' and then choose 'TabToMXL'. Apply and Run.<br />
   ![image](https://user-images.githubusercontent.com/77293069/108300509-6fbe0f00-716e-11eb-9127-87d455b108d6.png)<br /><br />
-  10. TabToMXL is now set up to run on your system. You can run the project in the future by clicking the run button on the top bar menu.
+  10. TabToMXL is now set up to run on your system. You can run the project in the future by clicking the run button on the top bar menu.<br />
+  ![image](https://user-images.githubusercontent.com/77293069/108300643-b3b11400-716e-11eb-9086-c8810172aa1f.png)<br /><br />
   
   ### IntelliJ  
