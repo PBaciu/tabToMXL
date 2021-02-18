@@ -26,8 +26,12 @@ Outlined below are instructions for setting up the project in both IntelliJ and 
   ![image](https://user-images.githubusercontent.com/77293069/108299292-2b317400-716c-11eb-89c3-d4977be688ed.png)<br /><br />
   6. Right click on the project 'TabToMXL' and navigate to Gradle -> Refresh Gradle Project. <br />
   ![image](https://user-images.githubusercontent.com/77293069/108299368-4dc38d00-716c-11eb-871c-232e43ad03ff.png)<br /><br />
-  7. 
-
-
+  7. Right click on the project 'TabToMXL' and navigate to Run As -> Run Configurations. <br /><br />
+  ![image](https://user-images.githubusercontent.com/77293069/108300067-a47d9680-716d-11eb-8ee7-055eb8ed2e9f.png)<br /><br />
+  8. Select Gradle Task and then click the icon circled in red to create a new configuration.<br />
+  ![image](https://user-images.githubusercontent.com/77293069/108300326-1f46b180-716e-11eb-8925-7008c3550c0e.png)<br /><br />
+  9. Click Add and rename the configuration from 'task' to 'run', by clicking on the name. Then, select 'Workspace' and then choose 'TabToMXL'. Apply and Run.<br />
+  ![image](https://user-images.githubusercontent.com/77293069/108300509-6fbe0f00-716e-11eb-9127-87d455b108d6.png)<br /><br />
+  10. TabToMXL is now set up to run on your system. You can run the project in the future by clicking the run button on the top bar menu.
   
   ### IntelliJ  
