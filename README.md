@@ -1,18 +1,24 @@
 # tabToMXL
 
 # Introduction
-The tabToMXL is a java application that can be downloaded on to a personal computer, which will convert tablature made for percussion, guitar, and bass guitar from a “.txt” format to a ".xml" format.
+tabToMXL is a java application which will convert tablature made for percussion, guitar, and bass guitar from a “.txt” format to a ".xml" format.
 
 The specific xml format being used is musicxml and there are various resources on the web that will allow conversion from the resultant musicxml file into sheet music.
 
 # Functionality
-Currently, our application supports input in the form of plain text (pasted into a text box), or the selection of a .txt file from the user's file system.
+Currently, our application supports input in the form of plain text (pasted into a text area), or the selection of a .txt file from the user's file system.
 The parser is a work in progress and no matter what input tab is submitted, one predetermined output will be generated.
+
+# Requirements
+tabToMXL uses Java 15.0.2 
+Please ensure that version 15.0.2 of java is installed on your machine prior to setup.
 
 # Setup
 Outlined below are instructions for setting up the project in both IntelliJ and Eclipse.
 
   ### Eclipse
+  
+  #### Downloading the project via zip file
   1. Download the zip file from this repository.<br />
   ![image](https://user-images.githubusercontent.com/77293069/108298248-a4c86280-716a-11eb-8faa-70209c86a642.png)<br /><br />
   2. Unzip the file using some file extractor software.<br />
@@ -22,6 +28,16 @@ Outlined below are instructions for setting up the project in both IntelliJ and 
   4. Select 'Directory' and navigate to the TabToMXL folder.<br />                      
   ![image](https://user-images.githubusercontent.com/77293069/108298911-bb22ee00-716b-11eb-91c3-a57dc2a175c8.png)<br />
     Click 'Select Folder' and then click 'Finish'.<br /><br />                             
+  
+  #### Downloading the project via git
+  1. Right click on Package Explorer section in Eclipse, select Import -> Projects from Git. <br />
+  ![image](https://user-images.githubusercontent.com/77293069/108302384-e27cb980-7171-11eb-8fa3-8c4b1ca74c24.png)<br /><br />
+  2. Click Next -> Clone URI -> Next and paste this link in the URI section: https://github.com/PBaciu/tabToMXL.git  <br />
+  ![image](https://user-images.githubusercontent.com/77293069/108302639-5dde6b00-7172-11eb-9b4a-5a69fa55e6c3.png)<br /><br />
+  3. Click 'Next' then unckeck the 'Develop' branch and then click 'Next'. Leave the next page as defaults and click Next. Then hit 'Finish'.
+
+  #### Running the project
+  
   5. You should now see the Package Explorer on the left hand side of the window.<br /> 
   ![image](https://user-images.githubusercontent.com/77293069/108299292-2b317400-716c-11eb-89c3-d4977be688ed.png)<br /><br />
   6. Right click on the project 'TabToMXL' and navigate to Gradle -> Refresh Gradle Project. <br />
