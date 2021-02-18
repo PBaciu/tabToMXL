@@ -18,7 +18,7 @@
             <Font size="25.0" />
          </font>
       </Label>
-      <Label layoutX="60.0" layoutY="71.0" prefHeight="40.0" prefWidth="300.0" text="Copy Text or Save File" AnchorPane.leftAnchor="310.0" AnchorPane.rightAnchor="310.0">
+      <Label layoutX="63.0" layoutY="71.0" prefHeight="40.0" prefWidth="300.0" text="Copy Text or Save File" AnchorPane.leftAnchor="310.0" AnchorPane.rightAnchor="310.0">
          <font>
             <Font size="20.0" />
          </font>
