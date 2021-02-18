@@ -2,10 +2,14 @@ plugins {
     id 'java'
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.8'
+    id 'org.beryx.jlink' version '2.6.5'
 }
-
+mainClassName = 'org.jfx.Main'
 group 'org.jfx'
 version '1.0-SNAPSHOT'
+
+sourceCompatibility = 15.0
+targetCompatibility = 15.0
 
 repositories {
     mavenCentral()
@@ -35,4 +39,10 @@ run {
     }
 }
 
-mainClassName = 'org.jfx.Main'
+jlink {
+    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
+    launcher {
+        name = 'TabToMXL'
+    }
+}
+
