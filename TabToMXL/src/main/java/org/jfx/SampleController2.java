@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 
 import java.util.Scanner;
 
+import TabToMXL.Parser;
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -135,6 +136,10 @@ public class SampleController2 implements Initializable {
 	
 	private void loadNextScene() {
 		try {
+			Parser p = new Parser("src/main/java/TabToMXL/Capricho_Arabe_Tab.txt");
+			var res = p.readTab();
+			System.out.println(res);
+
 			Parent secondView = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("org.jfx/Sample3.fxml")));
 			Scene newScene = new Scene(secondView);
 			//scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
