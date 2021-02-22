@@ -67,7 +67,7 @@ public class SampleController3 implements Initializable {
 	
 		File file = fileChooser.showSaveDialog(new Stage());
 		
-		File sampleFile = new File(Objects.requireNonNull(getClass().getClassLoader().getResource("org.jfx/SampleMXLFile").getFile()));
+		File sampleFile = new File(Objects.requireNonNull(getClass().getClassLoader().getResource("org.jfx/sample.musicxml").getFile()));
 		//File sampleFile = new File(getClass().getResource("/application/SampleMXLFile").getFile());{
 		if(sampleFile != null) {
 			try (Scanner scanner = new Scanner(sampleFile)) {
@@ -99,7 +99,7 @@ public class SampleController3 implements Initializable {
 	
 	
 	public void ViewResult() {
-		File sampleFile = new File(Objects.requireNonNull(getClass().getClassLoader().getResource("org.jfx/SampleMXLFile").getFile()));
+		File sampleFile = new File(Objects.requireNonNull(getClass().getClassLoader().getResource("org.jfx/sample.musicxml").getFile()));
 		//File sampleFile = new File(getClass().getResource("/application/SampleMXLFile").getFile());{
 		if(sampleFile != null) {
 			try (Scanner scanner = new Scanner(sampleFile)) {
