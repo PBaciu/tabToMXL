@@ -3,6 +3,7 @@ package TabToMXL;
 
 import Models.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -49,7 +50,7 @@ public class Parser {
 
         AtomicInteger barDelimiterIndex = new AtomicInteger(-1);
 
-        var subListStuff = new FunctionalList<>(lines.subList(2, lines.size() - 1));
+        var subListStuff = new FunctionalList<>(lines);
         var mapped = subListStuff.flatMapIndexed((row, line) -> {
             var firstPipeIndex = line.indexOf('|');
             barDelimiterIndex.set(line.indexOf('|', 2));
@@ -59,7 +60,7 @@ public class Parser {
         });
 
         var grouped = mapped.groupBy(intermediaryGarbage -> intermediaryGarbage.col);
-        System.out.println(grouped);														//prints out each row
+//        System.out.println(grouped);														//prints out each row
         var bars = grouped.values().stream().map(list -> list.stream().map(intermediaryGarbage -> {
             var matches = Pattern.compile("([\\dhpb\\[\\]/])*")
                     .matcher(intermediaryGarbage.val)
@@ -69,39 +70,53 @@ public class Parser {
                 //[7]
                 if (match.matches("\\[(\\d+)]")) {
                     return new Note(List.of(Integer.parseInt(match.substring(match.indexOf('[') + 1, match.indexOf(']')))),
-                            intermediaryGarbage.label, true, null);
+                            intermediaryGarbage.label, true, null, intermediaryGarbage.col);
                 }
                 //bend chain eg. 5b7b9
                 if (match.matches("^[\\db]+$")) {
                     var frets = Arrays.stream(match.split("b")).map(Integer::parseInt).collect(Collectors.toList());
                     return new Note(frets, intermediaryGarbage.label, false, frets.size() == 1 ? null : IntStream.range(0, frets.size() - 1)
-                            .mapToObj(i -> NoteRelationship.BEND).collect(Collectors.toList()));
+                            .mapToObj(i -> NoteRelationship.BEND).collect(Collectors.toList()), intermediaryGarbage.col);
                 }
                 //hammer chain eg. 5h7h9
                 if (match.matches("^[\\dh]+$")) {
                     var frets = Arrays.stream(match.split("h")).map(Integer::parseInt).collect(Collectors.toList());
                     return new Note(frets, intermediaryGarbage.label, false, frets.size() == 1 ? null : IntStream.range(0, frets.size() - 1)
-                            .mapToObj(i -> NoteRelationship.HAMMERON).collect(Collectors.toList()));
+                            .mapToObj(i -> NoteRelationship.HAMMERON).collect(Collectors.toList()), intermediaryGarbage.col);
                 }
                 //pulloff chain eg. 7p5p3
                 if (match.matches("^[\\dp]+$")) {
                     var frets = Arrays.stream(match.split("p")).map(Integer::parseInt).collect(Collectors.toList());
                     return new Note(frets, intermediaryGarbage.label, false, frets.size() == 1 ? null : IntStream.range(0, frets.size() - 1)
-                            .mapToObj(i -> NoteRelationship.PULLOFF).collect(Collectors.toList()));
+                            .mapToObj(i -> NoteRelationship.PULLOFF).collect(Collectors.toList()), intermediaryGarbage.col);
                 }
                 //slide eg. 5/9
                 if (match.matches("^[\\d/]+$")) {
                     var frets = Arrays.stream(match.split("/")).map(Integer::parseInt).collect(Collectors.toList());
                     return new Note(frets, intermediaryGarbage.label, false, frets.size() == 1 ? null : IntStream.range(0, frets.size() - 1)
-                            .mapToObj(i -> NoteRelationship.SLIDE).collect(Collectors.toList()));
+                            .mapToObj(i -> NoteRelationship.SLIDE).collect(Collectors.toList()), intermediaryGarbage.col);
                 }
 
                 //TODO Handle cases of mixed hammeron, pullofs, bends and slides
-                return null;
-            }).collect(Collectors.toList());
-        }).map(notes -> new Bar(notes, 4)).collect(Collectors.toList()));
+                return new Note(new ArrayList<>(), intermediaryGarbage.label, false, new ArrayList<>(), intermediaryGarbage.col);
+            }).collect(Collectors.groupingBy(note -> note.inBar));
+        }).collect(Collectors.toList())).collect(Collectors.toList());
+        List<Bar> barModelList = new ArrayList<>();
+        for(int i = 0; i < bars.size(); i++) {
+            List<Note> notes = new ArrayList<>();
+            for (var note : bars.get(i)){
+                notes.addAll(note.get(i));
+            }
+            Bar bar = new Bar(notes, 4);
 
-        var tabLine = new TabLine(bars.flatMap(List::stream).collect(Collectors.toList()));
+            barModelList.add(bar);
+        }
+
+//        for(var b : bars) {
+//            Bar bar = new Bar(b.get(0).get(0), 4);
+//            barModelList.add(bar);
+//        }
+        TabLine tabLine = new TabLine(barModelList);
         return tabLine;
 
 
