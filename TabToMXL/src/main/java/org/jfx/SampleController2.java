@@ -18,6 +18,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
@@ -77,13 +78,18 @@ public class SampleController2 implements Initializable {
 	public void ButtonAction(ActionEvent event) {
 		FileChooser fc = new FileChooser();
 		File selectedFile = fc.showOpenDialog(null);
+		textField.setText("");
 		if(selectedFile != null) {
 			if(selectedFile.getName().endsWith(".txt") || selectedFile.getName().endsWith(".rtf")) {
 				//listView.getItems().add(selectedFile.getName());
 				textField.setText(selectedFile.getName());
 			}
 			else {
-				System.out.println("Invalid File! You need to input a txt file");
+				Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+	            errorAlert.setHeaderText("Invalid File!");
+	            errorAlert.setContentText("You need to input a .txt or .rtf file");
+	            errorAlert.showAndWait();
+				//System.out.println("Invalid File! You need to input a txt file");
 			}
 			
 			if((selectedFile.getName().endsWith(".txt") || selectedFile.getName().endsWith(".rtf")) && info1 == "") {
@@ -113,7 +119,11 @@ public class SampleController2 implements Initializable {
 			}
 		}
 		else {
-			System.out.println("No File Chosen");
+			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setHeaderText("No File Chosen");
+            errorAlert.setContentText("Please choose a file first before you preview");
+            errorAlert.showAndWait();
+			//System.out.println("No File Chosen");
 		}
 
 	}
@@ -126,7 +136,10 @@ public class SampleController2 implements Initializable {
 			makeFadeOut();
 		}
 		else {
-			System.out.println("Text Area is Empty");
+			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setHeaderText("No Content to Convert");
+            errorAlert.setContentText("Please choose a file first or copy/paste a tablature to convert");
+            errorAlert.showAndWait();
 		}
 	}
 	
@@ -166,6 +179,7 @@ public class SampleController2 implements Initializable {
 	private void DragDrop() {
 		textField.setEditable(false);
 		textField.setMinWidth(250);
+		textField.setText("");
 		textField.setOnDragOver((e) -> {
 	        if (e.getGestureSource() != textField && e.getDragboard().hasFiles()) {
 	            e.acceptTransferModes(TransferMode.COPY_OR_MOVE);
@@ -186,7 +200,10 @@ public class SampleController2 implements Initializable {
 	    				textField.setText(droppedFile.getName());
 	    			}
 	    			else {
-	    				System.out.println("Invalid File! You need to input a txt file");
+	    				Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+	    	            errorAlert.setHeaderText("Invalid File!");
+	    	            errorAlert.setContentText("You need to input a .txt or .rtf file");
+	    	            errorAlert.showAndWait();
 	    			}
 	    			
 	    			if((droppedFile.getName().endsWith(".txt") || droppedFile.getName().endsWith(".rtf")) && info3 == "") {
@@ -216,7 +233,10 @@ public class SampleController2 implements Initializable {
 	    			}
 	    		}
 	    		else {
-	    			System.out.println("No File Chosen");
+	    			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+	                errorAlert.setHeaderText("No File Chosen");
+	                errorAlert.setContentText("Please choose a file first before you preview");
+	                errorAlert.showAndWait();
 	    		}
 	            result = true;
 	        }
