@@ -66,13 +66,7 @@ public class SampleController2 implements Initializable {
 	private Button chooseFile;
 	
 	@FXML
-	private Button upload;
-	
-	@FXML
 	private Button convert;
-	
-	@FXML
-	private ListView<String> listView;
 	
 	@FXML
 	private TextField textField;
@@ -85,18 +79,28 @@ public class SampleController2 implements Initializable {
 		File selectedFile = fc.showOpenDialog(null);
 		if(selectedFile != null) {
 			if(selectedFile.getName().endsWith(".txt") || selectedFile.getName().endsWith(".rtf")) {
-				listView.getItems().add(selectedFile.getName());
+				//listView.getItems().add(selectedFile.getName());
+				textField.setText(selectedFile.getName());
 			}
 			else {
 				System.out.println("Invalid File! You need to input a txt file");
 			}
 			
-			if(selectedFile.getName().endsWith(".txt") || selectedFile.getName().endsWith(".rtf")) {
+			if((selectedFile.getName().endsWith(".txt") || selectedFile.getName().endsWith(".rtf")) && info1 == "") {
 				try (Scanner scanner = new Scanner(selectedFile)) {
 			        while (scanner.hasNextLine())
 			        	info1 = info1 + scanner.nextLine() + "\n";
-			    } catch (FileNotFoundException e) {
-			        e.printStackTrace();
+			    } catch (FileNotFoundException e1) {
+			        e1.printStackTrace();
+			    }
+			}
+			else {
+				info1 = "";
+				try (Scanner scanner = new Scanner(selectedFile)) {
+			        while (scanner.hasNextLine())
+			        	info1 = info1 + scanner.nextLine() + "\n";
+			    } catch (FileNotFoundException e2) {
+			        e2.printStackTrace();
 			    }
 			}
 			//System.out.println(info1);
@@ -114,19 +118,16 @@ public class SampleController2 implements Initializable {
 
 	}
 	
-	public void UploadAction(ActionEvent event) {
+	public void ConvertAction(ActionEvent event) {
 		if(textArea.getText() != "") {
 			//System.out.println(textArea.getText());
 			info2 = textArea.getText();
 			System.out.println(info2);
+			makeFadeOut();
 		}
 		else {
 			System.out.println("Text Area is Empty");
 		}
-	}
-	
-	public void ConvertAction(ActionEvent event) {
-		makeFadeOut();
 	}
 	
 	private void makeFadeOut() {
@@ -163,15 +164,15 @@ public class SampleController2 implements Initializable {
  	}
 	
 	private void DragDrop() {
-		listView.setEditable(false);
-		listView.setMinWidth(250);
-		listView.setOnDragOver((e) -> {
-	        if (e.getGestureSource() != listView && e.getDragboard().hasFiles()) {
+		textField.setEditable(false);
+		textField.setMinWidth(250);
+		textField.setOnDragOver((e) -> {
+	        if (e.getGestureSource() != textField && e.getDragboard().hasFiles()) {
 	            e.acceptTransferModes(TransferMode.COPY_OR_MOVE);
 	        }
 	        e.consume();
 	    });
-	    listView.setOnDragDropped(e -> {
+		textField.setOnDragDropped(e -> {
 
 	        Dragboard db = e.getDragboard();
 	        boolean result = false;
@@ -181,18 +182,28 @@ public class SampleController2 implements Initializable {
 	        	File droppedFile = db.getFiles().get(0);
 	        	if(droppedFile != null) {
 	    			if(droppedFile.getName().endsWith(".txt") || droppedFile.getName().endsWith(".rtf")) {
-	    				listView.getItems().add(droppedFile.getName());
+	    				//listView.getItems().add(droppedFile.getName());
+	    				textField.setText(droppedFile.getName());
 	    			}
 	    			else {
 	    				System.out.println("Invalid File! You need to input a txt file");
 	    			}
 	    			
-	    			if(droppedFile.getName().endsWith(".txt") || droppedFile.getName().endsWith(".rtf")) {
+	    			if((droppedFile.getName().endsWith(".txt") || droppedFile.getName().endsWith(".rtf")) && info3 == "") {
 	    				try (Scanner scanner = new Scanner(droppedFile)) {
 	    			        while (scanner.hasNextLine())
 	    			        	info3 = info3 + scanner.nextLine() + "\n";
-	    			    } catch (FileNotFoundException e2) {
-	    			        e2.printStackTrace();
+	    			    } catch (FileNotFoundException e3) {
+	    			        e3.printStackTrace();
+	    			    }
+	    			}
+	    			else {
+	    				info3 = "";
+	    				try (Scanner scanner = new Scanner(droppedFile)) {
+	    			        while (scanner.hasNextLine())
+	    			        	info3 = info3 + scanner.nextLine() + "\n";
+	    			    } catch (FileNotFoundException e4) {
+	    			        e4.printStackTrace();
 	    			    }
 	    			}
 	    			//System.out.println(info3);
