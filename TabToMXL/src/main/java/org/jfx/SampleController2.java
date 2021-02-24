@@ -22,6 +22,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -31,6 +34,7 @@ public class SampleController2 implements Initializable {
 
 	String info1 = "";
 	String info2 = "";
+	String info3 = "";
 	ArrayList<String> info = new ArrayList<>();
 	
 	@FXML
@@ -43,6 +47,7 @@ public class SampleController2 implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		rootPane.setOpacity(0);
 		makeFade();
+		this.DragDrop();
 		
 	}
 
@@ -70,12 +75,14 @@ public class SampleController2 implements Initializable {
 	private ListView<String> listView;
 	
 	@FXML
+	private TextField textField;
+	
+	@FXML
 	private TextArea textArea;
 	
 	public void ButtonAction(ActionEvent event) {
 		FileChooser fc = new FileChooser();
 		File selectedFile = fc.showOpenDialog(null);
-		
 		if(selectedFile != null) {
 			if(selectedFile.getName().endsWith(".txt") || selectedFile.getName().endsWith(".rtf")) {
 				listView.getItems().add(selectedFile.getName());
@@ -88,20 +95,24 @@ public class SampleController2 implements Initializable {
 				try (Scanner scanner = new Scanner(selectedFile)) {
 			        while (scanner.hasNextLine())
 			        	info1 = info1 + scanner.nextLine() + "\n";
-			            //System.out.println(scanner.nextLine());
 			    } catch (FileNotFoundException e) {
 			        e.printStackTrace();
 			    }
 			}
-			System.out.println(info1);
+			//System.out.println(info1);
+			if(textArea.getText().isEmpty()) {
+				textArea.setText(info1);
+			}
+			else {
+				textArea.clear();
+				textArea.setText(info1);
+			}
 		}
 		else {
 			System.out.println("No File Chosen");
 		}
 
 	}
-	
-	
 	
 	public void UploadAction(ActionEvent event) {
 		if(textArea.getText() != "") {
@@ -150,4 +161,58 @@ public class SampleController2 implements Initializable {
 			e.printStackTrace();
 		}
  	}
+	
+	private void DragDrop() {
+		listView.setEditable(false);
+		listView.setMinWidth(250);
+		listView.setOnDragOver((e) -> {
+	        if (e.getGestureSource() != listView && e.getDragboard().hasFiles()) {
+	            e.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+	        }
+	        e.consume();
+	    });
+	    listView.setOnDragDropped(e -> {
+
+	        Dragboard db = e.getDragboard();
+	        boolean result = false;
+	        if (db.hasFiles()){
+
+	        	//listView.getItems().add(db.getFiles().toString());
+	        	File droppedFile = db.getFiles().get(0);
+	        	if(droppedFile != null) {
+	    			if(droppedFile.getName().endsWith(".txt") || droppedFile.getName().endsWith(".rtf")) {
+	    				listView.getItems().add(droppedFile.getName());
+	    			}
+	    			else {
+	    				System.out.println("Invalid File! You need to input a txt file");
+	    			}
+	    			
+	    			if(droppedFile.getName().endsWith(".txt") || droppedFile.getName().endsWith(".rtf")) {
+	    				try (Scanner scanner = new Scanner(droppedFile)) {
+	    			        while (scanner.hasNextLine())
+	    			        	info3 = info3 + scanner.nextLine() + "\n";
+	    			    } catch (FileNotFoundException e2) {
+	    			        e2.printStackTrace();
+	    			    }
+	    			}
+	    			//System.out.println(info3);
+	    			if(textArea.getText() == "") {
+	    				textArea.setText(info3);
+	    			}
+	    			else {
+	    				textArea.clear();
+	    				textArea.setText(info3);
+	    			}
+	    		}
+	    		else {
+	    			System.out.println("No File Chosen");
+	    		}
+	            result = true;
+	        }
+
+	        e.setDropCompleted(result);
+	        e.consume();
+
+	    });
+	}
 }
