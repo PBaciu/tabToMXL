@@ -8,20 +8,25 @@
 
 <AnchorPane fx:id="rootPane" prefHeight="800.0" prefWidth="900.0" style="-fx-background-color: #a0a7cc#a0a7cc #a0a7cc#a0a7cc #a0a7cc#a0a7cc #a0a7cc#a0a7cc #a0a7cc#a0a7cc #a0a7cc#a0a7cc #a0a7cc#a0a7cc #a0a7cc#a0a7cc;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jfx.SampleController3">
    <children>
-      <Button fx:id="saveButton" layoutX="503.0" layoutY="647.0" mnemonicParsing="false" onAction="#SaveAction" prefHeight="35.0" prefWidth="100.0" text="Save" AnchorPane.bottomAnchor="113.0" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0">
+      <Button fx:id="saveButton" layoutX="503.0" layoutY="647.0" mnemonicParsing="false" onAction="#SaveAction" prefHeight="35.0" prefWidth="100.0" text="Save" AnchorPane.bottomAnchor="113.0" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="647.0">
          <font>
             <Font size="20.0" />
          </font></Button>
       <TextArea fx:id="textArea" layoutX="50.0" layoutY="139.0" prefHeight="464.0" prefWidth="767.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="139.0" />
-      <Label layoutX="60.0" layoutY="51.0" prefHeight="40.0" prefWidth="300.0" text="Conversion Complete" AnchorPane.leftAnchor="310.0" AnchorPane.rightAnchor="310.0">
+      <Label layoutX="304.0" layoutY="51.0" prefHeight="40.0" prefWidth="293.0" text="Conversion Complete" AnchorPane.leftAnchor="304.0" AnchorPane.rightAnchor="303.0">
+         <font>
+            <Font size="28.5" />
+         </font>
+      </Label>
+      <Label layoutX="317.0" layoutY="91.0" prefHeight="40.0" prefWidth="267.0" text="Copy Text or Save File" AnchorPane.leftAnchor="317.0" AnchorPane.rightAnchor="316.0">
          <font>
             <Font size="25.0" />
          </font>
       </Label>
-      <Label layoutX="63.0" layoutY="71.0" prefHeight="40.0" prefWidth="300.0" text="Copy Text or Save File" AnchorPane.leftAnchor="310.0" AnchorPane.rightAnchor="310.0">
+      <Button fx:id="backButton" layoutX="14.0" layoutY="71.0" mnemonicParsing="false" onAction="#BackAction" prefHeight="35.0" prefWidth="100.0" text="Back">
          <font>
             <Font size="20.0" />
          </font>
-      </Label>
+      </Button>
    </children>
 </AnchorPane>

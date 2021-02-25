@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 import TabToMXL.Parser;
 import javafx.animation.FadeTransition;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -18,10 +19,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -31,7 +36,9 @@ public class SampleController2 implements Initializable {
 
 	String info1 = "";
 	String info2 = "";
+	String info3 = "";
 	ArrayList<String> info = new ArrayList<>();
+	Task progress;
 	
 	@FXML
 	private AnchorPane rootPane;
@@ -43,6 +50,7 @@ public class SampleController2 implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		rootPane.setOpacity(0);
 		makeFade();
+		this.DragDrop();
 		
 	}
 
@@ -61,13 +69,10 @@ public class SampleController2 implements Initializable {
 	private Button chooseFile;
 	
 	@FXML
-	private Button upload;
-	
-	@FXML
 	private Button convert;
 	
 	@FXML
-	private ListView<String> listView;
+	private TextField textField;
 	
 	@FXML
 	private TextArea textArea;
@@ -75,48 +80,99 @@ public class SampleController2 implements Initializable {
 	public void ButtonAction(ActionEvent event) {
 		FileChooser fc = new FileChooser();
 		File selectedFile = fc.showOpenDialog(null);
-		
+		textField.setText("");
 		if(selectedFile != null) {
 			if(selectedFile.getName().endsWith(".txt") || selectedFile.getName().endsWith(".rtf")) {
-				listView.getItems().add(selectedFile.getName());
+				//listView.getItems().add(selectedFile.getName());
+				textField.setText(selectedFile.getName());
 			}
 			else {
-				System.out.println("Invalid File! You need to input a txt file");
+				Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+	            errorAlert.setHeaderText("Invalid File!");
+	            errorAlert.setContentText("You need to input a .txt or .rtf File");
+	            errorAlert.showAndWait();
+				//System.out.println("Invalid File! You need to input a txt file");
 			}
 			
-			if(selectedFile.getName().endsWith(".txt") || selectedFile.getName().endsWith(".rtf")) {
+			if((selectedFile.getName().endsWith(".txt") || selectedFile.getName().endsWith(".rtf")) && info1 == "") {
 				try (Scanner scanner = new Scanner(selectedFile)) {
 			        while (scanner.hasNextLine())
 			        	info1 = info1 + scanner.nextLine() + "\n";
-			            //System.out.println(scanner.nextLine());
-			    } catch (FileNotFoundException e) {
-			        e.printStackTrace();
+			    } catch (FileNotFoundException e1) {
+			        e1.printStackTrace();
 			    }
 			}
-			System.out.println(info1);
+			else {
+				info1 = "";
+				try (Scanner scanner = new Scanner(selectedFile)) {
+			        while (scanner.hasNextLine())
+			        	info1 = info1 + scanner.nextLine() + "\n";
+			    } catch (FileNotFoundException e2) {
+			        e2.printStackTrace();
+			    }
+			}
+			//System.out.println(info1);
+			if(textArea.getText().isEmpty()) {
+				textArea.setText(info1);
+			}
+			else {
+				textArea.clear();
+				textArea.setText(info1);
+			}
 		}
 		else {
-			System.out.println("No File Chosen");
+			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setHeaderText("No File Chosen");
+            errorAlert.setContentText("Please choose a File before you preview");
+            errorAlert.showAndWait();
+			//System.out.println("No File Chosen");
 		}
 
 	}
 	
-	
-	
-	public void UploadAction(ActionEvent event) {
+	public void ConvertAction(ActionEvent event) {
 		if(textArea.getText() != "") {
 			//System.out.println(textArea.getText());
 			info2 = textArea.getText();
 			System.out.println(info2);
+//			progress = createWorker();
+//			new Thread(progress).start();
+//			progressBar.progressProperty().unbind();
+//	        progressBar.progressProperty().bind(progress.progressProperty());
+//	        progressBar.setProgress(1);
+//			if(progressBar.getProgress() >= 0) {
+//				makeFadeOut();
+//			}
+//			for(double i = 0.0; i <= 10.0; i++) {
+//				progressBar.setProgress(i*0.01);
+//				if(progressBar.getProgress() >= 1) {
+//					makeFadeOut();
+//				}
+//			}
+			makeFadeOut();
+//			loadNextScene();
 		}
 		else {
-			System.out.println("Text Area is Empty");
+			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setHeaderText("No Content to Convert");
+            errorAlert.setContentText("Please choose a File or Copy/Paste a Tablature to convert");
+            errorAlert.showAndWait();
 		}
 	}
 	
-	public void ConvertAction(ActionEvent event) {
-		makeFadeOut();
-	}
+	public Task createWorker() {
+	    return new Task() {
+	      @Override
+	      protected Object call() throws Exception {
+	        for (int i = 0; i < 10; i++) {
+	          Thread.sleep(500);
+	          updateMessage("500 milliseconds");
+	          updateProgress(i + 1, 10);
+	        }
+	        return true;
+	      }
+	    };
+	  }
 	
 	private void makeFadeOut() {
 		FadeTransition fadeTransition = new FadeTransition();
@@ -138,8 +194,13 @@ public class SampleController2 implements Initializable {
 		try {
 			Parser p = new Parser("src/main/java/TabToMXL/Capricho_Arabe_Tab.txt");
 			var res = p.readTab();
+//			progress = createWorker();
+//			new Thread(progress).start();
+//			progressBar.progressProperty().unbind();
+//	        progressBar.progressProperty().bind(progress.progressProperty());
+//	        progressBar.setProgress(1);
 			System.out.println(res);
-
+			
 			Parent secondView = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("org.jfx/Sample3.fxml")));
 			Scene newScene = new Scene(secondView);
 			//scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -150,4 +211,76 @@ public class SampleController2 implements Initializable {
 			e.printStackTrace();
 		}
  	}
+	
+	private void DragDrop() {
+		textField.setEditable(false);
+		textField.setMinWidth(250);
+		//textField.setText("");
+		textField.setOnDragOver((e) -> {
+	        if (e.getGestureSource() != textField && e.getDragboard().hasFiles()) {
+	            e.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+	        }
+	        e.consume();
+	    });
+		textField.setOnDragDropped(e -> {
+
+	        Dragboard db = e.getDragboard();
+	        boolean result = false;
+	        if (db.hasFiles()){
+
+	        	//listView.getItems().add(db.getFiles().toString());
+	        	File droppedFile = db.getFiles().get(0);
+	        	textField.setText("");
+	        	if(droppedFile != null) {
+	    			if(droppedFile.getName().endsWith(".txt") || droppedFile.getName().endsWith(".rtf")) {
+	    				//listView.getItems().add(droppedFile.getName());
+	    				textField.setText(droppedFile.getName());
+	    			}
+	    			else {
+	    				Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+	    	            errorAlert.setHeaderText("Invalid File!");
+	    	            errorAlert.setContentText("You need to input a .txt or .rtf File");
+	    	            errorAlert.showAndWait();
+	    			}
+	    			
+	    			if((droppedFile.getName().endsWith(".txt") || droppedFile.getName().endsWith(".rtf")) && info3 == "") {
+	    				try (Scanner scanner = new Scanner(droppedFile)) {
+	    			        while (scanner.hasNextLine())
+	    			        	info3 = info3 + scanner.nextLine() + "\n";
+	    			    } catch (FileNotFoundException e3) {
+	    			        e3.printStackTrace();
+	    			    }
+	    			}
+	    			else {
+	    				info3 = "";
+	    				try (Scanner scanner = new Scanner(droppedFile)) {
+	    			        while (scanner.hasNextLine())
+	    			        	info3 = info3 + scanner.nextLine() + "\n";
+	    			    } catch (FileNotFoundException e4) {
+	    			        e4.printStackTrace();
+	    			    }
+	    			}
+	    			//System.out.println(info3);
+	    			if(textArea.getText() == "") {
+	    				textArea.setText(info3);
+	    			}
+	    			else {
+	    				textArea.clear();
+	    				textArea.setText(info3);
+	    			}
+	    		}
+	    		else {
+	    			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+	                errorAlert.setHeaderText("No File Chosen");
+	                errorAlert.setContentText("Please choose a File before you preview");
+	                errorAlert.showAndWait();
+	    		}
+	            result = true;
+	        }
+
+	        e.setDropCompleted(result);
+	        e.consume();
+
+	    });
+	}
 }
