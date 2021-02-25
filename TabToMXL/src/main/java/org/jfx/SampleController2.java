@@ -192,7 +192,7 @@ public class SampleController2 implements Initializable {
 	
 	private void loadNextScene() {
 		try {
-			Parser p = new Parser("src/main/java/TabToMXL/Capricho_Arabe_Tab.txt");
+			Parser p = new Parser(textArea.getText());
 			var res = p.readTab();
 //			progress = createWorker();
 //			new Thread(progress).start();
