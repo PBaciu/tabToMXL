@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 import TabToMXL.Parser;
 import javafx.animation.FadeTransition;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -37,6 +38,7 @@ public class SampleController2 implements Initializable {
 	String info2 = "";
 	String info3 = "";
 	ArrayList<String> info = new ArrayList<>();
+	Task progress;
 	
 	@FXML
 	private AnchorPane rootPane;
@@ -133,7 +135,22 @@ public class SampleController2 implements Initializable {
 			//System.out.println(textArea.getText());
 			info2 = textArea.getText();
 			System.out.println(info2);
+//			progress = createWorker();
+//			new Thread(progress).start();
+//			progressBar.progressProperty().unbind();
+//	        progressBar.progressProperty().bind(progress.progressProperty());
+//	        progressBar.setProgress(1);
+//			if(progressBar.getProgress() >= 0) {
+//				makeFadeOut();
+//			}
+//			for(double i = 0.0; i <= 10.0; i++) {
+//				progressBar.setProgress(i*0.01);
+//				if(progressBar.getProgress() >= 1) {
+//					makeFadeOut();
+//				}
+//			}
 			makeFadeOut();
+//			loadNextScene();
 		}
 		else {
 			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -142,6 +159,20 @@ public class SampleController2 implements Initializable {
             errorAlert.showAndWait();
 		}
 	}
+	
+	public Task createWorker() {
+	    return new Task() {
+	      @Override
+	      protected Object call() throws Exception {
+	        for (int i = 0; i < 10; i++) {
+	          Thread.sleep(500);
+	          updateMessage("500 milliseconds");
+	          updateProgress(i + 1, 10);
+	        }
+	        return true;
+	      }
+	    };
+	  }
 	
 	private void makeFadeOut() {
 		FadeTransition fadeTransition = new FadeTransition();
@@ -163,8 +194,13 @@ public class SampleController2 implements Initializable {
 		try {
 			Parser p = new Parser("src/main/java/TabToMXL/Capricho_Arabe_Tab.txt");
 			var res = p.readTab();
+//			progress = createWorker();
+//			new Thread(progress).start();
+//			progressBar.progressProperty().unbind();
+//	        progressBar.progressProperty().bind(progress.progressProperty());
+//	        progressBar.setProgress(1);
 			System.out.println(res);
-
+			
 			Parent secondView = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("org.jfx/Sample3.fxml")));
 			Scene newScene = new Scene(secondView);
 			//scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
