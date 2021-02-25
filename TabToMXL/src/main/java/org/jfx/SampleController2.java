@@ -87,7 +87,7 @@ public class SampleController2 implements Initializable {
 			else {
 				Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 	            errorAlert.setHeaderText("Invalid File!");
-	            errorAlert.setContentText("You need to input a .txt or .rtf file");
+	            errorAlert.setContentText("You need to input a .txt or .rtf File");
 	            errorAlert.showAndWait();
 				//System.out.println("Invalid File! You need to input a txt file");
 			}
@@ -121,7 +121,7 @@ public class SampleController2 implements Initializable {
 		else {
 			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setHeaderText("No File Chosen");
-            errorAlert.setContentText("Please choose a file first before you preview");
+            errorAlert.setContentText("Please choose a File before you preview");
             errorAlert.showAndWait();
 			//System.out.println("No File Chosen");
 		}
@@ -138,7 +138,7 @@ public class SampleController2 implements Initializable {
 		else {
 			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setHeaderText("No Content to Convert");
-            errorAlert.setContentText("Please choose a file first or copy/paste a tablature to convert");
+            errorAlert.setContentText("Please choose a File or Copy/Paste a Tablature to convert");
             errorAlert.showAndWait();
 		}
 	}
@@ -179,7 +179,7 @@ public class SampleController2 implements Initializable {
 	private void DragDrop() {
 		textField.setEditable(false);
 		textField.setMinWidth(250);
-		textField.setText("");
+		//textField.setText("");
 		textField.setOnDragOver((e) -> {
 	        if (e.getGestureSource() != textField && e.getDragboard().hasFiles()) {
 	            e.acceptTransferModes(TransferMode.COPY_OR_MOVE);
@@ -194,6 +194,7 @@ public class SampleController2 implements Initializable {
 
 	        	//listView.getItems().add(db.getFiles().toString());
 	        	File droppedFile = db.getFiles().get(0);
+	        	textField.setText("");
 	        	if(droppedFile != null) {
 	    			if(droppedFile.getName().endsWith(".txt") || droppedFile.getName().endsWith(".rtf")) {
 	    				//listView.getItems().add(droppedFile.getName());
@@ -202,7 +203,7 @@ public class SampleController2 implements Initializable {
 	    			else {
 	    				Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 	    	            errorAlert.setHeaderText("Invalid File!");
-	    	            errorAlert.setContentText("You need to input a .txt or .rtf file");
+	    	            errorAlert.setContentText("You need to input a .txt or .rtf File");
 	    	            errorAlert.showAndWait();
 	    			}
 	    			
@@ -235,7 +236,7 @@ public class SampleController2 implements Initializable {
 	    		else {
 	    			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 	                errorAlert.setHeaderText("No File Chosen");
-	                errorAlert.setContentText("Please choose a file first before you preview");
+	                errorAlert.setContentText("Please choose a File before you preview");
 	                errorAlert.showAndWait();
 	    		}
 	            result = true;

@@ -23,5 +23,10 @@
             <Font size="25.0" />
          </font>
       </Label>
+      <Button fx:id="backButton" layoutX="75.0" layoutY="647.0" mnemonicParsing="false" onAction="#BackAction" text="Go Back">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
