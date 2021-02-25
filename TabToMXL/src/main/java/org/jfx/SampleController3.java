@@ -71,9 +71,9 @@ public class SampleController3 implements Initializable {
 	private TextArea textArea;
 	
 	public void SaveAction(ActionEvent event) {
-	
-		File file = fileChooser.showSaveDialog(new Stage());
+		
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("MusicXML File", "*.musicxml"));
+		File file = fileChooser.showSaveDialog(new Stage());
 		
 		File sampleFile = new File(Objects.requireNonNull(getClass().getClassLoader().getResource("org.jfx/sample.musicxml").getFile()));
 		//File sampleFile = new File(getClass().getResource("/application/SampleMXLFile").getFile());{
