@@ -8,6 +8,6 @@ build
 .idea
 .settings
 bin
-.classpath
-.gitattributes
-.project
+/.classpath
+/.gitattributes
+/.project

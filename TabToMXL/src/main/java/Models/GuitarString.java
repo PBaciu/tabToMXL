@@ -13,9 +13,12 @@ public enum GuitarString {
     D,
     D_FLAT,
     D_SHARP,
-    E,
-    E_FLAT,
-    E_SHARP,
+    LOW_E,
+    LOW_E_FLAT,
+    LOW_E_SHARP,
+    HIGH_E,
+    HIGH_E_FLAT,
+    HIGH_E_SHARP,
     F,
     F_FLAT,
     F_SHARP,
@@ -50,11 +53,11 @@ public enum GuitarString {
             case "D#":
                 return GuitarString.D_SHARP;
             case "E":
-                return GuitarString.E;
+                return GuitarString.LOW_E;
             case "Eb":
-                return GuitarString.E_FLAT;
+                return GuitarString.LOW_E_FLAT;
             case "E#":
-                return GuitarString.E_SHARP;
+                return GuitarString.LOW_E_SHARP;
             case "F":
                 return GuitarString.F;
             case "Fb":
@@ -67,6 +70,12 @@ public enum GuitarString {
                 return GuitarString.G_FLAT;
             case "G#":
                 return GuitarString.G_SHARP;
+            case "e":
+                return GuitarString.HIGH_E;
+            case "eb":
+                return GuitarString.HIGH_E_FLAT;
+            case "e#":
+                return GuitarString.HIGH_E_SHARP;
             default:
                 throw new IllegalStateException("Unexpected value: " + s);
         }
