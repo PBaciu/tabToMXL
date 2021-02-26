@@ -193,14 +193,13 @@ public class SampleController2 implements Initializable {
 	private void loadNextScene() {
 		try {
 			Parser p = new Parser(textArea.getText());
-			var res = p.readTab();
+			p.readTab();
 //			progress = createWorker();
 //			new Thread(progress).start();
 //			progressBar.progressProperty().unbind();
 //	        progressBar.progressProperty().bind(progress.progressProperty());
 //	        progressBar.setProgress(1);
-			System.out.println(res);
-			
+
 			Parent secondView = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("org.jfx/Sample3.fxml")));
 			Scene newScene = new Scene(secondView);
 			//scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
