@@ -6,9 +6,11 @@ import java.util.List;
 public class Tab {
 
     public List<TabLine> tabLines;
+    public List<GuitarString> tuning;
 
-    public Tab(List<TabLine> tabLines) {
+    public Tab(List<TabLine> tabLines, List<GuitarString> tuning) {
         this.tabLines = tabLines;
+        this.tuning = tuning;
     }
 
     @Override
