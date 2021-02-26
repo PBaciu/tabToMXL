@@ -75,43 +75,38 @@ public class Parser {
                     Note note;
                     //[7]
                     if (match.matches("\\[(\\d+)]")) {
-                        note = new Note(List.of(Integer.parseInt(match.substring(match.indexOf('[') + 1, match.indexOf(']')))),
+                        return new Note(List.of(Integer.parseInt(match.substring(match.indexOf('[') + 1, match.indexOf(']')))),
                                 intermediaryGarbage.label, true, null, intermediaryGarbage.col, intermediaryGarbage.val.indexOf(match, map.getOrDefault(intermediaryGarbage.label, new AtomicInteger(0)).get()) - 1);
                     }
                     //bend chain eg. 5b7b9
                     if (match.matches("^[\\db]+$")) {
                         var frets = Arrays.stream(match.split("b")).map(Integer::parseInt).collect(Collectors.toList());
-                        note = new Note(frets, intermediaryGarbage.label, false, frets.size() == 1 ? null : IntStream.range(0, frets.size() - 1)
+                        return new Note(frets, intermediaryGarbage.label, false, frets.size() == 1 ? null : IntStream.range(0, frets.size() - 1)
                                 .mapToObj(i -> NoteRelationship.BEND).collect(Collectors.toList()), intermediaryGarbage.col, intermediaryGarbage.val.indexOf(match, map.getOrDefault(intermediaryGarbage.label, new AtomicInteger(0)).get()) - 1);
                     }
                     //hammer chain eg. 5h7h9
                     if (match.matches("^[\\dh]+$")) {
                         var frets = Arrays.stream(match.split("h")).map(Integer::parseInt).collect(Collectors.toList());
-                        note = new Note(frets, intermediaryGarbage.label, false, frets.size() == 1 ? null : IntStream.range(0, frets.size() - 1)
+                        return new Note(frets, intermediaryGarbage.label, false, frets.size() == 1 ? null : IntStream.range(0, frets.size() - 1)
                                 .mapToObj(i -> NoteRelationship.HAMMERON).collect(Collectors.toList()), intermediaryGarbage.col, intermediaryGarbage.val.indexOf(match, map.getOrDefault(intermediaryGarbage.label, new AtomicInteger(0)).get()) - 1);
                     }
                     //pulloff chain eg. 7p5p3
                     if (match.matches("^[\\dp]+$")) {
                         var frets = Arrays.stream(match.split("p")).map(Integer::parseInt).collect(Collectors.toList());
-                        note = new Note(frets, intermediaryGarbage.label, false, frets.size() == 1 ? null : IntStream.range(0, frets.size() - 1)
+                        return new Note(frets, intermediaryGarbage.label, false, frets.size() == 1 ? null : IntStream.range(0, frets.size() - 1)
                                 .mapToObj(i -> NoteRelationship.PULLOFF).collect(Collectors.toList()), intermediaryGarbage.col, intermediaryGarbage.val.indexOf(match, map.getOrDefault(intermediaryGarbage.label, new AtomicInteger(0)).get()) - 1);
                     }
                     //slide eg. 5/9
                     if (match.matches("^[\\d/]+$")) {
                         var frets = Arrays.stream(match.split("/")).map(Integer::parseInt).collect(Collectors.toList());
-                        note = new Note(frets, intermediaryGarbage.label, false, frets.size() == 1 ? null : IntStream.range(0, frets.size() - 1)
+                        return new Note(frets, intermediaryGarbage.label, false, frets.size() == 1 ? null : IntStream.range(0, frets.size() - 1)
                                 .mapToObj(i -> NoteRelationship.SLIDE).collect(Collectors.toList()), intermediaryGarbage.col, intermediaryGarbage.val.indexOf(match, map.getOrDefault(intermediaryGarbage.label, new AtomicInteger(0)).get()) - 1);
-                    } else if (match != "") {
-                        var frets = List.of(Integer.parseInt(match));
-                        note = new Note(frets, intermediaryGarbage.label, false, null, intermediaryGarbage.col, intermediaryGarbage.val.indexOf(match, map.getOrDefault(intermediaryGarbage.label, new AtomicInteger(0)).get()) - 1);
-                    } else {
-                        note = new Note(null, intermediaryGarbage.label, false, new ArrayList<>(), intermediaryGarbage.col, 0);
-                    }
-                    if (match != "") {
-                        map.put(intermediaryGarbage.label, new AtomicInteger(intermediaryGarbage.val.indexOf(match) + 1));
+                    }else {
+                        map.put(intermediaryGarbage.label, new AtomicInteger(0));
+                        return new Note(null, intermediaryGarbage.label, false, null, intermediaryGarbage.col, intermediaryGarbage.val.indexOf(match, map.getOrDefault(intermediaryGarbage.label, new AtomicInteger(0)).get()) - 1);
                     }
 
-                    return note;
+
                     //TODO Handle cases of mixed hammeron, pullofs, bends and slides
 
                 }).collect(Collectors.groupingBy(note -> note.inBar));
