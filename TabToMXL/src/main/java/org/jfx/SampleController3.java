@@ -1,9 +1,6 @@
 package org.jfx;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -74,16 +71,19 @@ public class SampleController3 implements Initializable {
 		
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("MusicXML File", "*.musicxml"));
 		File file = fileChooser.showSaveDialog(new Stage());
-		
-		File sampleFile = new File(Objects.requireNonNull(getClass().getClassLoader().getResource("org.jfx/sample.musicxml").getFile()));
+
+		BufferedReader sampleFile = null;
+		try {
+			sampleFile = new BufferedReader(new FileReader("result.xml"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		//File sampleFile = new File(getClass().getResource("/application/SampleMXLFile").getFile());{
 		if(sampleFile != null) {
 			try (Scanner scanner = new Scanner(sampleFile)) {
 		        while (scanner.hasNextLine())
 		        	musicXML = musicXML + scanner.nextLine() + "\n";
 		            //System.out.println(scanner.nextLine());
-		    } catch (FileNotFoundException e) {
-		        e.printStackTrace();
 		    }
 		}
 		
@@ -107,15 +107,17 @@ public class SampleController3 implements Initializable {
 	
 	
 	public void ViewResult() {
-		File sampleFile = new File(Objects.requireNonNull(getClass().getClassLoader().getResource("org.jfx/sample.musicxml").getFile()));
-		//File sampleFile = new File(getClass().getResource("/application/SampleMXLFile").getFile());{
+		BufferedReader sampleFile = null;
+		try {
+			sampleFile = new BufferedReader(new FileReader("result.xml"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		if(sampleFile != null) {
 			try (Scanner scanner = new Scanner(sampleFile)) {
 		        while (scanner.hasNextLine())
 		        	musicXML = musicXML + scanner.nextLine() + "\n";
 		            //System.out.println(scanner.nextLine());
-		    } catch (FileNotFoundException e) {
-		        e.printStackTrace();
 		    }
 		}
 		if(musicXML == "") {
