@@ -74,7 +74,7 @@ public class SampleController3 implements Initializable {
 
 		BufferedReader sampleFile = null;
 		try {
-			sampleFile = new BufferedReader(new FileReader("result.xml"));
+			sampleFile = new BufferedReader(new FileReader(System.getProperty("java.io.tmpdir") + "result.xml"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -109,7 +109,7 @@ public class SampleController3 implements Initializable {
 	public void ViewResult() {
 		BufferedReader sampleFile = null;
 		try {
-			sampleFile = new BufferedReader(new FileReader("result.xml"));
+			sampleFile = new BufferedReader(new FileReader(System.getProperty("java.io.tmpdir") + "result.xml"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

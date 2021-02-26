@@ -12,6 +12,7 @@ import java.io.*;
 import java.lang.String;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.MatchResult;
@@ -209,7 +210,8 @@ public class Parser {
             }
         }
         scorePartwise.getPart().add(part);
-        File file = new File("result.xml");
-        marshaller.marshal(scorePartwise, new BufferedWriter(new FileWriter(file)));
+        //TODO Test this on Mac
+        String tDir = System.getProperty("java.io.tmpdir");
+        marshaller.marshal(scorePartwise, new BufferedWriter(new FileWriter(tDir + "result.xml")));
     }
 }
