@@ -28,10 +28,10 @@
             <Font size="20.0" />
          </font>
       </Button>
-      <Button fx:id="back" layoutX="721.0" layoutY="71.0" mnemonicParsing="false" onAction="#goBack" prefHeight="40.0" prefWidth="168.0" text="New Conversion">
+      <!-- <Button fx:id="back" layoutX="721.0" layoutY="71.0" mnemonicParsing="false" onAction="#goBack" prefHeight="40.0" prefWidth="168.0" text="New Conversion">
          <font>
             <Font size="20.0" />
          </font>
-      </Button>
+      </Button> -->
    </children>
 </AnchorPane>
