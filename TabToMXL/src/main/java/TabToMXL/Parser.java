@@ -2,7 +2,18 @@ package TabToMXL;
 
 
 import Models.*;
+import Models.Note;
+import generated.*;
+import org.w3c.dom.Document;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import java.io.FileOutputStream;
+import java.lang.String;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +35,7 @@ public class Parser {
         this.tab = tab;
     }
 
-    public Tab readTab() {
+    public void readTab() {
 //        List<String> res = new ArrayList<>();
 //        try (Scanner scanner = new Scanner(new File(this.path))){
 //            while(scanner.hasNext()) {
@@ -39,7 +50,7 @@ public class Parser {
         List<TabLine> tabLines = new ArrayList<>();
 
         for (var line : this.tab.split("\n\\s*\n")) {
-            System.out.println(line);
+
             var lines = new FunctionalList<>(line.lines().collect(Collectors.toList()));
 
             AtomicInteger barDelimiterIndex = new AtomicInteger(-1);
@@ -54,7 +65,6 @@ public class Parser {
             });
 
             var grouped = mapped.groupBy(intermediaryGarbage -> intermediaryGarbage.col);
-//        System.out.println(grouped);														//prints out each row
             var bars = grouped.values().stream().map(list -> list.stream().map(intermediaryGarbage -> {
                 var matches = Pattern.compile("([\\dhpb\\[\\]/])*")
                         .matcher(intermediaryGarbage.val)
@@ -108,6 +118,34 @@ public class Parser {
             TabLine tabLine = new TabLine(barModelList);
             tabLines.add(tabLine);
         }
-        return new Tab(tabLines);
+        try {
+            generateXML(new Tab(tabLines));
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    void generateXML(Tab tab) throws Exception{
+        JAXBContext context = JAXBContext.newInstance(ScorePartwise.class);
+        Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty("com.sun.xml.bind.xmlHeaders",
+                """
+                \n<!DOCTYPE score-partwise PUBLIC
+                                    "-//Recordare//DTD MusicXML Partwise//EN"
+                                    "http://www.musicxml.org/dtds/partwise.dtd">""");
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+        ScorePartwise scorePartwise = new ScorePartwise();
+        PartList partList = new PartList();
+        ScorePart scorePart = new ScorePart();
+        scorePart.setId("P1");
+        PartName partName = new PartName();
+        partName.setValue("Classical Guitar");
+        scorePart.setPartName(partName);
+        partList.getPartGroupOrScorePart().add(scorePart);
+        scorePartwise.setPartList(partList);
+        scorePartwise.setVersion("3.1");
+
+        marshaller.marshal(scorePartwise, new FileOutputStream("result.xml"));
     }
 }
