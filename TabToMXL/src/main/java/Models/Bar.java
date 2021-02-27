@@ -4,9 +4,9 @@ import java.util.List;
 
 public class Bar {
     public final List<Note> notes;
-    public final long beatsPerBar;
+    public final int beatsPerBar;
 
-    public Bar(List<Note> notes, long beatsPerBar) {
+    public Bar(List<Note> notes, int beatsPerBar) {
         this.notes = notes;
         this.beatsPerBar = beatsPerBar;
     }

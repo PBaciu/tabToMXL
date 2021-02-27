@@ -67,183 +67,17 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "work",
-    "movementNumber",
-    "movementTitle",
-    "identification",
-    "defaults",
-    "credit",
     "partList",
     "part"
 })
 @XmlRootElement(name = "score-partwise")
 public class ScorePartwise {
-
-    protected Work work;
-    @XmlElement(name = "movement-number")
-    protected java.lang.String movementNumber;
-    @XmlElement(name = "movement-title")
-    protected java.lang.String movementTitle;
-    protected Identification identification;
-    protected Defaults defaults;
-    protected List<Credit> credit;
     @XmlElement(name = "part-list", required = true)
     protected PartList partList;
-    @XmlElement(required = true)
+    @XmlElement(name = "part", required = true)
     protected List<ScorePartwise.Part> part;
     @XmlAttribute(name = "version")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
     protected java.lang.String version;
-
-    /**
-     * Gets the value of the work property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Work }
-     *     
-     */
-    public Work getWork() {
-        return work;
-    }
-
-    /**
-     * Sets the value of the work property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Work }
-     *     
-     */
-    public void setWork(Work value) {
-        this.work = value;
-    }
-
-    /**
-     * Gets the value of the movementNumber property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link java.lang.String }
-     *     
-     */
-    public java.lang.String getMovementNumber() {
-        return movementNumber;
-    }
-
-    /**
-     * Sets the value of the movementNumber property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.String }
-     *     
-     */
-    public void setMovementNumber(java.lang.String value) {
-        this.movementNumber = value;
-    }
-
-    /**
-     * Gets the value of the movementTitle property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link java.lang.String }
-     *     
-     */
-    public java.lang.String getMovementTitle() {
-        return movementTitle;
-    }
-
-    /**
-     * Sets the value of the movementTitle property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.String }
-     *     
-     */
-    public void setMovementTitle(java.lang.String value) {
-        this.movementTitle = value;
-    }
-
-    /**
-     * Gets the value of the identification property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Identification }
-     *     
-     */
-    public Identification getIdentification() {
-        return identification;
-    }
-
-    /**
-     * Sets the value of the identification property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Identification }
-     *     
-     */
-    public void setIdentification(Identification value) {
-        this.identification = value;
-    }
-
-    /**
-     * Gets the value of the defaults property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Defaults }
-     *     
-     */
-    public Defaults getDefaults() {
-        return defaults;
-    }
-
-    /**
-     * Sets the value of the defaults property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Defaults }
-     *     
-     */
-    public void setDefaults(Defaults value) {
-        this.defaults = value;
-    }
-
-    /**
-     * Gets the value of the credit property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the credit property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getCredit().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Credit }
-     * 
-     * 
-     */
-    public List<Credit> getCredit() {
-        if (credit == null) {
-            credit = new ArrayList<Credit>();
-        }
-        return this.credit;
-    }
 
     /**
      * Gets the value of the partList property.
@@ -443,7 +277,8 @@ public class ScorePartwise {
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
-            "noteOrBackupOrForward"
+            "noteOrBackupOrForward",
+                "barline"
         })
         public static class Measure {
 
@@ -473,6 +308,7 @@ public class ScorePartwise {
             protected YesNo nonControlling;
             @XmlAttribute(name = "width")
             protected BigDecimal width;
+            protected Barline barline;
 
             /**
              * Gets the value of the noteOrBackupOrForward property.
@@ -611,6 +447,13 @@ public class ScorePartwise {
                 this.width = value;
             }
 
+            public Barline getBarline() {
+                return barline;
+            }
+
+            public void setBarline(Barline barline) {
+                this.barline = barline;
+            }
         }
 
     }

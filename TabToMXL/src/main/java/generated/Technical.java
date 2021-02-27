@@ -94,7 +94,7 @@ public class Technical {
         @XmlElementRef(name = "fingering", type = JAXBElement.class, required = false),
         @XmlElementRef(name = "arrow", type = JAXBElement.class, required = false)
     })
-    protected List<JAXBElement<?>> upBowOrDownBowOrHarmonic;
+    protected List<Object> upBowOrDownBowOrHarmonic;
 
     /**
      * Gets the value of the upBowOrDownBowOrHarmonic property.
@@ -141,9 +141,9 @@ public class Technical {
      * 
      * 
      */
-    public List<JAXBElement<?>> getUpBowOrDownBowOrHarmonic() {
+    public List<Object> getUpBowOrDownBowOrHarmonic() {
         if (upBowOrDownBowOrHarmonic == null) {
-            upBowOrDownBowOrHarmonic = new ArrayList<JAXBElement<?>>();
+            upBowOrDownBowOrHarmonic = new ArrayList<>();
         }
         return this.upBowOrDownBowOrHarmonic;
     }
