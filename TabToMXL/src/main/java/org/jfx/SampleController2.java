@@ -85,6 +85,8 @@ public class SampleController2 implements Initializable {
 		fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text File", "*.txt"));
 		File selectedFile = fc.showOpenDialog(null);
 		textField.setText("");
+		textArea.setText("");
+		info1 = "";
 		if(selectedFile != null) {
 			if(selectedFile.getName().endsWith(".txt")) {
 				//listView.getItems().add(selectedFile.getName());
@@ -106,7 +108,7 @@ public class SampleController2 implements Initializable {
 			        e1.printStackTrace();
 			    }
 			}
-			else {
+			else if (selectedFile.getName().endsWith(".txt")) {
 				info1 = "";
 				try (Scanner scanner = new Scanner(selectedFile)) {
 			        while (scanner.hasNextLine())
@@ -172,8 +174,8 @@ public class SampleController2 implements Initializable {
 		Alert helpAlert = new Alert(Alert.AlertType.CONFIRMATION);
         helpAlert.setHeaderText("Information on Usage");
         helpAlert.setContentText("You can Drag and Drop a file in the Text Field given in this screen. You can also Browse for a File from your computer."
-        		+ "\n" + "The Files should only be of the format .txt or .rtf." + "\n" + "The Uploaded Files will have their content displayed on the Cop/Paste area which can be modified to the Users' preference."
-        		+ "\n" + "Hitting the Convert button converts the final variation of the Tablature in the Cop/Paste Text Area into a musicxml file.");
+        		+ "\n" + "The Files should only be of the format .txt or .rtf." + "\n" + "The Uploaded Files will have their content displayed on the Copy/Paste area which can be modified to the Users' preference."
+        		+ "\n" + "Hitting the Convert button converts the final variation of the Tablature in the Copy/Paste Text Area into a musicxml file.");
         helpAlert.showAndWait();
 	}
 
@@ -229,7 +231,7 @@ public class SampleController2 implements Initializable {
 	        e.consume();
 	    });
 		textField.setOnDragDropped(e -> {
-
+			
 	        Dragboard db = e.getDragboard();
 
 	        boolean result = false;
@@ -238,6 +240,8 @@ public class SampleController2 implements Initializable {
 	        	//listView.getItems().add(db.getFiles().toString());
 	        	File droppedFile = db.getFiles().get(0);
 	        	textField.setText("");
+	        	textArea.setText("");
+	        	info3 = "";
 	        	if(droppedFile != null) {
 	    			if(droppedFile.getName().endsWith(".txt")) {
 	    				//listView.getItems().add(droppedFile.getName());
@@ -250,7 +254,7 @@ public class SampleController2 implements Initializable {
 	    	            errorAlert.showAndWait();
 	    			}
 	    			
-	    			if(droppedFile.getName().endsWith(".txt")  && info3.equals("")) {
+	    			if(droppedFile.getName().endsWith(".txt") && info3.equals("")) {
 	    				try (Scanner scanner = new Scanner(droppedFile)) {
 	    			        while (scanner.hasNextLine())
 	    			        	info3 = info3 + scanner.nextLine() + "\n";
@@ -258,7 +262,7 @@ public class SampleController2 implements Initializable {
 	    			        e3.printStackTrace();
 	    			    }
 	    			}
-	    			else {
+	    			else if(droppedFile.getName().endsWith(".txt")) {
 	    				info3 = "";
 	    				try (Scanner scanner = new Scanner(droppedFile)) {
 	    			        while (scanner.hasNextLine())
