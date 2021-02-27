@@ -143,7 +143,7 @@ public class SampleController2 implements Initializable {
 			Alert progressAlert = new Alert(Alert.AlertType.INFORMATION);
 			progressAlert.setHeaderText("Coversion in progress");
 			progressAlert.setContentText("Please give a few seconds for the conversion to complete.");
-			progressAlert.showAndWait();
+			progressAlert.show();
 			//System.out.println(info2);
 //			progress = createWorker();
 //			new Thread(progress).start();
