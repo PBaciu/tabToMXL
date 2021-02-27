@@ -61,6 +61,9 @@ public class SampleController3 implements Initializable {
 	private Button help;
 	
 	@FXML
+	private Button newConversion;
+	
+	@FXML
 	private TextArea textArea;
 	
 	public void SaveAction() {
@@ -119,6 +122,10 @@ public class SampleController3 implements Initializable {
         		+ "\n" + "You can save the contents that are displayed into your computer using the Save button (Can only be saved as a .musicxml file."
         		+ "\n" + "The Back button takes you back to the previous page to help you perform a new Tablature Conversion.");
         helpAlert.showAndWait();
+	}
+	
+	public void NewConvertAction() {
+		makeFadeOut();
 	}
 	
 	public void BackAction() {
