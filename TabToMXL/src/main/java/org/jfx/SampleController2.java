@@ -72,6 +72,9 @@ public class SampleController2 implements Initializable {
 	private Button convert;
 	
 	@FXML
+	private Button help;
+	
+	@FXML
 	private TextField textField;
 	
 	@FXML
@@ -135,7 +138,7 @@ public class SampleController2 implements Initializable {
 		if(textArea.getText() != "") {
 			//System.out.println(textArea.getText());
 			info2 = textArea.getText();
-			System.out.println(info2);
+			//System.out.println(info2);
 //			progress = createWorker();
 //			new Thread(progress).start();
 //			progressBar.progressProperty().unbind();
@@ -159,6 +162,15 @@ public class SampleController2 implements Initializable {
             errorAlert.setContentText("Please choose a File or Copy/Paste a Tablature to convert");
             errorAlert.showAndWait();
 		}
+	}
+	
+	public void HelpAction() {
+		Alert helpAlert = new Alert(Alert.AlertType.INFORMATION);
+        helpAlert.setHeaderText("Information on Usage");
+        helpAlert.setContentText("You can Drag and Drop a file in the Text Field given in this screen. You can also Browse for a File from your computer."
+        		+ "\n" + "The Files should only be of the format .txt or .rtf." + "\n" + "The Uploaded Files will have their content displayed on the Cop/Paste area which can be modified to the Users' preference."
+        		+ "\n" + "Hitting the Convert button converts the final variation of the Tablature in the Cop/Paste Text Area into a musicxml file.");
+        helpAlert.showAndWait();
 	}
 
 	private void makeFadeOut() {

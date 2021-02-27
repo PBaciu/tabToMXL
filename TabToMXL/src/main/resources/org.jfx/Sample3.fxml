@@ -28,6 +28,11 @@
             <Font size="20.0" />
          </font>
       </Button>
+      <Button fx:id="help" layoutX="736.0" layoutY="54.0" mnemonicParsing="false" onAction="#HelpAction" prefHeight="35.0" prefWidth="100.0" text="Help">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
       <!-- <Button fx:id="back" layoutX="721.0" layoutY="71.0" mnemonicParsing="false" onAction="#goBack" prefHeight="40.0" prefWidth="168.0" text="New Conversion">
          <font>
             <Font size="20.0" />

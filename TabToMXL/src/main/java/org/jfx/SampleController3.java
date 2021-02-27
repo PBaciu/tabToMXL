@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
@@ -57,6 +58,9 @@ public class SampleController3 implements Initializable {
 	private Button backButton;
 	
 	@FXML
+	private Button help;
+	
+	@FXML
 	private TextArea textArea;
 	
 	public void SaveAction() {
@@ -106,6 +110,15 @@ public class SampleController3 implements Initializable {
 		else {
 			textArea.setText(musicXMLBuilder.toString());
 		}
+	}
+	
+	public void HelpAction() {
+		Alert helpAlert = new Alert(Alert.AlertType.INFORMATION);
+        helpAlert.setHeaderText("Information on Usage");
+        helpAlert.setContentText("This page displays the Converted tablature in a MusicXML format."
+        		+ "\n" + "You can save the contents that are displayed into your computer using the Save button (Can only be saved as a .musicxml file."
+        		+ "\n" + "The Back button takes you back to the previous page to help you perform a new Tablature Conversion.");
+        helpAlert.showAndWait();
 	}
 	
 	public void BackAction() {
