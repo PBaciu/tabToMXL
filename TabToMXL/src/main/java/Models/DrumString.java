@@ -1,6 +1,6 @@
 package Models;
 
-public enum Drum {
+public enum DrumString {
 	   HiHatSplash,
 	   HiHatPedal,
 	   LeftBass,
@@ -23,56 +23,90 @@ public enum Drum {
 	   Crash,
 	   Cowbell,
 	   Splash,
-	   China;
+	   China,
+	   CrashCrystal,
+	   HiHat,
+	   RideCymbal,
+	   SnareDrum,
+	   HighTom,
+	   MiddleTom,
+	   LowTom,
+	   FloorTom,
+	   BassDrum,
+	   HiHatWFoot;
 
-    public static Drum parse(String s) {
+    public static DrumString parse(String s) {
         switch (s) {
+        	case "CC":
+        		return DrumString.CrashCrystal;
+        	case "HH":
+        		return DrumString.HiHat;
+        	case "Rd":
+        		return DrumString.RideCymbal;
+        	case "SN":
+        	case "SD":
+        		return DrumString.SnareDrum;
+        	case "T1":
+        	case "HT":
+        		return DrumString.HighTom;
+        	case "MT":
+        		return DrumString.MiddleTom;
+        	case "T2":
+        		return DrumString.LowTom;
+        	case "FT":
+        		return DrumString.FloorTom;
+        	case "BD":
+        		return DrumString.BassDrum;
+        	case "Hf/FH":
+        		return DrumString.HiHatWFoot;
+        		
+        		
             case "HiHatSplash":
-                return Drum.HiHatSplash;
+                return DrumString.HiHatSplash;			//useless for now
             case "HiHatPedal":
-                return Drum.HiHatPedal;
+                return DrumString.HiHatPedal;
             case "LeftBass":
-                return Drum.LeftBass;
+                return DrumString.LeftBass;
             case "RightBass":
-                return Drum.RightBass;
+                return DrumString.RightBass;
             case "Tom5":
-                return Drum.Tom5;
+                return DrumString.Tom5;
             case "Tom4":
-                return Drum.Tom4;
+                return DrumString.Tom4;
             case "Tom3":
-                return Drum.Tom3;
+                return DrumString.Tom3;
             case "SnareBuzz":
-                return Drum.SnareBuzz;
+                return DrumString.SnareBuzz;
             case "SnareDoubles":
-                return Drum.SnareDoubles;
+                return DrumString.SnareDoubles;
             case "RimClick":
-                return Drum.RimClick;
+                return DrumString.RimClick;
             case "GhostNote":
-                return Drum.GhostNote;
+                return DrumString.GhostNote;
             case "Snare":
-                return Drum.Snare;
+                return DrumString.Snare;
             case "Tom2":
-                return Drum.Tom2;
+                return DrumString.Tom2;
             case "Tom1":
-                return Drum.Tom1;
+                return DrumString.Tom1;
             case "OpenHiHat":
-                return Drum.OpenHiHat;
+                return DrumString.OpenHiHat;
             case "ClosedHiHat":
-                return Drum.ClosedHiHat;
+                return DrumString.ClosedHiHat;
             case "RideBell":
-                return Drum.RideBell;
+                return DrumString.RideBell;
             case "Ride":
-                return Drum.Ride;
+                return DrumString.Ride;
             case "ChokedCrash":
-                return Drum.ChokedCrash;
+                return DrumString.ChokedCrash;
             case "Crash":
-                return Drum.Crash;
+                return DrumString.Crash;
             case "Cowbell":
-                return Drum.Cowbell;
+                return DrumString.Cowbell;
             case "Splash":
-                return Drum.Splash;
+                return DrumString.Splash;
             case "China":
-                return Drum.China;
+                return DrumString.China;
             default:
                 throw new IllegalStateException("Unexpected value: " + s);
         }

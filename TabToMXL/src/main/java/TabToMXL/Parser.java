@@ -141,6 +141,113 @@ public class Parser {
             exception.printStackTrace();
         }
     }
+    
+    public void parseDrumsTab() {
+        String[] standard = {"CC", "HH", "SD", "HT", "MT", "BD"};
+        List<TabLine> tabLines = new ArrayList<>();
+        List<DrumString> tuning = new ArrayList<>();
+        for (var line : this.tab.split("\n\\s*\n")) {
+
+            var lines = new FunctionalList<>(line.lines().collect(Collectors.toList()));
+
+            AtomicInteger barDelimiterIndex = new AtomicInteger(-1);
+
+            var subListStuff = new FunctionalList<>(lines);
+
+            var mapped = subListStuff.flatMapIndexed((row, l) -> {
+                var firstPipeIndex = l.indexOf('|');
+                barDelimiterIndex.set(l.indexOf('|', 2));
+                var split = new FunctionalList<>(Arrays.asList(l.substring(firstPipeIndex + 1).split("\\|")));
+                var label = DrumString.parse(!l.substring(0, firstPipeIndex).equals("") ? l.substring(0, firstPipeIndex): standard[row]);
+                tuning.add(label);
+                return split.mapIndexed((col, it) -> new IntermediaryGarbage2(label, row, col, it));
+            });
+
+            var grouped = mapped.groupBy(intermediaryGarbage -> intermediaryGarbage.col);
+
+            var bars = grouped.values().stream().map(list -> list.stream().map(intermediaryGarbage2 -> {
+                var map = new HashMap<DrumString, AtomicInteger>();
+                var matches = Pattern.compile("([\\dhpb\\[\\]/])*")
+                        .matcher(intermediaryGarbage2.val)
+                        .results()
+                        .map(MatchResult::group);
+
+
+                return matches.map(match -> {
+                    //[7]
+                    if (match.matches("\\[(\\d+)]")) {
+                        int prev = intermediaryGarbage2.val.indexOf(match,map.getOrDefault(intermediaryGarbage2.label, new AtomicInteger(0)).get());
+                        map.put(intermediaryGarbage2.label, new AtomicInteger(prev + 1));
+                        return new Note(List.of(Integer.parseInt(match.substring(match.indexOf('[') + 1, match.indexOf(']')))),
+                                intermediaryGarbage2.label, true, null, intermediaryGarbage2.col,  prev - 1);
+                    }
+                    //bend chain eg. 5b7b9
+                    else if (match.matches("^[\\db]+$")) {
+                        int prev = intermediaryGarbage2.val.indexOf(match,map.getOrDefault(intermediaryGarbage2.label, new AtomicInteger(0)).get());
+                        map.put(intermediaryGarbage2.label, new AtomicInteger(prev + 1));
+                        var frets = Arrays.stream(match.split("b")).map(Integer::parseInt).collect(Collectors.toList());
+                        return new Note(frets, intermediaryGarbage2.label, false, frets.size() == 1 ? null : IntStream.range(0, frets.size() - 1)
+                                .mapToObj(i -> NoteRelationship.BEND).collect(Collectors.toList()), intermediaryGarbage2.col, prev - 1);
+                    }
+                    //hammer chain eg. 5h7h9
+                    else if (match.matches("^[\\dh]+$")) {
+                        var frets = Arrays.stream(match.split("h")).map(Integer::parseInt).collect(Collectors.toList());
+                        return new Note(frets, intermediaryGarbage2.label, false, frets.size() == 1 ? null : IntStream.range(0, frets.size() - 1)
+                                .mapToObj(i -> NoteRelationship.HAMMERON).collect(Collectors.toList()), intermediaryGarbage2.col, intermediaryGarbage2.val.indexOf(match, map.getOrDefault(intermediaryGarbage2.label, new AtomicInteger(0)).get()) - 1);
+                    }
+                    //pulloff chain eg. 7p5p3
+                    else if (match.matches("^[\\dp]+$")) {
+                        var frets = Arrays.stream(match.split("p")).map(Integer::parseInt).collect(Collectors.toList());
+                        return new Note(frets, intermediaryGarbage2.label, false, frets.size() == 1 ? null : IntStream.range(0, frets.size() - 1)
+                                .mapToObj(i -> NoteRelationship.PULLOFF).collect(Collectors.toList()), intermediaryGarbage2.col, intermediaryGarbage2.val.indexOf(match, map.getOrDefault(intermediaryGarbage2.label, new AtomicInteger(0)).get()) - 1);
+                    }
+                    //slide eg. 5/9
+                    else if (match.matches("^[\\d/]+$")) {
+                        var frets = Arrays.stream(match.split("/")).map(Integer::parseInt).collect(Collectors.toList());
+                        return new Note(frets, intermediaryGarbage2.label, false, frets.size() == 1 ? null : IntStream.range(0, frets.size() - 1)
+                                .mapToObj(i -> NoteRelationship.SLIDE).collect(Collectors.toList()), intermediaryGarbage2.col, intermediaryGarbage2.val.indexOf(match, map.getOrDefault(intermediaryGarbage2.label, new AtomicInteger(0)).get()) - 1);
+                    } else {
+                        return new Note(null, intermediaryGarbage2.label, false, null, intermediaryGarbage2.col, intermediaryGarbage2.val.indexOf(match, map.getOrDefault(intermediaryGarbage2.label, new AtomicInteger(0)).get()) - 1);
+                    }
+
+
+                    //TODO Handle cases of mixed hammeron, pullofs, bends and slides
+
+                }).collect(Collectors.groupingBy(note -> note.inBar));
+            }).collect(Collectors.toList())).collect(Collectors.toCollection(ArrayList::new));
+            List<Bar> barModelList = new ArrayList<>();
+            for(int i = 0; i < bars.size(); i++) {
+                List<Note> notes = new ArrayList<>();
+                for (var note : bars.get(i)){
+                    notes.addAll(note.get(i));
+                }
+                int barLength = (notes.size() / 6 ) - 2;
+                notes = notes.parallelStream().filter(note -> Objects.nonNull(note.frets)).collect(Collectors.toList());
+                Bar bar = new Bar(notes, barLength);
+
+                barModelList.add(bar);
+            }
+            List<Bar> barList = new ArrayList<>();
+            for (var bar: barModelList) {
+                PriorityQueue<Note> pq = new PriorityQueue<>(bar.notes);
+                List<Note> notes = new ArrayList<>();
+                while (!pq.isEmpty()) {
+                    notes.add(pq.poll());
+                }
+                Bar b = new Bar(notes, bar.barLength);
+                barList.add(b);
+            }
+            TabLine tabLine = new TabLine(barList);
+            tabLines.add(tabLine);
+        }
+        Collections.reverse(tuning);
+        try {
+            generateDrumXML(new Tab(tabLines, tuning));
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+    
     public void generateGuitarXML(Tab tab) throws Exception{
         JAXBContext context = JAXBContext.newInstance(ScorePartwise.class);
         Marshaller marshaller = context.createMarshaller();
