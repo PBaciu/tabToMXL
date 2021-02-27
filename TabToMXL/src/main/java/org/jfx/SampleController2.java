@@ -236,57 +236,66 @@ public class SampleController2 implements Initializable {
 
 	        boolean result = false;
 	        if (db.hasFiles()){
-
-	        	//listView.getItems().add(db.getFiles().toString());
-	        	File droppedFile = db.getFiles().get(0);
-	        	textField.setText("");
-	        	textArea.setText("");
-	        	info3 = "";
-	        	if(droppedFile != null) {
-	    			if(droppedFile.getName().endsWith(".txt")) {
-	    				//listView.getItems().add(droppedFile.getName());
-	    				textField.setText(droppedFile.getName());
-	    			}
-	    			else {
-	    				Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-	    	            errorAlert.setHeaderText("Invalid File!");
-	    	            errorAlert.setContentText("You need to input a .txt file");
-	    	            errorAlert.showAndWait();
-	    			}
-	    			
-	    			if(droppedFile.getName().endsWith(".txt") && info3.equals("")) {
-	    				try (Scanner scanner = new Scanner(droppedFile)) {
-	    			        while (scanner.hasNextLine())
-	    			        	info3 = info3 + scanner.nextLine() + "\n";
-	    			    } catch (FileNotFoundException e3) {
-	    			        e3.printStackTrace();
-	    			    }
-	    			}
-	    			else if(droppedFile.getName().endsWith(".txt")) {
-	    				info3 = "";
-	    				try (Scanner scanner = new Scanner(droppedFile)) {
-	    			        while (scanner.hasNextLine())
-	    			        	info3 = info3 + scanner.nextLine() + "\n";
-	    			    } catch (FileNotFoundException e4) {
-	    			        e4.printStackTrace();
-	    			    }
-	    			}
-	    			//System.out.println(info3);
-	    			if(textArea.getText().equals("")) {
-	    				textArea.setText(info3);
-	    			}
-	    			else {
-	    				textArea.clear();
-	    				textArea.setText(info3);
-	    			}
-	    		}
-	    		else {
-	    			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-	                errorAlert.setHeaderText("No File Chosen");
-	                errorAlert.setContentText("Please choose a File before you preview");
+	        	
+	        	if(db.getFiles().size() == 1) {
+	        		
+		        	//listView.getItems().add(db.getFiles().toString());
+		        	File droppedFile = db.getFiles().get(0);
+		        	textField.setText("");
+		        	textArea.setText("");
+		        	info3 = "";
+		        	if(droppedFile != null) {
+		    			if(droppedFile.getName().endsWith(".txt")) {
+		    				//listView.getItems().add(droppedFile.getName());
+		    				textField.setText(droppedFile.getName());
+		    			}
+		    			else {
+		    				Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+		    	            errorAlert.setHeaderText("Invalid File!");
+		    	            errorAlert.setContentText("You need to input a .txt file");
+		    	            errorAlert.showAndWait();
+		    			}
+		    			
+		    			if(droppedFile.getName().endsWith(".txt") && info3.equals("")) {
+		    				try (Scanner scanner = new Scanner(droppedFile)) {
+		    			        while (scanner.hasNextLine())
+		    			        	info3 = info3 + scanner.nextLine() + "\n";
+		    			    } catch (FileNotFoundException e3) {
+		    			        e3.printStackTrace();
+		    			    }
+		    			}
+		    			else if(droppedFile.getName().endsWith(".txt")) {
+		    				info3 = "";
+		    				try (Scanner scanner = new Scanner(droppedFile)) {
+		    			        while (scanner.hasNextLine())
+		    			        	info3 = info3 + scanner.nextLine() + "\n";
+		    			    } catch (FileNotFoundException e4) {
+		    			        e4.printStackTrace();
+		    			    }
+		    			}
+		    			//System.out.println(info3);
+		    			if(textArea.getText().equals("")) {
+		    				textArea.setText(info3);
+		    			}
+		    			else {
+		    				textArea.clear();
+		    				textArea.setText(info3);
+		    			}
+		    		}
+		    		else {
+		    			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+		                errorAlert.setHeaderText("No File Chosen");
+		                errorAlert.setContentText("Please choose a File before you preview");
+		                errorAlert.showAndWait();
+		    		}
+		            result = true;
+		        }
+	        	else {
+	        		Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+	                errorAlert.setHeaderText("Multiple Files Chosen");
+	                errorAlert.setContentText("Please choose one File at a time");
 	                errorAlert.showAndWait();
-	    		}
-	            result = true;
+	        	}
 	        }
 
 	        e.setDropCompleted(result);
