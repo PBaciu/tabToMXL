@@ -138,6 +138,10 @@ public class SampleController2 implements Initializable {
 		if(textArea.getText() != "") {
 			//System.out.println(textArea.getText());
 			info2 = textArea.getText();
+			Alert progressAlert = new Alert(Alert.AlertType.INFORMATION);
+			progressAlert.setHeaderText("Coversion in progress");
+			progressAlert.setContentText("Please give a few seconds for the conversion to complete.");
+			progressAlert.showAndWait();
 			//System.out.println(info2);
 //			progress = createWorker();
 //			new Thread(progress).start();
@@ -165,7 +169,7 @@ public class SampleController2 implements Initializable {
 	}
 	
 	public void HelpAction() {
-		Alert helpAlert = new Alert(Alert.AlertType.INFORMATION);
+		Alert helpAlert = new Alert(Alert.AlertType.CONFIRMATION);
         helpAlert.setHeaderText("Information on Usage");
         helpAlert.setContentText("You can Drag and Drop a file in the Text Field given in this screen. You can also Browse for a File from your computer."
         		+ "\n" + "The Files should only be of the format .txt or .rtf." + "\n" + "The Uploaded Files will have their content displayed on the Cop/Paste area which can be modified to the Users' preference."

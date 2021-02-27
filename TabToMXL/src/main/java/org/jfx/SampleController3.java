@@ -113,7 +113,7 @@ public class SampleController3 implements Initializable {
 	}
 	
 	public void HelpAction() {
-		Alert helpAlert = new Alert(Alert.AlertType.INFORMATION);
+		Alert helpAlert = new Alert(Alert.AlertType.CONFIRMATION);
         helpAlert.setHeaderText("Information on Usage");
         helpAlert.setContentText("This page displays the Converted tablature in a MusicXML format."
         		+ "\n" + "You can save the contents that are displayed into your computer using the Save button (Can only be saved as a .musicxml file."
