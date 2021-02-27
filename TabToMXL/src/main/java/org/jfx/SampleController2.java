@@ -79,22 +79,23 @@ public class SampleController2 implements Initializable {
 	
 	public void ButtonAction(ActionEvent event) {
 		FileChooser fc = new FileChooser();
+		fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text File", "*.txt"));
 		File selectedFile = fc.showOpenDialog(null);
 		textField.setText("");
 		if(selectedFile != null) {
-			if(selectedFile.getName().endsWith(".txt") || selectedFile.getName().endsWith(".rtf")) {
+			if(selectedFile.getName().endsWith(".txt")) {
 				//listView.getItems().add(selectedFile.getName());
 				textField.setText(selectedFile.getName());
 			}
 			else {
 				Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 	            errorAlert.setHeaderText("Invalid File!");
-	            errorAlert.setContentText("You need to input a .txt or .rtf File");
+	            errorAlert.setContentText("You need to input a .txt file");
 	            errorAlert.showAndWait();
 				//System.out.println("Invalid File! You need to input a txt file");
 			}
 			
-			if((selectedFile.getName().endsWith(".txt") || selectedFile.getName().endsWith(".rtf")) && info1 == "") {
+			if(selectedFile.getName().endsWith(".txt") && info1.equals("")) {
 				try (Scanner scanner = new Scanner(selectedFile)) {
 			        while (scanner.hasNextLine())
 			        	info1 = info1 + scanner.nextLine() + "\n";
@@ -130,7 +131,7 @@ public class SampleController2 implements Initializable {
 
 	}
 	
-	public void ConvertAction(ActionEvent event) {
+	public void ConvertAction() {
 		if(textArea.getText() != "") {
 			//System.out.println(textArea.getText());
 			info2 = textArea.getText();
@@ -159,34 +160,14 @@ public class SampleController2 implements Initializable {
             errorAlert.showAndWait();
 		}
 	}
-	
-	public Task createWorker() {
-	    return new Task() {
-	      @Override
-	      protected Object call() throws Exception {
-	        for (int i = 0; i < 10; i++) {
-	          Thread.sleep(500);
-	          updateMessage("500 milliseconds");
-	          updateProgress(i + 1, 10);
-	        }
-	        return true;
-	      }
-	    };
-	  }
-	
+
 	private void makeFadeOut() {
 		FadeTransition fadeTransition = new FadeTransition();
 		fadeTransition.setDuration(Duration.millis(500));
 		fadeTransition.setNode(rootPane);
 		fadeTransition.setFromValue(1);
 		fadeTransition.setToValue(0);
-		fadeTransition.setOnFinished(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				loadNextScene();
-				
-			}
-		});
+		fadeTransition.setOnFinished(event -> loadNextScene());
 		fadeTransition.play();
 	}
 	
@@ -234,6 +215,7 @@ public class SampleController2 implements Initializable {
 		textField.setOnDragDropped(e -> {
 
 	        Dragboard db = e.getDragboard();
+
 	        boolean result = false;
 	        if (db.hasFiles()){
 
@@ -241,18 +223,18 @@ public class SampleController2 implements Initializable {
 	        	File droppedFile = db.getFiles().get(0);
 	        	textField.setText("");
 	        	if(droppedFile != null) {
-	    			if(droppedFile.getName().endsWith(".txt") || droppedFile.getName().endsWith(".rtf")) {
+	    			if(droppedFile.getName().endsWith(".txt")) {
 	    				//listView.getItems().add(droppedFile.getName());
 	    				textField.setText(droppedFile.getName());
 	    			}
 	    			else {
 	    				Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 	    	            errorAlert.setHeaderText("Invalid File!");
-	    	            errorAlert.setContentText("You need to input a .txt or .rtf File");
+	    	            errorAlert.setContentText("You need to input a .txt file");
 	    	            errorAlert.showAndWait();
 	    			}
 	    			
-	    			if((droppedFile.getName().endsWith(".txt") || droppedFile.getName().endsWith(".rtf")) && info3 == "") {
+	    			if(droppedFile.getName().endsWith(".txt")  && info3.equals("")) {
 	    				try (Scanner scanner = new Scanner(droppedFile)) {
 	    			        while (scanner.hasNextLine())
 	    			        	info3 = info3 + scanner.nextLine() + "\n";
@@ -270,7 +252,7 @@ public class SampleController2 implements Initializable {
 	    			    }
 	    			}
 	    			//System.out.println(info3);
-	    			if(textArea.getText() == "") {
+	    			if(textArea.getText().equals("")) {
 	    				textArea.setText(info3);
 	    			}
 	    			else {
