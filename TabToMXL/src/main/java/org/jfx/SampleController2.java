@@ -72,6 +72,9 @@ public class SampleController2 implements Initializable {
 	private Button convert;
 	
 	@FXML
+	private Button help;
+	
+	@FXML
 	private TextField textField;
 	
 	@FXML
@@ -79,22 +82,25 @@ public class SampleController2 implements Initializable {
 	
 	public void ButtonAction(ActionEvent event) {
 		FileChooser fc = new FileChooser();
+		fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text File", "*.txt"));
 		File selectedFile = fc.showOpenDialog(null);
 		textField.setText("");
+		textArea.setText("");
+		info1 = "";
 		if(selectedFile != null) {
-			if(selectedFile.getName().endsWith(".txt") || selectedFile.getName().endsWith(".rtf")) {
+			if(selectedFile.getName().endsWith(".txt")) {
 				//listView.getItems().add(selectedFile.getName());
 				textField.setText(selectedFile.getName());
 			}
 			else {
 				Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 	            errorAlert.setHeaderText("Invalid File!");
-	            errorAlert.setContentText("You need to input a .txt or .rtf File");
+	            errorAlert.setContentText("You need to input a .txt file");
 	            errorAlert.showAndWait();
 				//System.out.println("Invalid File! You need to input a txt file");
 			}
 			
-			if((selectedFile.getName().endsWith(".txt") || selectedFile.getName().endsWith(".rtf")) && info1 == "") {
+			if(selectedFile.getName().endsWith(".txt") && info1.equals("")) {
 				try (Scanner scanner = new Scanner(selectedFile)) {
 			        while (scanner.hasNextLine())
 			        	info1 = info1 + scanner.nextLine() + "\n";
@@ -102,7 +108,7 @@ public class SampleController2 implements Initializable {
 			        e1.printStackTrace();
 			    }
 			}
-			else {
+			else if (selectedFile.getName().endsWith(".txt")) {
 				info1 = "";
 				try (Scanner scanner = new Scanner(selectedFile)) {
 			        while (scanner.hasNextLine())
@@ -130,11 +136,15 @@ public class SampleController2 implements Initializable {
 
 	}
 	
-	public void ConvertAction(ActionEvent event) {
+	public void ConvertAction() {
 		if(textArea.getText() != "") {
 			//System.out.println(textArea.getText());
 			info2 = textArea.getText();
-			System.out.println(info2);
+			Alert progressAlert = new Alert(Alert.AlertType.INFORMATION);
+			progressAlert.setHeaderText("Coversion in progress");
+			progressAlert.setContentText("Please give a few seconds for the conversion to complete.");
+			progressAlert.showAndWait();
+			//System.out.println(info2);
 //			progress = createWorker();
 //			new Thread(progress).start();
 //			progressBar.progressProperty().unbind();
@@ -160,40 +170,39 @@ public class SampleController2 implements Initializable {
 		}
 	}
 	
-	public Task createWorker() {
-	    return new Task() {
-	      @Override
-	      protected Object call() throws Exception {
-	        for (int i = 0; i < 10; i++) {
-	          Thread.sleep(500);
-	          updateMessage("500 milliseconds");
-	          updateProgress(i + 1, 10);
-	        }
-	        return true;
-	      }
-	    };
-	  }
-	
+	public void HelpAction() {
+		Alert helpAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        helpAlert.setHeaderText("Information on Usage");
+        helpAlert.setContentText("You can Drag and Drop a file in the Text Field given in this screen. You can also Browse for a File from your computer."
+        		+ "\n" + "The Files should only be of the format .txt or .rtf." + "\n" + "The Uploaded Files will have their content displayed on the Copy/Paste area which can be modified to the Users' preference."
+        		+ "\n" + "Hitting the Convert button converts the final variation of the Tablature in the Copy/Paste Text Area into a musicxml file.");
+        helpAlert.showAndWait();
+	}
+
 	private void makeFadeOut() {
 		FadeTransition fadeTransition = new FadeTransition();
 		fadeTransition.setDuration(Duration.millis(500));
 		fadeTransition.setNode(rootPane);
 		fadeTransition.setFromValue(1);
 		fadeTransition.setToValue(0);
-		fadeTransition.setOnFinished(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				loadNextScene();
-				
-			}
-		});
+		fadeTransition.setOnFinished(event -> loadNextScene());
 		fadeTransition.play();
 	}
 	
 	private void loadNextScene() {
 		try {
 			Parser p = new Parser(textArea.getText());
-			p.readTab();
+			var tab = p.readTab();
+			Thread thread = new Thread(() -> {
+				try {
+					p.generateXML(tab);
+				} catch (Exception exception) {
+					exception.printStackTrace();
+				}
+			});
+			thread.start();
+			thread.join();
+
 //			progress = createWorker();
 //			new Thread(progress).start();
 //			progressBar.progressProperty().unbind();
@@ -222,27 +231,30 @@ public class SampleController2 implements Initializable {
 	        e.consume();
 	    });
 		textField.setOnDragDropped(e -> {
-
+			
 	        Dragboard db = e.getDragboard();
+
 	        boolean result = false;
 	        if (db.hasFiles()){
 
 	        	//listView.getItems().add(db.getFiles().toString());
 	        	File droppedFile = db.getFiles().get(0);
 	        	textField.setText("");
+	        	textArea.setText("");
+	        	info3 = "";
 	        	if(droppedFile != null) {
-	    			if(droppedFile.getName().endsWith(".txt") || droppedFile.getName().endsWith(".rtf")) {
+	    			if(droppedFile.getName().endsWith(".txt")) {
 	    				//listView.getItems().add(droppedFile.getName());
 	    				textField.setText(droppedFile.getName());
 	    			}
 	    			else {
 	    				Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 	    	            errorAlert.setHeaderText("Invalid File!");
-	    	            errorAlert.setContentText("You need to input a .txt or .rtf File");
+	    	            errorAlert.setContentText("You need to input a .txt file");
 	    	            errorAlert.showAndWait();
 	    			}
 	    			
-	    			if((droppedFile.getName().endsWith(".txt") || droppedFile.getName().endsWith(".rtf")) && info3 == "") {
+	    			if(droppedFile.getName().endsWith(".txt") && info3.equals("")) {
 	    				try (Scanner scanner = new Scanner(droppedFile)) {
 	    			        while (scanner.hasNextLine())
 	    			        	info3 = info3 + scanner.nextLine() + "\n";
@@ -250,7 +262,7 @@ public class SampleController2 implements Initializable {
 	    			        e3.printStackTrace();
 	    			    }
 	    			}
-	    			else {
+	    			else if(droppedFile.getName().endsWith(".txt")) {
 	    				info3 = "";
 	    				try (Scanner scanner = new Scanner(droppedFile)) {
 	    			        while (scanner.hasNextLine())
@@ -260,7 +272,7 @@ public class SampleController2 implements Initializable {
 	    			    }
 	    			}
 	    			//System.out.println(info3);
-	    			if(textArea.getText() == "") {
+	    			if(textArea.getText().equals("")) {
 	    				textArea.setText(info3);
 	    			}
 	    			else {
