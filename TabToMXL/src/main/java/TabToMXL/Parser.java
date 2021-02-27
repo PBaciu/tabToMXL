@@ -54,7 +54,6 @@ public class Parser {
 
             var grouped = mapped.groupBy(intermediaryGarbage -> intermediaryGarbage.col);
 
-
             var bars = grouped.values().stream().map(list -> list.stream().map(intermediaryGarbage -> {
                 var map = new HashMap<GuitarString, AtomicInteger>();
                 var matches = Pattern.compile("([\\dhpb\\[\\]/])*")
@@ -111,8 +110,9 @@ public class Parser {
                 for (var note : bars.get(i)){
                     notes.addAll(note.get(i));
                 }
+                int barLength = (notes.size() / 6 ) - 2;
                 notes = notes.parallelStream().filter(note -> Objects.nonNull(note.frets)).collect(Collectors.toList());
-                Bar bar = new Bar(notes, 4);
+                Bar bar = new Bar(notes, barLength);
 
                 barModelList.add(bar);
             }
@@ -123,8 +123,9 @@ public class Parser {
                 while (!pq.isEmpty()) {
                     notes.add(pq.poll());
                 }
-                Bar b = new Bar(notes, 4);
+                Bar b = new Bar(notes, bar.barLength);
                 barList.add(b);
+                System.out.println(b.barLength);
             }
             TabLine tabLine = new TabLine(barList);
             tabLines.add(tabLine);
@@ -165,7 +166,7 @@ public class Parser {
                 ScorePartwise.Part.Measure measure = new ScorePartwise.Part.Measure();
                 measure.setNumber(Integer.toString(currMeasure + 1));
                 Attributes attributes = new Attributes();
-                attributes.setDivisions(new BigDecimal(2));
+                attributes.setDivisions(new BigDecimal(line.bars.get(i).barLength / 4));
                 Key key = new Key();
                 key.setFifths(BigInteger.valueOf(0));
                 attributes.getKey().add(key);
@@ -176,7 +177,7 @@ public class Parser {
                 attributes.getClef().add(clef);
 
                 Time time = factory.createTime();
-                var beats = factory.createTimeBeats(Integer.toString(line.bars.get(i).beatsPerBar));
+                var beats = factory.createTimeBeats(Integer.toString(4));
                 var beatType = factory.createTimeBeatType(Integer.toString(4));
                 time.getTimeSignature().add(beats);
                 time.getTimeSignature().add(beatType);
@@ -207,10 +208,8 @@ public class Parser {
                 }
                 measure.getNoteOrBackupOrForward().add(attributes);
                 for (var n : line.bars.get(i).notes) {
-                    System.out.println(n.frets);
-                    if (n.frets.size() > 1) {
-                        System.out.println(n.relationships);
-                    }
+                    if (n.frets.size() == 1) {
+
                     generated.Note note = new generated.Note();
                     Pitch p = new Pitch();
                     Notations notations = new Notations();
@@ -248,7 +247,93 @@ public class Parser {
                     note.setPitch(p);
                     note.getNotations().add(notations);
                     measure.getNoteOrBackupOrForward().add(note);
+                    }
+                    else if (n.frets.size() == 2){
 
+                        for (int index = 0; index < n.frets.size(); index ++) {
+
+                            Step step;
+                            int octave;
+                            int string;
+                            switch (n.string) {
+                                case HIGH_E -> {step = Step.E; octave = 4; string = 1;}
+                                case B -> {step = Step.B; octave = 3; string = 2;}
+                                case G -> {step = Step.G; octave = 3; string = 3;}
+                                case D -> {step = Step.D; octave = 3; string = 4;}
+                                case A -> {step = Step.A; octave = 2; string = 5;}
+                                case LOW_E -> {step = Step.E; octave = 2; string = 6;}
+                                default -> {step = Step.E; octave = 3; string = 0;}
+                            }
+                            Pitch p = new Pitch();
+                            p.setOctave(octave);
+                            p.setStep(step);
+                            int diff = 0;
+
+                            generated.String s = factory.createString();
+                            generated.Fret f = factory.createFret();
+                            Technical t = factory.createTechnical();
+                            Slur slur = factory.createSlur();
+                            slur.setPlacement(AboveBelow.ABOVE);
+                            Notations notations = new Notations();
+
+                            diff = computePitchDiff(n.frets.get(0), n.frets.get(1), n.string);
+
+                            var note = factory.createNote();
+                            var hp = factory.createHammerOnPullOff();
+                            hp.setNumber(diff);
+                            if (index == 0) {
+                                hp.setType(StartStop.START);
+                                slur.setType(StartStopContinue.START);
+                            }
+                            if (index == 1) {
+                                hp.setType(StartStop.STOP);
+                                slur.setType(StartStopContinue.STOP);
+                            }
+
+                            s.setValue(BigInteger.valueOf(string));
+                            f.setValue(BigInteger.valueOf(n.frets.get(index)));
+
+                            var ts = factory.createTechnicalString(s);
+                            var tf = factory.createTechnicalFret(f);
+
+                            if(n.relationships.get(0) == NoteRelationship.HAMMERON) {
+                                hp.setValue("H");
+                                slur.setNumber(diff);
+
+                                var hammerOn = factory.createTechnicalHammerOn(hp);
+
+                                t.getUpBowOrDownBowOrHarmonic().add(hammerOn);
+                                t.getUpBowOrDownBowOrHarmonic().add(ts);
+                                t.getUpBowOrDownBowOrHarmonic().add(tf);
+
+                            }
+                            else if(n.relationships.get(0) == NoteRelationship.PULLOFF) {
+                                hp.setValue("P");
+                                var pullOff = factory.createTechnicalPullOff(hp);
+
+
+                                t.getUpBowOrDownBowOrHarmonic().add(pullOff);
+                                t.getUpBowOrDownBowOrHarmonic().add(ts);
+                                t.getUpBowOrDownBowOrHarmonic().add(tf);
+
+                                t.getUpBowOrDownBowOrHarmonic().add(pullOff);
+                                t.getUpBowOrDownBowOrHarmonic().add(ts);
+                                t.getUpBowOrDownBowOrHarmonic().add(tf);
+                            }
+                            var noteType = factory.createNoteType();
+                            noteType.setValue("eighth");
+                            note.setType(noteType);
+                            note.setDuration(BigDecimal.valueOf(1));
+                            note.setVoice("1");
+                            notations.setTechnical(t);
+                            notations.getTiedOrSlurOrTuplet().add(slur);
+                            note.setPitch(p);
+                            note.getNotations().add(notations);
+                            measure.getNoteOrBackupOrForward().add(note);
+                        }
+
+
+                    }
                 }
 
                 part.getMeasure().add(measure);
@@ -266,5 +351,25 @@ public class Parser {
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         String tDir = System.getProperty("java.io.tmpdir");
         marshaller.marshal(scorePartwise, new BufferedWriter(new FileWriter(tDir + "result.xml")));
+    }
+
+
+    int computePitchDiff(int fret1, int fret2, GuitarString string) {
+        int counter = 0;
+        List<String> noteArray = List.of("A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#");
+        String startPoint;
+        switch (string) {
+            case HIGH_E: startPoint = "E";
+            case LOW_E: startPoint = "E";
+            case A: startPoint = "A";
+            case B: startPoint = "B";
+            case D: startPoint = "D";
+            case G: startPoint = "G";
+            default: startPoint = "A";
+        }
+        int index1 = noteArray.indexOf(startPoint) + fret1;
+        int index2 = noteArray.indexOf(startPoint) + fret2;
+
+        return Math.abs(index2 - index1);
     }
 }

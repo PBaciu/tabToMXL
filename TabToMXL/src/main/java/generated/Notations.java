@@ -70,7 +70,7 @@ public class Notations {
         @XmlElement(name = "glissando", type = Glissando.class),
         @XmlElement(name = "slide", type = Slide.class),
         @XmlElement(name = "ornaments", type = Ornaments.class),
-//        @XmlElement(name = "technical", type = Technical.class),
+        @XmlElement(name = "technical", type = Technical.class),
         @XmlElement(name = "articulations", type = Articulations.class),
         @XmlElement(name = "dynamics", type = Dynamics.class),
         @XmlElement(name = "fermata", type = Fermata.class),
