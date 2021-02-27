@@ -125,7 +125,6 @@ public class Parser {
                 }
                 Bar b = new Bar(notes, bar.barLength);
                 barList.add(b);
-                System.out.println(b.barLength);
             }
             TabLine tabLine = new TabLine(barList);
             tabLines.add(tabLine);

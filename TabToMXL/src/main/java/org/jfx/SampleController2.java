@@ -138,29 +138,8 @@ public class SampleController2 implements Initializable {
 	
 	public void ConvertAction() {
 		if(textArea.getText() != "") {
-			//System.out.println(textArea.getText());
 			info2 = textArea.getText();
-			Alert progressAlert = new Alert(Alert.AlertType.INFORMATION);
-			progressAlert.setHeaderText("Coversion in progress");
-			progressAlert.setContentText("Please give a few seconds for the conversion to complete.");
-			progressAlert.show();
-			//System.out.println(info2);
-//			progress = createWorker();
-//			new Thread(progress).start();
-//			progressBar.progressProperty().unbind();
-//	        progressBar.progressProperty().bind(progress.progressProperty());
-//	        progressBar.setProgress(1);
-//			if(progressBar.getProgress() >= 0) {
-//				makeFadeOut();
-//			}
-//			for(double i = 0.0; i <= 10.0; i++) {
-//				progressBar.setProgress(i*0.01);
-//				if(progressBar.getProgress() >= 1) {
-//					makeFadeOut();
-//				}
-//			}
 			makeFadeOut();
-//			loadNextScene();
 		}
 		else {
 			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
