@@ -171,16 +171,7 @@ public class SampleController2 implements Initializable {
 	private void loadNextScene() {
 		try {
 			Parser p = new Parser(textArea.getText());
-			var tab = p.readTab();
-			Thread thread = new Thread(() -> {
-				try {
-					p.generateXML(tab);
-				} catch (Exception exception) {
-					exception.printStackTrace();
-				}
-			});
-			thread.start();
-			thread.join();
+			p.readTab();
 
 //			progress = createWorker();
 //			new Thread(progress).start();

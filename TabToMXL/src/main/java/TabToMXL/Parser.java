@@ -31,7 +31,12 @@ public class Parser {
         this.tab = tab;
     }
 
-    public Tab readTab() {
+    public void readTab() {
+
+
+        parseGuitarTab();
+    }
+    public void parseGuitarTab() {
         String[] standard = {"e", "B", "G", "D", "A", "E"};
         List<TabLine> tabLines = new ArrayList<>();
         List<GuitarString> tuning = new ArrayList<>();
@@ -130,9 +135,13 @@ public class Parser {
             tabLines.add(tabLine);
         }
         Collections.reverse(tuning);
-        return new Tab(tabLines, tuning);
+        try {
+            generateGuitarXML(new Tab(tabLines, tuning));
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
     }
-    public void generateXML(Tab tab) throws Exception{
+    public void generateGuitarXML(Tab tab) throws Exception{
         JAXBContext context = JAXBContext.newInstance(ScorePartwise.class);
         Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty("com.sun.xml.bind.xmlHeaders",
@@ -206,7 +215,11 @@ public class Parser {
                     attributes.getTime().add(time);
                 }
                 measure.getNoteOrBackupOrForward().add(attributes);
+                var distanceMap = new HashMap<Integer, List<Note>>();
                 for (var n : line.bars.get(i).notes) {
+
+                    distanceMap.putIfAbsent(n.absoluteDistance, new ArrayList<>());
+                    distanceMap.get(n.absoluteDistance).add(n);
                     if (n.frets.size() == 1) {
 
                     generated.Note note = new generated.Note();
@@ -322,6 +335,9 @@ public class Parser {
                             var noteType = factory.createNoteType();
                             noteType.setValue("eighth");
                             note.setType(noteType);
+                            if (distanceMap.get(n.absoluteDistance).size() > 1) {
+                                note.setChord(factory.createEmpty());
+                            }
                             note.setDuration(BigDecimal.valueOf(1));
                             note.setVoice("1");
                             notations.setTechnical(t);
@@ -334,7 +350,7 @@ public class Parser {
 
                     }
                 }
-
+                System.out.println(distanceMap);
                 part.getMeasure().add(measure);
                 currMeasure++;
             }
