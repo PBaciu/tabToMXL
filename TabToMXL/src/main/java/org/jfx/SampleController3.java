@@ -1,37 +1,29 @@
 package org.jfx;
 
-import java.io.*;
-import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import TabToMXL.Parser;
-
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
-import java.util.Scanner;
-
 import javafx.animation.FadeTransition;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.*;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Objects;
+import java.util.ResourceBundle;
+import java.util.Scanner;
+
 public class SampleController3 implements Initializable {
 	
-	String musicXML = "";
+	StringBuilder musicXMLBuilder = new StringBuilder();
 	
 	@FXML
 	private AnchorPane rootPane;
@@ -67,40 +59,28 @@ public class SampleController3 implements Initializable {
 	@FXML
 	private TextArea textArea;
 	
-	public void SaveAction(ActionEvent event) {
+	public void SaveAction() {
 		
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("MusicXML File", "*.musicxml"));
 		File file = fileChooser.showSaveDialog(new Stage());
 
-		BufferedReader sampleFile = null;
+		StringBuilder content = new StringBuilder();
 		try {
-			sampleFile = new BufferedReader(new FileReader(System.getProperty("java.io.tmpdir") + "result.xml"));
-		} catch (FileNotFoundException e) {
+			for(var line: Files.readAllLines(Path.of( System.getProperty("java.io.tmpdir") + "result.xml")) ){
+				content.append(line);
+				content.append("\n");
+			}
+			saveSystem(file, content.toString());
+		} catch (IOException e) {
 			e.printStackTrace();
-		}
-		//File sampleFile = new File(getClass().getResource("/application/SampleMXLFile").getFile());{
-		if(sampleFile != null) {
-			try (Scanner scanner = new Scanner(sampleFile)) {
-		        while (scanner.hasNextLine())
-		        	musicXML = musicXML + scanner.nextLine() + "\n";
-		            //System.out.println(scanner.nextLine());
-		    }
-		}
-		
-		if(file != null) {
-			saveSystem(file,musicXML);	
-			
 		}
 	}
 	
 	
 	public void saveSystem(File file, String content) {
-		try {
-			PrintWriter printWriter = new PrintWriter(file);
-			printWriter.write(content);
-			printWriter.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))){
+			bw.write(content);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -116,19 +96,19 @@ public class SampleController3 implements Initializable {
 		if(sampleFile != null) {
 			try (Scanner scanner = new Scanner(sampleFile)) {
 		        while (scanner.hasNextLine())
-		        	musicXML = musicXML + scanner.nextLine() + "\n";
+		        	musicXMLBuilder.append(scanner.nextLine()).append("\n");
 		            //System.out.println(scanner.nextLine());
 		    }
 		}
-		if(musicXML == "") {
+		if(musicXMLBuilder.toString().equals("")) {
 			textArea.setText("The File is empty");
 		}
 		else {
-			textArea.setText(musicXML);
+			textArea.setText(musicXMLBuilder.toString());
 		}
 	}
 	
-	public void BackAction(ActionEvent event) {
+	public void BackAction() {
 		makeFadeOut();
 	}
 	
@@ -138,13 +118,7 @@ public class SampleController3 implements Initializable {
 		fadeTransition.setNode(rootPane);
 		fadeTransition.setFromValue(1);
 		fadeTransition.setToValue(0);
-		fadeTransition.setOnFinished(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				loadPrevScene();
-				
-			}
-		});
+		fadeTransition.setOnFinished(event -> loadPrevScene());
 		fadeTransition.play();
 	}
 	

@@ -10,12 +10,7 @@ package generated;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElements;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 
 
 /**
@@ -60,8 +55,10 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "notations", propOrder = {
     "footnote",
     "level",
+    "technical",
     "tiedOrSlurOrTuplet"
 })
+
 public class Notations {
 
     protected FormattedText footnote;
@@ -85,6 +82,9 @@ public class Notations {
     protected List<Object> tiedOrSlurOrTuplet;
     @XmlAttribute(name = "print-object")
     protected YesNo printObject;
+
+    @XmlElement (name = "technical")
+    protected Technical technical;
 
     /**
      * Gets the value of the footnote property.
@@ -200,4 +200,11 @@ public class Notations {
         this.printObject = value;
     }
 
+    public Technical getTechnical() {
+        return technical;
+    }
+
+    public void setTechnical(Technical technical) {
+        this.technical = technical;
+    }
 }
