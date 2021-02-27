@@ -253,6 +253,9 @@ public class Parser {
                     var noteType = factory.createNoteType();
                     noteType.setValue("eighth");
                     note.setType(noteType);
+                        if (distanceMap.get(n.absoluteDistance).size() > 1) {
+                            note.setChord(factory.createEmpty());
+                        }
                     note.setDuration(BigDecimal.valueOf(1));
                     note.setVoice("1");
                     notations.setTechnical(t);
