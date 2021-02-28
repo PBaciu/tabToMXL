@@ -9,9 +9,9 @@
 
 <AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="900.0" style="-fx-background-color: #a0a7cc#a0a7cc #a0a7cc#a0a7cc;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jfx.SampleController2">
    <children>
-      <Button fx:id="chooseFile" layoutX="55.0" layoutY="176.0" mnemonicParsing="false" onAction="#ButtonAction" prefHeight="40.0" prefWidth="120.0" text="Browse">
+      <Button fx:id="chooseFile" layoutX="55.0" layoutY="176.0" mnemonicParsing="false" onAction="#ButtonAction" prefHeight="50.0" prefWidth="177.0" text="Browse" AnchorPane.leftAnchor="55.0">
          <font>
-            <Font size="15.0" />
+            <Font size="25.0" />
          </font></Button>
       <Label layoutX="55.0" layoutY="51.0" prefHeight="40.0" prefWidth="313.0" text="Choose File/Drag and Drop">
          <font>
@@ -23,21 +23,21 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <TextArea fx:id="textArea" layoutX="55.0" layoutY="296.0" prefHeight="363.0" prefWidth="785.0">
+      <TextArea fx:id="textArea" layoutX="55.0" layoutY="296.0" prefHeight="363.0" prefWidth="785.0" AnchorPane.bottomAnchor="141.0" AnchorPane.leftAnchor="55.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="296.0">
          <font>
             <Font name="Courier New" size="13.0" />
          </font></TextArea>
-      <Button fx:id="convert" layoutX="342.0" layoutY="683.0" mnemonicParsing="false" onAction="#ConvertAction" prefHeight="50.0" prefWidth="215.0" text="Convert" AnchorPane.leftAnchor="342.0" AnchorPane.rightAnchor="342.0">
+      <Button fx:id="convert" layoutX="342.0" layoutY="683.0" mnemonicParsing="false" onAction="#ConvertAction" prefHeight="50.0" prefWidth="215.0" text="Convert" AnchorPane.bottomAnchor="67.0" AnchorPane.rightAnchor="60.0">
          <font>
-            <Font size="17.0" />
+            <Font size="25.0" />
          </font></Button>
-      <TextField fx:id="textField" layoutX="55.0" layoutY="104.0" prefHeight="50.0" prefWidth="506.0" promptText="Drop File here (Only .txt files accepted)">
+      <TextField fx:id="textField" layoutX="55.0" layoutY="104.0" prefHeight="50.0" prefWidth="785.0" promptText="Drop File here (Only .txt or .rtf files accepted)" AnchorPane.leftAnchor="55.0" AnchorPane.rightAnchor="60.0">
          <font>
             <Font size="20.0" />
          </font></TextField>
-      <Button fx:id="help" layoutX="740.0" layoutY="51.0" mnemonicParsing="false" onAction="#HelpAction" prefHeight="40.0" prefWidth="100.0" text="Help">
+      <Button fx:id="help" layoutX="711.0" layoutY="47.0" mnemonicParsing="false" onAction="#HelpAction" prefHeight="48.0" prefWidth="129.0" text="Help" AnchorPane.rightAnchor="60.0">
          <font>
-            <Font size="20.0" />
+            <Font size="25.0" />
          </font>
       </Button>
    </children>
