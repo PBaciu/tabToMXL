@@ -31,6 +31,9 @@ public class SampleController3 implements Initializable {
 	
 	FileChooser fileChooser = new FileChooser();
 	
+	String textArea2;
+	String textField2;
+	
 	//Stage curStage = (Stage) rootPane.getScene().getWindow();
 	
 	@Override
@@ -61,7 +64,15 @@ public class SampleController3 implements Initializable {
 	private Button help;
 	
 	@FXML
+	private Button newConversion;
+	
+	@FXML
 	private TextArea textArea;
+	
+	public void initData(String textArea, String textField) {
+		this.textArea2 = textArea;
+		this.textField2 = textField;
+	}
 	
 	public void SaveAction() {
 		
@@ -121,6 +132,10 @@ public class SampleController3 implements Initializable {
         helpAlert.showAndWait();
 	}
 	
+	public void NewConvertAction() {
+		makeFadeOut2();
+	}
+	
 	public void BackAction() {
 		makeFadeOut();
 	}
@@ -135,7 +150,33 @@ public class SampleController3 implements Initializable {
 		fadeTransition.play();
 	}
 	
+	private void makeFadeOut2() {
+		FadeTransition fadeTransition = new FadeTransition();
+		fadeTransition.setDuration(Duration.millis(500));
+		fadeTransition.setNode(rootPane);
+		fadeTransition.setFromValue(1);
+		fadeTransition.setToValue(0);
+		fadeTransition.setOnFinished(event -> loadPrevScene2());
+		fadeTransition.play();
+	}
+	
 	private void loadPrevScene() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(getClass().getClassLoader().getResource("org.jfx/Sample2.fxml"));
+			Parent secondView = loader.load();
+			Scene newScene = new Scene(secondView);
+			SampleController2 controller = loader.getController();
+			controller.initData(textArea2, textField2);
+			Stage curStage = (Stage) rootPane.getScene().getWindow();
+			curStage.setScene(newScene);
+			curStage.show();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+ 	}
+	
+	private void loadPrevScene2() {
 		try {
 			Parent secondView = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("org.jfx/Sample2.fxml")));
 			Scene newScene = new Scene(secondView);

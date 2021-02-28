@@ -34,17 +34,13 @@ import javafx.util.Duration;
 
 public class SampleController2 implements Initializable {
 
-	String info1 = "";
-	String info2 = "";
-	String info3 = "";
+	String info1;
+	String info2;
+	String info3;
 	ArrayList<String> info = new ArrayList<>();
-	Task progress;
 	
 	@FXML
 	private AnchorPane rootPane;
-	
-	@FXML
-	private ProgressBar progressBar;
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -79,6 +75,11 @@ public class SampleController2 implements Initializable {
 	
 	@FXML
 	private TextArea textArea;
+	
+	public void initData(String textArea2, String textField2) {
+		textArea.setText(textArea2);
+		textField.setText(textField2);;
+	}
 	
 	public void ButtonAction(ActionEvent event) {
 		FileChooser fc = new FileChooser();
@@ -172,16 +173,22 @@ public class SampleController2 implements Initializable {
 		try {
 			Parser p = new Parser(textArea.getText());
 			p.readTab();
-
-//			progress = createWorker();
-//			new Thread(progress).start();
-//			progressBar.progressProperty().unbind();
-//	        progressBar.progressProperty().bind(progress.progressProperty());
-//	        progressBar.setProgress(1);
-
-			Parent secondView = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("org.jfx/Sample3.fxml")));
+			Thread thread = new Thread(() -> {
+				try {
+					p.generateXML(tab);
+				} catch (Exception exception) {
+					exception.printStackTrace();
+				}
+			});
+			thread.start();
+			thread.join();
+			
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(getClass().getClassLoader().getResource("org.jfx/Sample3.fxml"));
+			Parent secondView = loader.load();
 			Scene newScene = new Scene(secondView);
-			//scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			SampleController3 controller = loader.getController();
+			controller.initData(textArea.getText(), textField.getText());
 			Stage curStage = (Stage) rootPane.getScene().getWindow();
 			curStage.setScene(newScene);
 			curStage.show();
