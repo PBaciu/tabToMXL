@@ -162,13 +162,6 @@ public class SampleController3 implements Initializable {
 	
 	private void loadPrevScene() {
 		try {
-//			Parent secondView = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("org.jfx/Sample2.fxml")));
-//			Scene newScene = new Scene(secondView);
-//			//scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-//			Stage curStage = (Stage) rootPane.getScene().getWindow();
-//			curStage.setScene(newScene);
-//			curStage.show();
-			
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getClassLoader().getResource("org.jfx/Sample2.fxml"));
 			Parent secondView = loader.load();

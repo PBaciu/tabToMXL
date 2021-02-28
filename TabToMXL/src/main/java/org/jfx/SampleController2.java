@@ -42,9 +42,6 @@ public class SampleController2 implements Initializable {
 	@FXML
 	private AnchorPane rootPane;
 	
-	@FXML
-	private ProgressBar progressBar;
-	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		rootPane.setOpacity(0);
@@ -185,13 +182,6 @@ public class SampleController2 implements Initializable {
 			});
 			thread.start();
 			thread.join();
-
-//			Parent secondView = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("org.jfx/Sample3.fxml")));
-//			Scene newScene = new Scene(secondView);
-//			//scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-//			Stage curStage = (Stage) rootPane.getScene().getWindow();
-//			curStage.setScene(newScene);
-//			curStage.show();
 			
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getClassLoader().getResource("org.jfx/Sample3.fxml"));
