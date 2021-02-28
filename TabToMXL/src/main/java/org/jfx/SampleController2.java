@@ -173,15 +173,6 @@ public class SampleController2 implements Initializable {
 		try {
 			Parser p = new Parser(textArea.getText());
 			p.readTab();
-			Thread thread = new Thread(() -> {
-				try {
-					p.generateXML(tab);
-				} catch (Exception exception) {
-					exception.printStackTrace();
-				}
-			});
-			thread.start();
-			thread.join();
 			
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getClassLoader().getResource("org.jfx/Sample3.fxml"));
