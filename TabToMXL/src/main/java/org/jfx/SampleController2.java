@@ -172,7 +172,7 @@ public class SampleController2 implements Initializable {
 	private void loadNextScene() {
 		try {
 			Parser p = new Parser(textArea.getText());
-			var tab = p.readTab();
+			p.readTab();
 			Thread thread = new Thread(() -> {
 				try {
 					p.generateXML(tab);
