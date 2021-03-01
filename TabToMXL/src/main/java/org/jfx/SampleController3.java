@@ -40,7 +40,7 @@ public class SampleController3 implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		rootPane.setOpacity(0);
 		makeFade();
-		this.ViewResult();
+		this.viewResult();
 	}
 	
 	private void makeFade() {
@@ -74,7 +74,7 @@ public class SampleController3 implements Initializable {
 		this.textField2 = textField;
 	}
 	
-	public void SaveAction() {
+	public void saveAction() {
 		
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("MusicXML File", "*.musicxml"));
 		File file = fileChooser.showSaveDialog(new Stage());
@@ -101,7 +101,7 @@ public class SampleController3 implements Initializable {
 	}
 	
 	
-	public void ViewResult() {
+	public void viewResult() {
 		BufferedReader sampleFile = null;
 		try {
 			sampleFile = new BufferedReader(new FileReader(System.getProperty("java.io.tmpdir") + "result.xml"));
@@ -123,7 +123,7 @@ public class SampleController3 implements Initializable {
 		}
 	}
 	
-	public void HelpAction() {
+	public void helpAction() {
 		Alert helpAlert = new Alert(Alert.AlertType.INFORMATION);
         helpAlert.setHeaderText("Information on Usage");
         helpAlert.setContentText("•This page displays the Converted tablature in a MusicXML format. \n"
@@ -132,11 +132,11 @@ public class SampleController3 implements Initializable {
         helpAlert.showAndWait();
 	}
 	
-	public void NewConvertAction() {
+	public void newConvertAction() {
 		makeFadeOut2();
 	}
 	
-	public void BackAction() {
+	public void backAction() {
 		makeFadeOut();
 	}
 	

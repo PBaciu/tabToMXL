@@ -8,7 +8,7 @@
 
 <AnchorPane fx:id="rootPane" prefHeight="800.0" prefWidth="900.0" style="-fx-background-color: #a0a7cc#a0a7cc #a0a7cc#a0a7cc #a0a7cc#a0a7cc #a0a7cc#a0a7cc #a0a7cc#a0a7cc #a0a7cc#a0a7cc #a0a7cc#a0a7cc #a0a7cc#a0a7cc;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jfx.SampleController3">
    <children>
-      <Button fx:id="saveButton" layoutX="157.0" layoutY="717.0" mnemonicParsing="false" onAction="#SaveAction" prefHeight="48.0" prefWidth="227.0" text="Save" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="157.0">
+      <Button fx:id="saveButton" layoutX="153.0" layoutY="647.0" mnemonicParsing="false" onAction="#saveAction" prefHeight="35.0" prefWidth="100.0" text="Save" AnchorPane.bottomAnchor="113.0" AnchorPane.leftAnchor="153.0" AnchorPane.rightAnchor="547.0" AnchorPane.topAnchor="647.0">
          <font>
             <Font size="25.0" />
          </font></Button>
@@ -23,17 +23,17 @@
             <Font size="25.0" />
          </font>
       </Label>
-      <Button fx:id="backButton" layoutX="11.0" layoutY="53.0" mnemonicParsing="false" onAction="#BackAction" prefHeight="35.0" prefWidth="100.0" text="Back" AnchorPane.leftAnchor="11.0">
+      <Button fx:id="backButton" layoutX="14.0" layoutY="71.0" mnemonicParsing="false" onAction="#backAction" prefHeight="35.0" prefWidth="100.0" text="Back" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="786.0">
          <font>
             <Font size="25.0" />
          </font>
       </Button>
-      <Button fx:id="help" layoutX="791.0" layoutY="53.0" mnemonicParsing="false" onAction="#HelpAction" prefHeight="35.0" prefWidth="100.0" text="Help" AnchorPane.rightAnchor="9.0">
+      <Button fx:id="help" layoutX="786.0" layoutY="71.0" mnemonicParsing="false" onAction="#helpAction" prefHeight="35.0" prefWidth="100.0" text="Help" AnchorPane.leftAnchor="786.0" AnchorPane.rightAnchor="14.0">
          <font>
             <Font size="25.0" />
          </font>
       </Button>
-      <Button fx:id="newConversion" layoutX="517.0" layoutY="717.0" mnemonicParsing="false" onAction="#NewConvertAction" prefHeight="48.0" prefWidth="227.0" text="New Conversion" AnchorPane.bottomAnchor="35.0" AnchorPane.rightAnchor="156.0">
+      <Button fx:id="newConversion" layoutX="584.0" layoutY="647.0" mnemonicParsing="false" onAction="#newConvertAction" prefHeight="40.0" prefWidth="200.0" text="New Conversion" AnchorPane.leftAnchor="547.0" AnchorPane.rightAnchor="153.0">
          <font>
             <Font size="25.0" />
          </font>

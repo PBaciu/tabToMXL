@@ -2,6 +2,7 @@ package org.jfx;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -10,6 +11,8 @@ import java.util.ResourceBundle;
 import java.util.Scanner;
 
 import TabToMXL.Parser;
+import TabToMXL.ScoreWriter;
+import generated.ScorePartwise;
 import javafx.animation.FadeTransition;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -32,11 +35,14 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import javax.xml.bind.JAXBException;
+
 public class SampleController2 implements Initializable {
 
 	String info1;
 	String info2;
 	String info3;
+	FXMLLoader loader;
 	ArrayList<String> info = new ArrayList<>();
 	
 	@FXML
@@ -44,6 +50,8 @@ public class SampleController2 implements Initializable {
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		loader = new FXMLLoader();
+		loader.setLocation(getClass().getClassLoader().getResource("org.jfx/Sample3.fxml"));
 		rootPane.setOpacity(0);
 		makeFade();
 		this.DragDrop();
@@ -85,22 +93,14 @@ public class SampleController2 implements Initializable {
 		FileChooser fc = new FileChooser();
 		fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text File", "*.txt"));
 		File selectedFile = fc.showOpenDialog(null);
-		textField.setText("");
-		textArea.setText("");
 		info1 = "";
 		if(selectedFile != null) {
 			if(selectedFile.getName().endsWith(".txt")) {
 				//listView.getItems().add(selectedFile.getName());
 				textField.setText(selectedFile.getName());
 			}
-			else {
-				Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-	            errorAlert.setHeaderText("Invalid File!");
-	            errorAlert.setContentText("You need to input a .txt file");
-	            errorAlert.showAndWait();
-				//System.out.println("Invalid File! You need to input a txt file");
-			}
-			
+
+
 			if(selectedFile.getName().endsWith(".txt") && info1.equals("")) {
 				try (Scanner scanner = new Scanner(selectedFile)) {
 			        while (scanner.hasNextLine())
@@ -118,6 +118,7 @@ public class SampleController2 implements Initializable {
 			        e2.printStackTrace();
 			    }
 			}
+
 			//System.out.println(info1);
 			if(textArea.getText().isEmpty()) {
 				textArea.setText(info1);
@@ -127,7 +128,7 @@ public class SampleController2 implements Initializable {
 				textArea.setText(info1);
 			}
 		}
-		else {
+		else if (textArea.getText().equals("")) {
 			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setHeaderText("No File Chosen");
             errorAlert.setContentText("Please choose a File before you preview");
@@ -138,9 +139,9 @@ public class SampleController2 implements Initializable {
 	}
 	
 	public void ConvertAction() {
-		if(textArea.getText() != "") {
+		if(!textArea.getText().equals("")) {
 			info2 = textArea.getText();
-			makeFadeOut();
+			loadNextScene();
 		}
 		else {
 			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -153,40 +154,56 @@ public class SampleController2 implements Initializable {
 	public void HelpAction() {
 		Alert helpAlert = new Alert(Alert.AlertType.INFORMATION);
         helpAlert.setHeaderText("Information on Usage");
-        helpAlert.setContentText("•You can Drag and Drop a file in the Text Field provided on the screen. You can also Browse for a File from your computer. \n"
-        		+ "\n" + "•The Files should only be of the format .txt. \n" + "\n" + "•The Uploaded Files will have their content displayed on the Copy/Paste area which can be modified to the Users' preference. \n"
-        		+ "\n" + "•Hitting the Convert button converts the final variation of the Tablature in the Copy/Paste Text Area into a musicxml file.");
+        helpAlert.setContentText("""
+				You can Drag and Drop a file in the Text Field given in this screen. You can also Browse for a File from your computer.
+				The Files should only be of a .txt format
+				The Uploaded Files will have their content displayed on the Copy/Paste area which can be modified to the Users' preference.
+				Hitting the Convert button converts the final variation of the Tablature in the Copy/Paste Text Area into a musicxml file.""");
         helpAlert.showAndWait();
 	}
 
-	private void makeFadeOut() {
+	private void makeFadeOut(Parent secondView) {
 		FadeTransition fadeTransition = new FadeTransition();
 		fadeTransition.setDuration(Duration.millis(500));
 		fadeTransition.setNode(rootPane);
 		fadeTransition.setFromValue(1);
 		fadeTransition.setToValue(0);
-		fadeTransition.setOnFinished(event -> loadNextScene());
-		fadeTransition.play();
-	}
-	
-	private void loadNextScene() {
-		try {
-			Parser p = new Parser(textArea.getText());
-			p.readTab();
-			
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getClassLoader().getResource("org.jfx/Sample3.fxml"));
-			Parent secondView = loader.load();
+		fadeTransition.setOnFinished(event -> {
 			Scene newScene = new Scene(secondView);
 			SampleController3 controller = loader.getController();
 			controller.initData(textArea.getText(), textField.getText());
 			Stage curStage = (Stage) rootPane.getScene().getWindow();
 			curStage.setScene(newScene);
 			curStage.show();
-		} catch(Exception e) {
-			e.printStackTrace();
+		});
+		fadeTransition.play();
+	}
+	
+	private void loadNextScene() {
+		Parser p = new Parser();
+		try {
+			ScoreWriter writer = new ScoreWriter();
+
+			ScorePartwise scorePartwise = p.readTab(textArea.getText());
+			writer.writeToTempFile(scorePartwise);
+		} catch (Exception e) {
+			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+			errorAlert.setHeaderText("Unsupported Tablature Format Error");
+			errorAlert.setContentText("Please ensure that the tablature provided matches the format provided in .README");
+			errorAlert.showAndWait();
+			return;
 		}
+
+		Parent secondView;
+		try {
+			secondView = this.loader.load();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		makeFadeOut(secondView);
  	}
+
 	
 	private void DragDrop() {
 		textField.setEditable(false);
