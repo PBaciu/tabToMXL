@@ -11,9 +11,9 @@ public class NoteDrum implements Comparable{
     public final int inBar;
     public final int absoluteDistance;
 
-    public NoteDrum(List<Integer> frets, GuitarString string, boolean isHarmonic, List<NoteRelationship> relationships, int inBar, int absoluteDistance) {
+    public NoteDrum(List<Integer> frets, DrumString label, boolean isHarmonic, List<NoteRelationship> relationships, int inBar, int absoluteDistance) {
         this.frets = frets;
-        this.string = string;
+        this.string = label;
         this.isHarmonic = isHarmonic;
         this.relationships = relationships;
         this.inBar = inBar;
