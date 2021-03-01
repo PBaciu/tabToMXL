@@ -86,17 +86,14 @@ Outlined below are instructions for setting up the project in Eclipse.
 
 # Usage
 Our application currently consists of three pages
-  #### Welcome Page
-  This page is a simple welcome page. It will be customized in the future.<br />
-  ![image](https://user-images.githubusercontent.com/77293069/108305546-338fac00-7178-11eb-8b37-24e8cab917cf.png)<br /><br />
   
   #### Input Page
-  This page allows the insertion of text via a .txt file or copied text. <br />
-  ![image](https://user-images.githubusercontent.com/77293069/108305639-705ba300-7178-11eb-840f-87d10623fcb0.png)<br /><br />
+  This page allows the insertion of text via a .txt file that can be selected from the file system, or copied text. <br />
+  ![image](https://user-images.githubusercontent.com/77293069/109452295-6ca00a00-7a1d-11eb-93d9-6adddd26c682.png)<br /><br />
   
   #### Output Page
-  This page allows the user to view the resulting xml and gives the option to save the file.<br />
-  ![image](https://user-images.githubusercontent.com/77293069/108305689-8ff2cb80-7178-11eb-8836-2b6fe2374cd4.png)<br /><br />
+  This page allows the user to view the resulting xml and gives the option to save the file, convert another file, or go back to the previously inputted file.<br />
+  ![image](https://user-images.githubusercontent.com/77293069/109452346-8b060580-7a1d-11eb-979a-ed912778f244.png)<br /><br />
   
 # Issues
 In case of any problems, please open an issue on this github page, or email Patrick at baciupat@my.yorku.ca
