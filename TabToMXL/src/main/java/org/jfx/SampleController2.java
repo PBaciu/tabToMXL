@@ -154,7 +154,7 @@ public class SampleController2 implements Initializable {
 		Alert helpAlert = new Alert(Alert.AlertType.INFORMATION);
         helpAlert.setHeaderText("Information on Usage");
         helpAlert.setContentText("•You can Drag and Drop a file in the Text Field provided on the screen. You can also Browse for a File from your computer. \n"
-        		+ "\n" + "•The Files should only be of the format .txt or .rtf. \n" + "\n" + "•The Uploaded Files will have their content displayed on the Copy/Paste area which can be modified to the Users' preference. \n"
+        		+ "\n" + "•The Files should only be of the format .txt. \n" + "\n" + "•The Uploaded Files will have their content displayed on the Copy/Paste area which can be modified to the Users' preference. \n"
         		+ "\n" + "•Hitting the Convert button converts the final variation of the Tablature in the Copy/Paste Text Area into a musicxml file.");
         helpAlert.showAndWait();
 	}

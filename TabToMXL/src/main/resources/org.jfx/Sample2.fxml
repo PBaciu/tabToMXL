@@ -31,7 +31,7 @@
          <font>
             <Font size="25.0" />
          </font></Button>
-      <TextField fx:id="textField" layoutX="55.0" layoutY="104.0" prefHeight="50.0" prefWidth="785.0" promptText="Drop File here (Only .txt or .rtf files accepted)" AnchorPane.leftAnchor="55.0" AnchorPane.rightAnchor="60.0">
+      <TextField fx:id="textField" layoutX="55.0" layoutY="104.0" prefHeight="50.0" prefWidth="785.0" promptText="Drop File here (Only .txt files accepted)" AnchorPane.leftAnchor="55.0" AnchorPane.rightAnchor="60.0">
          <font>
             <Font size="20.0" />
          </font></TextField>
