@@ -4,6 +4,7 @@ import Models.GuitarString;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
+import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -24,6 +25,7 @@ class ParserTest {
 
     @Test
     void generateGuitarXML() {
+
     }
 
     @Test
