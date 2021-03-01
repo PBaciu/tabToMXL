@@ -13,6 +13,40 @@ The parser is a work in progress and no matter what input tab is submitted, one 
 tabToMXL uses Java 15.0.2 
 Please ensure that version 15.0.2 of java is installed on your machine prior to setup.
 
+# Supported Features
+We support the conversion of simple guitar tabs. These tabs must not contain additional information such as title, repeats, and text between lines of the tab.
+We currently support chords.
+We currently only support 6 string guitars in standard tuning.
+Hammerons and pulloffs are only supported outside of chords and in pairs of two.
+These features are currently being added.
+
+Two example tabs are shown below.
+
+```
+e|-------5-7-----7-|-8-----8-2-----2-|-0---------0-----|-----------------|
+B|-----5-----5-----|---5-------3-----|---1---1-----1---|-0-1-1-----------|
+G|---5---------5---|-----5-------2---|-----2---------2-|-0-2-2---2-------|
+D|-7-------6-------|-5-------4-------|-3---------------|-----------------|
+A|-----------------|-----------------|-----------------|-2-0-0---0---8-7-|
+E|-----------------|-----------------|-----------------|-----------------|
+ 
+e|---------7-----7-|-8-----8-2-----2-|-0---------0-----|-----------------|
+B|-------5---5-----|---5-------3-----|---1---1-----1---|-0-1-1-----------|
+G|-----5-------5---|-----5-------2---|-----2---------2-|-0-2-2-----------|
+D|---7-----6-------|-5-------4-------|-3---------------|-----------------|
+A|-0---------------|-----------------|-----------------|-2-0-0-------0-2-|
+E|-----------------|-----------------|-----------------|-----------------|
+```
+
+```
+|-----------0-----|-0---------------|
+|---------0---0---|-0---------------|
+|-------1-------1-|-1---------------|
+|-----2-----------|-2---------------|
+|---2-------------|-2---------------|
+|-0---------------|-0---------------|
+```
+
 # Setup
 Outlined below are instructions for setting up the project in Eclipse.
 
