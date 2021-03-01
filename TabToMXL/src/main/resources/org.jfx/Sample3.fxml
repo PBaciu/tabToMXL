@@ -8,17 +8,17 @@
 
 <AnchorPane fx:id="rootPane" prefHeight="800.0" prefWidth="900.0" style="-fx-background-color: #a0a7cc#a0a7cc #a0a7cc#a0a7cc #a0a7cc#a0a7cc #a0a7cc#a0a7cc #a0a7cc#a0a7cc #a0a7cc#a0a7cc #a0a7cc#a0a7cc #a0a7cc#a0a7cc;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jfx.SampleController3">
    <children>
-      <Button fx:id="saveButton" layoutX="165.0" layoutY="725.0" mnemonicParsing="false" onAction="#SaveAction" prefHeight="48.0" prefWidth="204.0" text="Save" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="165.0">
+      <Button fx:id="saveButton" layoutX="157.0" layoutY="717.0" mnemonicParsing="false" onAction="#SaveAction" prefHeight="48.0" prefWidth="227.0" text="Save" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="157.0">
          <font>
             <Font size="25.0" />
          </font></Button>
       <TextArea fx:id="textArea" layoutX="11.0" layoutY="179.0" prefHeight="512.0" prefWidth="880.0" AnchorPane.bottomAnchor="109.0" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="9.0" AnchorPane.topAnchor="179.0" />
       <Label alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="223.0" layoutY="47.0" prefHeight="44.0" prefWidth="367.0" text="   Conversion Complete" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS" AnchorPane.leftAnchor="223.0" AnchorPane.rightAnchor="245.0" AnchorPane.topAnchor="47.0">
          <font>
-            <Font size="43.0" />
+            <Font size="38.0" />
          </font>
       </Label>
-      <Label alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="321.0" layoutY="120.0" prefHeight="40.0" prefWidth="235.0" text="Copy Text or Save File" textOverrun="CENTER_ELLIPSIS" AnchorPane.leftAnchor="321.0" AnchorPane.rightAnchor="344.0">
+      <Label alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="311.0" layoutY="120.0" prefHeight="40.0" prefWidth="265.0" text="Copy Text or Save File" textOverrun="CENTER_ELLIPSIS" AnchorPane.leftAnchor="311.0" AnchorPane.rightAnchor="324.0">
          <font>
             <Font size="25.0" />
          </font>
@@ -33,7 +33,7 @@
             <Font size="25.0" />
          </font>
       </Button>
-      <Button fx:id="newConversion" layoutX="532.0" layoutY="725.0" mnemonicParsing="false" onAction="#NewConvertAction" prefHeight="48.0" prefWidth="210.0" text="New Conversion" AnchorPane.bottomAnchor="35.0" AnchorPane.rightAnchor="158.0">
+      <Button fx:id="newConversion" layoutX="517.0" layoutY="717.0" mnemonicParsing="false" onAction="#NewConvertAction" prefHeight="48.0" prefWidth="227.0" text="New Conversion" AnchorPane.bottomAnchor="35.0" AnchorPane.rightAnchor="156.0">
          <font>
             <Font size="25.0" />
          </font>
