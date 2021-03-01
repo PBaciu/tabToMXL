@@ -152,7 +152,7 @@ public class SampleController2 implements Initializable {
 	}
 	
 	public void HelpAction() {
-		Alert helpAlert = new Alert(Alert.AlertType.CONFIRMATION);
+		Alert helpAlert = new Alert(Alert.AlertType.INFORMATION);
         helpAlert.setHeaderText("Information on Usage");
         helpAlert.setContentText("""
 				You can Drag and Drop a file in the Text Field given in this screen. You can also Browse for a File from your computer.
