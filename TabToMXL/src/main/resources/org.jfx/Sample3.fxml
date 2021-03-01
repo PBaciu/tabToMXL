@@ -13,7 +13,7 @@
             <Font size="25.0" />
          </font></Button>
       <TextArea fx:id="textArea" layoutX="11.0" layoutY="179.0" prefHeight="512.0" prefWidth="880.0" AnchorPane.bottomAnchor="109.0" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="9.0" AnchorPane.topAnchor="179.0" />
-      <Label alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="220.0" layoutY="45.0" prefHeight="53.0" prefWidth="448.0" text="   Conversion Complete" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="232.0" AnchorPane.topAnchor="45.0">
+      <Label alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="188.0" layoutY="45.0" prefHeight="53.0" prefWidth="480.0" text="   Conversion Complete" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS" AnchorPane.leftAnchor="188.0" AnchorPane.rightAnchor="232.0" AnchorPane.topAnchor="45.0">
          <font>
             <Font size="43.0" />
          </font>
