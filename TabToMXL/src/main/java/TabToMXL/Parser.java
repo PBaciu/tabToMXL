@@ -9,6 +9,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.String;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -25,22 +26,21 @@ import java.util.stream.IntStream;
  */
 public class Parser {
 
-    private final String tab;
 
-    public Parser(String tab) {
-        this.tab = tab;
+    public Parser() {
     }
 
-    public void readTab() {
-
-
-        parseGuitarTab();
+    public ScorePartwise readTab(String tab) {
+        //TODO Determine if tab is guitar, bass, or drum
+        return parseGuitarTab(tab);
     }
-    public void parseGuitarTab() {
+
+    private ScorePartwise parseGuitarTab(String t) {
         String[] standard = {"e", "B", "G", "D", "A", "E"};
         List<TabLine> tabLines = new ArrayList<>();
         List<GuitarString> tuning = new ArrayList<>();
-        for (var line : this.tab.split("\n\\s*\n")) {
+        var tab = t.strip();
+        for (var line : tab.split("\n\\s*\n")) {
 
             var lines = new FunctionalList<>(line.lines().collect(Collectors.toList()));
 
@@ -137,23 +137,11 @@ public class Parser {
             tabLines.add(tabLine);
         }
         Collections.reverse(tuning);
-        try {
-            generateGuitarXML(new Tab(tabLines, tuning));
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
+
+        return generateGuitarXML(new Tab(tabLines, tuning));
+
     }
-    public void generateGuitarXML(Tab tab) throws Exception{
-
-
-        JAXBContext context = JAXBContext.newInstance(ScorePartwise.class);
-        Marshaller marshaller = context.createMarshaller();
-        marshaller.setProperty("com.sun.xml.bind.xmlHeaders",
-                """                                        
-                        <!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
-                                                
-                        """);
-
+    private ScorePartwise generateGuitarXML(Tab tab) {
 
         ObjectFactory factory = new ObjectFactory();
 
@@ -231,22 +219,19 @@ public class Parser {
                     distanceMap.putIfAbsent(n.absoluteDistance, new ArrayList<>());
                     distanceMap.get(n.absoluteDistance).add(n);
 
-                    if (n.frets.size() == 1) {
+                    generated.Note note = new generated.Note();
 
-                        generated.Note note = new generated.Note();
+                    if (distanceMap.get(n.absoluteDistance).size() > 1) {
+                        note.setChord(factory.createEmpty());
+                    }
+
+                    if (n.frets.size() == 1) {
 
                         Notations notations = new Notations();
                         Technical t = factory.createTechnical();
-                        int string;
-                        switch (n.string) {
-                            case HIGH_E -> {string = 1; break;}
-                            case B -> {string = 2; break;}
-                            case G -> {string = 3; break;}
-                            case D -> {string = 4; break;}
-                            case A -> {string = 5; break;}
-                            case LOW_E -> {string = 6; break;}
-                            default -> { string = 0; break;}
-                        }
+
+                        int string = standardTuningStringToInt(n.string);
+
                         note.setPitch(fretboard[string - 1][n.frets.get(0)]);
 
                         Fret f = factory.createFret();
@@ -259,9 +244,7 @@ public class Parser {
                         t.getUpBowOrDownBowOrHarmonic().add(ts);
 
 
-                        if (distanceMap.get(n.absoluteDistance).size() > 1) {
-                            note.setChord(factory.createEmpty());
-                        }
+
                         double duration;
                         if (line.bars.get(i).notes.stream().noneMatch(note1 -> note1.absoluteDistance > n.absoluteDistance)) {
                             duration = (double)(line.bars.get(i).barLength  - line.bars.get(i).notes.get(noteIndex).absoluteDistance) / quarterNoteLength;
@@ -310,30 +293,8 @@ public class Parser {
 
                         for (int index = 0; index < n.frets.size(); index ++) {
 
-                            int string;
-                            switch (n.string) {
-                                case HIGH_E -> {
-                                    string = 1;
-                                }
-                                case B -> {
-                                    string = 2;
-                                }
-                                case G -> {
-                                    string = 3;
-                                }
-                                case D -> {
-                                    string = 4;
-                                }
-                                case A -> {
-                                    string = 5;
-                                }
-                                case LOW_E -> {
-                                    string = 6;
-                                }
-                                default -> {
-                                    string = 0;
-                                }
-                            }
+                            int string = standardTuningStringToInt(n.string);
+
                             Pitch p = fretboard[string - 1][n.frets.get(index)];
 
                             generated.String s = factory.createString();
@@ -383,7 +344,6 @@ public class Parser {
 
                             }
 
-                            var note = factory.createNote();
                             var noteType = factory.createNoteType();
 
                             if (distanceMap.get(n.absoluteDistance).size() > 1) {
@@ -416,9 +376,8 @@ public class Parser {
         bl.setBarStyle(styleColor);
         part.getMeasure().get(currMeasure - 1).setBarline(bl);
         scorePartwise.getPart().add(part);
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        String tDir = System.getProperty("java.io.tmpdir");
-        marshaller.marshal(scorePartwise, new BufferedWriter(new FileWriter(tDir + "result.xml")));
+
+        return scorePartwise;
     }
 
 
@@ -484,5 +443,31 @@ public class Parser {
             stringPitches[index] = newPitch;
         }
         return stringPitches;
+    }
+
+    int standardTuningStringToInt(GuitarString string) {
+        switch (string) {
+            case HIGH_E -> {
+                return 1;
+            }
+            case B -> {
+                return 2;
+            }
+            case G -> {
+                return 3;
+            }
+            case D -> {
+                return 4;
+            }
+            case A -> {
+                return 5;
+            }
+            case LOW_E -> {
+                return 6;
+            }
+            default -> {
+                return 0;
+            }
+        }
     }
 }
