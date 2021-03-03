@@ -19,4 +19,5 @@ public class CreditComposer {
 	public String getvalign() {
 		return valign;
 	}
+
 }
