@@ -1,7 +1,9 @@
 package org.jfx;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -42,6 +44,7 @@ public class SampleController2 implements Initializable {
 	String info1;
 	String info2;
 	String info3;
+	File fileName;
 	FXMLLoader loader;
 	ArrayList<String> info = new ArrayList<>();
 	
@@ -79,6 +82,9 @@ public class SampleController2 implements Initializable {
 	private Button help;
 	
 	@FXML
+	private Button saveChanges;
+	
+	@FXML
 	private TextField textField;
 	
 	@FXML
@@ -98,6 +104,7 @@ public class SampleController2 implements Initializable {
 			if(selectedFile.getName().endsWith(".txt")) {
 				//listView.getItems().add(selectedFile.getName());
 				textField.setText(selectedFile.getName());
+				fileName = selectedFile;
 			}
 
 
@@ -158,7 +165,8 @@ public class SampleController2 implements Initializable {
 				You can Drag and Drop a file in the Text Field given in this screen. You can also Browse for a File from your computer.
 				The Files should only be of a .txt format
 				The Uploaded Files will have their content displayed on the Copy/Paste area which can be modified to the Users' preference.
-				Hitting the Convert button converts the final variation of the Tablature in the Copy/Paste Text Area into a musicxml file.""");
+				Hitting the Convert button converts the final variation of the Tablature in the Copy/Paste Text Area into a musicxml file.
+				The Save Changes button allows you to save the changes you made in the Tablature to a file of your choosing.""");
         helpAlert.showAndWait();
 	}
 
@@ -233,6 +241,7 @@ public class SampleController2 implements Initializable {
 		    			if(droppedFile.getName().endsWith(".txt")) {
 		    				//listView.getItems().add(droppedFile.getName());
 		    				textField.setText(droppedFile.getName());
+		    				fileName = droppedFile;
 		    			}
 		    			else {
 		    				Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -287,5 +296,17 @@ public class SampleController2 implements Initializable {
 	        e.consume();
 
 	    });
+	}
+	
+	public void SaveChanges() {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text File", "*.txt"));
+		File file = fileChooser.showSaveDialog(new Stage());
+		info2 = textArea.getText();
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))){
+			bw.write(info2);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

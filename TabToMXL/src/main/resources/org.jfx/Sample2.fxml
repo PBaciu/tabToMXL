@@ -40,5 +40,10 @@
             <Font size="25.0" />
          </font>
       </Button>
+      <Button fx:id="saveChanges" layoutX="55.0" layoutY="683.0" mnemonicParsing="false" onAction="#SaveChanges" prefHeight="50.0" prefWidth="215.0" text="Save Changes" AnchorPane.bottomAnchor="67.0" AnchorPane.leftAnchor="55.0">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
