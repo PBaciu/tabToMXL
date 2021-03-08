@@ -44,6 +44,7 @@ public class SampleController2 implements Initializable {
 	String info1;
 	String info2;
 	String info3;
+	Boolean saved = false;
 	File fileName;
 	FXMLLoader loader;
 	ArrayList<String> info = new ArrayList<>();
@@ -148,7 +149,21 @@ public class SampleController2 implements Initializable {
 	public void ConvertAction() {
 		if(!textArea.getText().equals("")) {
 			info2 = textArea.getText();
-			loadNextScene();
+			if(info2 != info1 && textField.getText() != "") {
+				if(saved) {
+					loadNextScene();
+				}
+				else {
+					saved = true;
+					Alert saveAlert = new Alert(Alert.AlertType.WARNING);
+					saveAlert.setHeaderText("You seem to have made changes to your Tablature");
+					saveAlert.setContentText("Please click the  Save Changes button if you wish to save them to a file.");
+					saveAlert.showAndWait();
+				}
+			}
+			else {
+				loadNextScene();
+			}
 		}
 		else {
 			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -308,5 +323,6 @@ public class SampleController2 implements Initializable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		saved = true;
 	}
 }
