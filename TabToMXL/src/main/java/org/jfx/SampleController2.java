@@ -181,6 +181,7 @@ public class SampleController2 implements Initializable {
 			if(timeSignature.getText().equals("")) {
 				numerator = 4;
 				denominator = 4;
+				timeSignature.setText("4/4");
 			}
 			else {
 				if(timeSignature.getText().contains("/")) {
@@ -231,6 +232,7 @@ public class SampleController2 implements Initializable {
 			}
 			if(tempo.getText().equals("")) {
 				tempoInt = 120;
+				tempo.setText("120");
 			}
 			else {
 				for(int i = 0; i < tempo.getText().length(); i++) {

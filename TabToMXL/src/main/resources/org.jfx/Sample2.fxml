@@ -55,12 +55,12 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <TextField fx:id="timeSignature" layoutX="408.0" layoutY="194.0" onAction="#TimeAction" prefHeight="40.0" prefWidth="432.0" promptText="Enter the Time Signature in the format: 4/4">
+      <TextField fx:id="timeSignature" layoutX="408.0" layoutY="194.0" prefHeight="40.0" prefWidth="432.0" promptText="Enter the Time Signature in the format: 4/4">
          <font>
             <Font size="20.0" />
          </font>
       </TextField>
-      <TextField fx:id="tempo" layoutX="408.0" layoutY="263.0" onAction="#TempoAction" prefHeight="40.0" prefWidth="432.0" promptText="Enter the Tempo in Beats Per Minute">
+      <TextField fx:id="tempo" layoutX="408.0" layoutY="263.0" prefHeight="40.0" prefWidth="432.0" promptText="Enter the Tempo in Beats Per Minute">
          <font>
             <Font size="20.0" />
          </font>
