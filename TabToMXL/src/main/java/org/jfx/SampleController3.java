@@ -33,6 +33,9 @@ public class SampleController3 implements Initializable {
 	
 	String textArea2;
 	String textField2;
+	String fileContent;
+	String timeSignature;
+	String tempo;
 	
 	//Stage curStage = (Stage) rootPane.getScene().getWindow();
 	
@@ -69,9 +72,12 @@ public class SampleController3 implements Initializable {
 	@FXML
 	private TextArea textArea;
 	
-	public void initData(String textArea, String textField) {
+	public void initData(String textArea, String textField, String fileContent, String timeSign, String tempo2) {
 		this.textArea2 = textArea;
 		this.textField2 = textField;
+		this.fileContent = fileContent;
+		this.timeSignature = timeSign;
+		this.tempo = tempo2;
 	}
 	
 	public void saveAction() {
@@ -167,7 +173,7 @@ public class SampleController3 implements Initializable {
 			Parent secondView = loader.load();
 			Scene newScene = new Scene(secondView);
 			SampleController2 controller = loader.getController();
-			controller.initData(textArea2, textField2);
+			controller.initData(textArea2, textField2, this.fileContent, this.timeSignature, this.tempo);
 			Stage curStage = (Stage) rootPane.getScene().getWindow();
 			curStage.setScene(newScene);
 			curStage.show();
