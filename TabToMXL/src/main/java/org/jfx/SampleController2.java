@@ -442,4 +442,12 @@ public class SampleController2 implements Initializable {
 			saved = true;
 		}
 	}
+	
+	public void TimeAction() {
+		
+	}
+	
+	public void TempoAction() {
+		
+	}
 }
