@@ -149,7 +149,7 @@ public class SampleController2 implements Initializable {
 	public void ConvertAction() {
 		if(!textArea.getText().equals("")) {
 			info2 = textArea.getText();
-			if(info2 != info1 && textField.getText() != "") {
+			if(!info2.equals(info1) && textField.getText() != "") {
 				if(saved) {
 					loadNextScene();
 				}
@@ -157,7 +157,7 @@ public class SampleController2 implements Initializable {
 					saved = true;
 					Alert saveAlert = new Alert(Alert.AlertType.WARNING);
 					saveAlert.setHeaderText("You seem to have made changes to your Tablature");
-					saveAlert.setContentText("Please click the  Save Changes button if you wish to save them to a file.");
+					saveAlert.setContentText("Please click the Save Changes button if you wish to save them to a file");
 					saveAlert.showAndWait();
 				}
 			}
@@ -314,15 +314,23 @@ public class SampleController2 implements Initializable {
 	}
 	
 	public void SaveChanges() {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text File", "*.txt"));
-		File file = fileChooser.showSaveDialog(new Stage());
-		info2 = textArea.getText();
-		try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))){
-			bw.write(info2);
-		} catch (IOException e) {
-			e.printStackTrace();
+		if(textArea.getText().equals("")) {
+			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setHeaderText("Text Area is empty");
+            errorAlert.setContentText("Please input a Tablature to save into a file");
+            errorAlert.showAndWait();
 		}
-		saved = true;
+		else {
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text File", "*.txt"));
+			File file = fileChooser.showSaveDialog(new Stage());
+			info2 = textArea.getText();
+			try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))){
+				bw.write(info2);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			saved = true;
+		}
 	}
 }
