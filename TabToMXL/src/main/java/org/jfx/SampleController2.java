@@ -44,6 +44,12 @@ public class SampleController2 implements Initializable {
 	String info1;
 	String info2;
 	String info3;
+	int numerator;
+	int denominator;
+	int tempoInt;
+	String[] timeSign;
+	ArrayList<Character> checker = new ArrayList<Character>();
+//	char[] checker;
 	Boolean saved = false;
 	File fileName;
 	FXMLLoader loader;
@@ -89,12 +95,20 @@ public class SampleController2 implements Initializable {
 	private TextField textField;
 	
 	@FXML
+	private TextField timeSignature;
+	
+	@FXML
+	private TextField tempo;
+	
+	@FXML
 	private TextArea textArea;
 	
-	public void initData(String textArea2, String textField2, String fileContent) {
+	public void initData(String textArea2, String textField2, String fileContent, String timeSign, String tempo2) {
 		textArea.setText(textArea2);
 		textField.setText(textField2);
 		info1 = fileContent;
+		timeSignature.setText(timeSign);
+		tempo.setText(tempo2);
 	}
 	
 	public void ButtonAction(ActionEvent event) {
@@ -150,9 +164,96 @@ public class SampleController2 implements Initializable {
 	public void ConvertAction() {
 		if(!textArea.getText().equals("")) {
 			info2 = textArea.getText();
+			checker.add('1');
+			checker.add('2');
+			checker.add('3');
+			checker.add('4');
+			checker.add('5');
+			checker.add('6');
+			checker.add('7');
+			checker.add('8');
+			checker.add('9');
+			checker.add('0');
+			checker.add('.');
+			int a = 0;
+			int b = 0;
+			int c = 0;
+			if(timeSignature.getText().equals("")) {
+				numerator = 4;
+				denominator = 4;
+			}
+			else {
+				if(timeSignature.getText().contains("/")) {
+					timeSign = timeSignature.getText().split("/");
+					if(timeSign.length > 2 || timeSign.length < 2) {
+						a = 1;
+						Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+			            errorAlert.setHeaderText("Incorrect Time Signature specified");
+			            errorAlert.setContentText("Please enter the Time Signature in the right format");
+			            errorAlert.showAndWait();
+					}
+					else {
+						for(int i = 0; i < timeSign[0].length(); i++) {
+							if(!checker.contains(timeSign[0].charAt(i))) {
+								a = 1;
+								i = timeSign[0].length();
+								Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+					            errorAlert.setHeaderText("Incorrect Time Signature specified");
+					            errorAlert.setContentText("Please enter the Time Signature in the right format");
+					            errorAlert.showAndWait();
+							}
+						}
+						for(int j = 0; j < timeSign[1].length(); j++) {
+							if(!checker.contains(timeSign[1].charAt(j))) {
+								b = 1;
+								j = timeSign[1].length();
+								Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+					            errorAlert.setHeaderText("Incorrect Time Signature specified");
+					            errorAlert.setContentText("Please enter the Time Signature in the right format");
+					            errorAlert.showAndWait();
+							}
+						}
+						if(a == 0 && b == 0) {
+//							numerator = Integer.parseInt(timeSign[0]);
+//							denominator = Integer.parseInt(timeSign[1]);
+							numerator = (int)Double.parseDouble(timeSign[0]);
+							denominator = (int)Double.parseDouble(timeSign[1]);;
+						}
+					}
+				}
+				else {
+					a = 1;
+					Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+		            errorAlert.setHeaderText("Incorrect Time Signature specified");
+		            errorAlert.setContentText("Please enter the Time Signature in the right format");
+		            errorAlert.showAndWait();
+				}
+			}
+			if(tempo.getText().equals("")) {
+				tempoInt = 120;
+			}
+			else {
+				for(int i = 0; i < tempo.getText().length(); i++) {
+					if(!checker.contains(tempo.getText().charAt(i))) {
+						c = 1;
+						i = tempo.getText().length();
+						Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+			            errorAlert.setHeaderText("Incorrect Tempo specified");
+			            errorAlert.setContentText("Please enter the Tempo in the right format");
+			            errorAlert.showAndWait();
+					}
+				}
+				if(c == 0) {
+//					tempoInt = Integer.parseInt(tempo.getText());
+					tempoInt = (int)Double.parseDouble(tempo.getText());
+					System.out.println(tempoInt);
+				}
+			}
 			if(!info2.equals(info1) && textField.getText() != "") {
 				if(saved) {
-					loadNextScene();
+					if(a == 0 && b == 0 && c == 0) {
+						loadNextScene();
+					}
 				}
 				else {
 					saved = true;
@@ -163,7 +264,9 @@ public class SampleController2 implements Initializable {
 				}
 			}
 			else {
-				loadNextScene();
+				if(a == 0 && b == 0 && c == 0) {
+					loadNextScene();
+				}
 			}
 		}
 		else {
@@ -179,8 +282,10 @@ public class SampleController2 implements Initializable {
         helpAlert.setHeaderText("Information on Usage");
         helpAlert.setContentText("""
 				You can Drag and Drop a file in the Text Field given in this screen. You can also Browse for a File from your computer.
-				The Files should only be of a .txt format
+				The Files should only be of a .txt format.
 				The Uploaded Files will have their content displayed on the Copy/Paste area which can be modified to the Users' preference.
+				There are text fields for Time Signature and Tempo which can be inputted if preferred in the correct format.
+				The default values set for Time Signature is 4/4 while the default Tempo is 120.
 				Hitting the Convert button converts the final variation of the Tablature in the Copy/Paste Text Area into a musicxml file.
 				The Save Changes button allows you to save the changes you made in the Tablature to a file of your choosing.""");
         helpAlert.showAndWait();
@@ -195,7 +300,7 @@ public class SampleController2 implements Initializable {
 		fadeTransition.setOnFinished(event -> {
 			Scene newScene = new Scene(secondView);
 			SampleController3 controller = loader.getController();
-			controller.initData(textArea.getText(), textField.getText(), info1);
+			controller.initData(textArea.getText(), textField.getText(), info1, timeSignature.getText(), tempo.getText());
 			Stage curStage = (Stage) rootPane.getScene().getWindow();
 			curStage.setScene(newScene);
 			curStage.show();
