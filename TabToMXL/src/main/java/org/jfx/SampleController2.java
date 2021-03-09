@@ -91,9 +91,10 @@ public class SampleController2 implements Initializable {
 	@FXML
 	private TextArea textArea;
 	
-	public void initData(String textArea2, String textField2) {
+	public void initData(String textArea2, String textField2, String fileContent) {
 		textArea.setText(textArea2);
-		textField.setText(textField2);;
+		textField.setText(textField2);
+		info1 = fileContent;
 	}
 	
 	public void ButtonAction(ActionEvent event) {
@@ -194,7 +195,7 @@ public class SampleController2 implements Initializable {
 		fadeTransition.setOnFinished(event -> {
 			Scene newScene = new Scene(secondView);
 			SampleController3 controller = loader.getController();
-			controller.initData(textArea.getText(), textField.getText());
+			controller.initData(textArea.getText(), textField.getText(), info1);
 			Stage curStage = (Stage) rootPane.getScene().getWindow();
 			curStage.setScene(newScene);
 			curStage.show();
@@ -329,6 +330,9 @@ public class SampleController2 implements Initializable {
 				bw.write(info2);
 			} catch (IOException e) {
 				e.printStackTrace();
+			}
+			if(file != null) {
+				textField.setText(file.getName());
 			}
 			saved = true;
 		}
