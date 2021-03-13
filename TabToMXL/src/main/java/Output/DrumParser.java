@@ -11,12 +11,12 @@ public class DrumParser {
 	static ArrayList<String> drumTab;
 	
 	public static void main(String[] args) {
-		drumTab = getTextArray("CC|x---------------|--------x-------|\r\n"
-				+ "HH|--x-x-x-x-x-x-x-|----------------|\r\n"
-				+ "SD|----o-------o---|oooo------------|\r\n"
-				+ "HT|----------------|----oo----------|\r\n"
-				+ "MT|----------------|------oo--------|\r\n"
-				+ "BD|o-------o-------|o-------o-------|");
+		drumTab = getTextArray("CC|x---------------x|------x--x-------|---x-----x-------|\r\n"
+				+ "HH|--x-x-x-x-x-x-x-x|--------x--------|------x--x-------|\r\n"
+				+ "SD|----o------x-o---|oooo--x----------|-----x---x-------|\r\n"
+				+ "HT|------------x----|x----oo----------|--x------x-------|\r\n"
+				+ "MT|-----------x-----|------oo--x------|-----x---x-------|\r\n"
+				+ "BD|o-------o-----x--|o-------o---x----|-----x---x-------|");
 		System.out.println("DRUMTAB: " + drumTab);
 		
 		String converted = drumTabToXMLConversion(drumTab);
