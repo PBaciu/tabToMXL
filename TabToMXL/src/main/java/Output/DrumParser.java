@@ -76,7 +76,7 @@ public class DrumParser {
 			ArrayList<Measure> measures = new ArrayList<Measure>();
 
 				
-			ArrayList<ArrayList<String>> measuresOfCollection = DParser.collectionToMeasure(drumTab);
+			ArrayList<ArrayList<String>> measuresOfCollection = DMethods.collectionToMeasure(drumTab);
 			System.out.println("measuresOfCollection: " + measuresOfCollection);
 				
 			for (int j = 0; j < measuresOfCollection.size(); j++) {// iterate through each set of measure

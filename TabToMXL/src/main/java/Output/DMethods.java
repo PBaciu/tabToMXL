@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class DParser {
+public class DMethods {
 
 	public static ArrayList<ArrayList<String>> collectionToMeasure(ArrayList<String> input) {
 
