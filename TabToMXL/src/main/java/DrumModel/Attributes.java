@@ -7,7 +7,11 @@ public class Attributes {
 	Time time;
 	Clef clef;
 
+	public Attributes() {
+	}
+	
 	public Attributes(int divisions, Key key, Time time, Clef clef) {
+		super();
 		this.divisions = divisions;
 		this.key = key;
 		this.time = time;

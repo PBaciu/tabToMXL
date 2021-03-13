@@ -8,8 +8,12 @@ public class Measure {
 	ArrayList<Note> note;
 	Barline barline;
 	Backup backup;
+	
+	public Measure() {
+	}
 
 	public Measure(int number, ArrayList<Note> note, Attributes attributes, Barline barline) {
+		super();
 		this.number = number;
 		this.note = note;
 		this.attributes = attributes;

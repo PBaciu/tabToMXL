@@ -4,6 +4,15 @@ public class Beam {
 	
 	String number, value;
 	
+	public Beam() {
+	}
+	
+	public Beam(String number, String value) {
+		super();
+		this.number = number;
+		this.value = value;
+	}
+	
 	public String getValue() {
 		return this.value;
 	}
@@ -12,7 +21,7 @@ public class Beam {
 		this.value = value;
 	}
 	
-	public String getID() { 
+	public String getNumber() { 
 		return this.number;
 	}
 	

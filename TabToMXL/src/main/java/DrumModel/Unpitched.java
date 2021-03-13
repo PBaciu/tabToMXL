@@ -4,6 +4,15 @@ public class Unpitched {
 	
 	String displayStep, displayOctave;
 	
+	public Unpitched() {	
+	}
+	
+	public Unpitched(String displayStep, String displayOctave) {
+		super();
+		this.displayStep = displayStep;
+		this.displayOctave = displayOctave;
+	}
+	
 	public void setDisplayStep(String displayStep) { 
 		this.displayStep = displayStep;
 	}

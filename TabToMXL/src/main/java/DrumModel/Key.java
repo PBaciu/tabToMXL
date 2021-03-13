@@ -4,7 +4,11 @@ public class Key {
 	
 	String fifths;
 
+	public Key() {
+	}
+	
 	public Key(String fifths) {
+		super();
 		this.fifths = fifths;
 	}	
 	

@@ -3,16 +3,20 @@ package DrumModel;
 public class Backup {
 	
 	String duration;
+	
+	public Backup() {
+	}
 
 	public Backup(String duration) {
+		super();
 		this.duration = duration;
 	}	
 	
-	public String getFifths() {
+	public String getDuration() {
 		return this.duration;
 	}
 	
-	public void setFifths(String duration) {
+	public void setDuration(String duration) {
 		this.duration = duration;
 	}
 }

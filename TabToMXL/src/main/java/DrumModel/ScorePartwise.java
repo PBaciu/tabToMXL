@@ -8,7 +8,11 @@ public class ScorePartwise {
 	PartList partList;
 	ArrayList<Part> parts;
 	
+	public ScorePartwise() {
+	}
+	
 	public ScorePartwise(String version, PartList partList, ArrayList<Part> parts) {
+		super();
 		this.version = version;
 		this.partList = partList;
 		this.parts = parts;

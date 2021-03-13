@@ -8,7 +8,11 @@ public class Part {
 	String id;
 	public ArrayList<Measure> measures;
 
+	public Part() {
+	}
+	
 	public Part(String id, ArrayList<Measure> measures) {
+		super();
 		this.id = id;
 		this.measures = measures;
 	}	

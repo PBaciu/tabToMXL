@@ -5,6 +5,14 @@ public class Instrument {
 	
 	String id;
 	
+	public Instrument() {
+	}
+	
+	public Instrument(String id) {
+		super();
+		this.id = id;
+	}
+	
 	public String getID() { 
 		return this.id;
 	}	

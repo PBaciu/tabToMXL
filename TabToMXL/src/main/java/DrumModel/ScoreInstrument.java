@@ -4,7 +4,11 @@ public class ScoreInstrument {
 
 	String id, instrumentName; 
 	
+	public ScoreInstrument() {
+	}
+	
 	public ScoreInstrument(String id, String instrumentName) {
+		super();
 		this.id = id;
 		this.instrumentName = instrumentName;
 	}	

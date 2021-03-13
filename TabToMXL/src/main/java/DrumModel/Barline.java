@@ -4,7 +4,11 @@ public class Barline {
 
 	String location, barStyle;
 
+	public Barline() {
+	}
+	
 	public Barline(String location, String barStyle) {
+		super();
 		this.location = location;
 		this.barStyle = barStyle;
 	}

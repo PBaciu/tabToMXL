@@ -8,7 +8,11 @@ public class Note {
 	String voice, type, stem, notehead;
 	Beam beam; 
 	
+	public Note() {
+	}
+	
 	public Note(Unpitched pitch, String duration, String voice, String stem, String type, String notehead, Instrument instrument, Beam beam) {
+		super();
 		this.beam = beam;
 		this.instrument = instrument;
 		this.unpitch = pitch;

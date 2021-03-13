@@ -6,7 +6,11 @@ public class PartList {
 
 	ArrayList<ScorePart> scoreParts;
 	
+	public PartList() {
+	}
+	
 	public PartList(ArrayList<ScorePart> scoreParts) {
+		super();
 		this.scoreParts = scoreParts;
 	}
 	
