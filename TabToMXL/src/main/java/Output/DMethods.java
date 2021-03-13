@@ -19,8 +19,8 @@ public class DMethods {
 
 		for (int i = 0; i < measureSize; i++) {
 			for (int j = 0; j < 6; j++) {
-				int left_Bound = 3 + (text.length() + 1) * i;
-				int right_Bound = (text.length() + 1) * (i + 1) + 2;
+				int left_Bound = 3 + (text.length() + 1) * i;			//left bound of the measure
+				int right_Bound = (text.length() + 1) * (i + 1) + 2;	//right bound of the measure
 				eachSection.add(input.get(j).substring(left_Bound, right_Bound));
 				// System.out.println(input.size()); //6
 				// System.out.println(input.get(j).substring(left_Bound, right_Bound));
@@ -36,5 +36,4 @@ public class DMethods {
 		// returns each seperate measure
 		return sections;
 	}
-
 }
