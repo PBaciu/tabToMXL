@@ -75,24 +75,21 @@ public class DrumParser {
 
 			ArrayList<Measure> measures = new ArrayList<Measure>();
 
-			int measureCount = 0;
 				
-				ArrayList<ArrayList<String>> measuresOfCollection = DParser.collectionToMeasure(drumTab);
+			ArrayList<ArrayList<String>> measuresOfCollection = DParser.collectionToMeasure(drumTab);
+			System.out.println("measuresOfCollection: " + measuresOfCollection);
+				
+			for (int j = 0; j < measuresOfCollection.size(); j++) {// iterate through each set of measure
+				Measure newMeasure = parseDrumMeasure();			//unsure how to do this for now
+				measures.add(newMeasure);
+			}
 				
 
-				
-				for (int j = 0; j < measuresOfCollection.size(); j++) {// iterate through each set of measure
-					measureCount++;
-					Measure newMeasure = parseDrumMeasure();
-					measures.add(newMeasure);
-				}
-				System.out.println("measuresOfCollection: " + measuresOfCollection);
-
-			// set last measure to have barline values
+			//last measure has the barline to end the music
 			Barline barline = new Barline();
 			barline.setBarStyle("light-heavy");
 			barline.setLocation("right");
-			measures.get(measures.size() - 1).setBarline(barline);
+			//measures.get(measures.size() - 1).setBarline(barline);		//need to get measures else this throws NullPointerException
 
 			parts.get(0).setMeasures(measures);
 
