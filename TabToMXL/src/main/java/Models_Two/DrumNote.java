@@ -1,6 +1,8 @@
-package Models;
+package Models_Two;
 
 import java.util.List;
+
+import Models.NoteRelationship;
 
 public class DrumNote implements Comparable{
     public final DrumInstrument instrument;

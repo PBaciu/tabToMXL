@@ -1,6 +1,6 @@
 package TabToMXL;
 
-import Models.DrumInstrument;
+import Models_Two.DrumInstrument;
 
 public class IntermediaryGarbage2 {
     final DrumInstrument label;

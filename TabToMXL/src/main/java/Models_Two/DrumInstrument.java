@@ -1,4 +1,4 @@
-package Models;
+package Models_Two;
 
 public enum DrumInstrument {
 	   HiHatSplash,

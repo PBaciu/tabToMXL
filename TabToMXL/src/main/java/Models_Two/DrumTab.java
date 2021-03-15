@@ -1,16 +1,18 @@
-package Models;
+package Models_Two;
 
 import java.util.HashMap;
 import java.util.List;
 
+import Models.TabLine;
+
 public class DrumTab {
 
     public List<TabLine> tabLines;
-    public List<GuitarString> tuning;
+    public List<DrumInstrument> device;
 
-    public DrumTab(List<TabLine> tabLines, List<GuitarString> tuning) {
+    public DrumTab(List<TabLine> tabLines, List<DrumInstrument> device) {
         this.tabLines = tabLines;
-        this.tuning = tuning;
+        this.device = device;
     }
 
     @Override
