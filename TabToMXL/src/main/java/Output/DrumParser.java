@@ -38,20 +38,18 @@ public class DrumParser {
 		return arrayText;
 	}
 	
-	public static String drumTabToXMLConversion(ArrayList<String> tabInArray) {
+	public static String drumTabToXMLConversion(ArrayList<String> tabInArray) { //top to bottom from the xml file
 		try {
-
+			//can later add <?xml version="1.0" encoding="UTF-8"?>
 			ScorePartwise scorePartwise = new ScorePartwise();
 			scorePartwise.setVersion("3.1");
 			
-			
 			ArrayList<ScorePart> scoreParts = new ArrayList<ScorePart>();
+			ArrayList<String> InstrumentNames = new ArrayList<String>( Arrays.asList("Bass Drum 1", "Bass Drum 2", "Side Stick", "Snare", "Low Floor Tom", "Closed Hi-Hat", "High Floor Tom", "Pedal Hi-Hat", "Low Tom", "Open Hi-Hat", "Low-Mid Tom", "Hi-Mid Tom", "Crash Cymbal 1", "High Tom", "Ride Cymbal 1", "Chinese Cymbal", "Ride Bell", "Tambourine", "Splash Cymbal", "Cowbell", "Crash Cymbal 2", "Ride Cymbal 2", "Open Hi Conga", "Low Conga") );
+			ArrayList<Integer> ScoreInstrumentID = new ArrayList<Integer>( Arrays.asList(36, 37, 38, 39, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 60, 64, 65));
 			ScorePart scorepart = new ScorePart();
 			scorepart.setId("P1");
 			scorepart.setPartName("Drumset");
-			
-			ArrayList<String> InstrumentNames = new ArrayList<String>( Arrays.asList("Bass Drum 1", "Bass Drum 2", "Side Stick", "Snare", "Low Floor Tom", "Closed Hi-Hat", "High Floor Tom", "Pedal Hi-Hat", "Low Tom", "Open Hi-Hat", "Low-Mid Tom", "Hi-Mid Tom", "Crash Cymbal 1", "High Tom", "Ride Cymbal 1", "Chinese Cymbal", "Ride Bell", "Tambourine", "Splash Cymbal", "Cowbell", "Crash Cymbal 2", "Ride Cymbal 2", "Open Hi Conga", "Low Conga") );
-			ArrayList<Integer> ScoreInstrumentID = new ArrayList<Integer>( Arrays.asList(36, 37, 38, 39, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 60, 64, 65));
 			
 			ArrayList<ScoreInstrument> instruments = new ArrayList<ScoreInstrument>();
 			int counter = 0;
@@ -76,12 +74,45 @@ public class DrumParser {
 			ArrayList<Measure> measures = new ArrayList<Measure>();
 
 				
-			ArrayList<ArrayList<String>> measuresOfCollection = DMethods.collectionToMeasure(drumTab);
-			System.out.println("measuresOfCollection: " + measuresOfCollection);
+			ArrayList<ArrayList<String>> measureCollections = DMethods.collectionToMeasure(drumTab);
+			System.out.println("measureCollections: " + measureCollections);
 				
-			for (int j = 0; j < measuresOfCollection.size(); j++) {// iterate through each set of measure
-				Measure newMeasure = parseDrumMeasure();			//unsure how to do this for now
-				measures.add(newMeasure);
+			for (int j = 0; j < measureCollections.size(); j++) {// iterate through each set of measure				
+				Measure measure = new Measure();
+				measure.setNumber(j);
+				
+				if (j == 1) {			//only measure number 1 has an attribute, otherwise null
+					Attributes attributes = new Attributes();
+					
+					int division = (measureCollections.get(j).get(0).length()) / 4;
+					
+					Key key = new Key();
+					key.setFifths("0");
+					
+					Time time = new Time();
+					time.setBeats("4");
+					time.setBeatType("4");
+					
+					Clef clef = new Clef();
+					clef.setSign("percussion");
+					clef.setLine("2");
+					
+					attributes.setDivisions(division);
+					attributes.setKey(key);
+					attributes.setTime(time);	
+					attributes.setClef(clef);
+					measure.setAttributes(attributes);
+				} else {
+					measure.setAttributes(null);
+				}
+
+				ArrayList<Note> note = new ArrayList<Note>();
+
+				//need to iterate through each measure for each note. ADD SOON
+				
+				measure.setNote(note);
+				
+				measures.add(measure);
 			}
 				
 
@@ -103,7 +134,11 @@ return "OUTPUT HERE";
 		return null;
 	}
 
-	private static Measure parseDrumMeasure() {			//Will need to do
+	private static Measure parseDrumMeasure() {
+		return null;
+	}
+	
+	private static Measure parseDrumMeasure(int j, ArrayList<String> measureInput) {
 		return null;
 	}
 }
