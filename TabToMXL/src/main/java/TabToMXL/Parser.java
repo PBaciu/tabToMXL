@@ -137,25 +137,6 @@ public class Parser {
             tabLines.add(tabLine);
         }
         Collections.reverse(tuning);
-<<<<<<< HEAD
-        try {
-            generateGuitarXML(new Tab(tabLines, tuning));
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-    }
-    
-    
-    public void generateGuitarXML(Tab tab) throws Exception{
-        JAXBContext context = JAXBContext.newInstance(ScorePartwise.class);
-        Marshaller marshaller = context.createMarshaller();
-        marshaller.setProperty("com.sun.xml.bind.xmlHeaders",
-                """                                        
-                        <!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
-                                                
-                        """);
-=======
->>>>>>> refs/remotes/origin/develop
 
         return generateGuitarXML(new Tab(tabLines, tuning));
 
