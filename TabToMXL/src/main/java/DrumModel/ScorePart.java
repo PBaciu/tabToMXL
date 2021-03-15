@@ -11,7 +11,6 @@ public class ScorePart {
 	}
 	
 	public ScorePart(String id, String partName) { 
-		super();
 		this.id = id; 
 		this.partName = partName; 
 	}

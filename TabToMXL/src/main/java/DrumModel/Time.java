@@ -2,30 +2,29 @@ package DrumModel;
 
 
 public class Time {
-	String beats, beatType;
+	int beats, beatType;
 
 	public Time() {
 	}
 	
-	public Time(String beats, String beatType) {
-		super();
+	public Time(int beats, int beatType) {
 		this.beats = beats;
 		this.beatType = beatType;
 	}
 
-	public String getBeats() {
+	public int getBeats() {
 		return this.beats;
 	}
 
-	public void setBeats(String beats) {
+	public void setBeats(int beats) {
 		this.beats = beats;
 	}
 
-	public String getBeatType() {
+	public int getBeatType() {
 		return this.beatType;
 	}
 
-	public void setBeatType(String beatType) {
+	public void setBeatType(int beatType) {
 		this.beatType = beatType;
 	}
 }

@@ -12,7 +12,6 @@ public class Part {
 	}
 	
 	public Part(String id, ArrayList<Measure> measures) {
-		super();
 		this.id = id;
 		this.measures = measures;
 	}	

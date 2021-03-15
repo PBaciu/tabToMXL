@@ -3,18 +3,16 @@ package DrumModel;
 
 public class Note {
 	Unpitched unpitch;
-	String duration; 
+	int duration; 
 	Instrument instrument;
-	String voice, type, stem, notehead;
+	int voice;
+	String type, stem, notehead;
 	Beam beam; 
 	
 	public Note() {
 	}
 	
-	public Note(Unpitched pitch, String duration, String voice, String stem, String type, String notehead, Instrument instrument, Beam beam) {
-		super();
-		this.beam = beam;
-		this.instrument = instrument;
+	public Note(Unpitched pitch, int duration, int voice, String stem, String type, String notehead, Instrument instrument, Beam beam) {
 		this.unpitch = pitch;
 		this.duration = duration;
 		this.voice = voice;
@@ -22,6 +20,8 @@ public class Note {
 		this.stem = stem;
 		this.voice = voice;
 		this.notehead = notehead;
+		this.instrument = instrument;
+		this.beam = beam;
 	}
 
 	public void setUnpitch(Unpitched pitch) { 
@@ -32,19 +32,19 @@ public class Note {
 		return this.unpitch;
 	}
 	
-	public void setDuration(String duration) { 
+	public void setDuration(int duration) { 
 		this.duration = duration; 
 	}
 	
-	public String getDuration() { 
+	public int getDuration() { 
 		return this.duration; 
 	}
 	
-	public void setVoice(String voice) { 
+	public void setVoice(int voice) { 
 		this.voice = voice;  
 	}
 	
-	public String getVoice() { 
+	public int getVoice() { 
 		return this.voice; 
 	}
 	

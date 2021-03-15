@@ -2,13 +2,13 @@ package DrumModel;
 
 public class Beam {
 	
-	String number, value;
+	int number;
+	String value;
 	
 	public Beam() {
 	}
 	
-	public Beam(String number, String value) {
-		super();
+	public Beam(int number, String value) {
 		this.number = number;
 		this.value = value;
 	}
@@ -21,11 +21,11 @@ public class Beam {
 		this.value = value;
 	}
 	
-	public String getNumber() { 
+	public int getNumber() { 
 		return this.number;
 	}
 	
-	public void setNumber(String number) { 
+	public void setNumber(int number) { 
 		this.number = number; 
 	}
 }

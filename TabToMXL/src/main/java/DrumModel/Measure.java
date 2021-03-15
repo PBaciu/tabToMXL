@@ -13,7 +13,6 @@ public class Measure {
 	}
 
 	public Measure(int number, ArrayList<Note> note, Attributes attributes, Barline barline) {
-		super();
 		this.number = number;
 		this.note = note;
 		this.attributes = attributes;

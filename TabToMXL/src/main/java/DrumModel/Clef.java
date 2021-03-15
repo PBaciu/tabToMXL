@@ -2,13 +2,13 @@ package DrumModel;
 
 public class Clef {
 	
-	String sign, line;
+	String sign;
+	int line;
 	
 	public Clef() {
 	}
 	
-	public Clef(String sign, String line) {
-		super();
+	public Clef(String sign, int line) {
 		this.sign = sign;
 		this.line = line;
 	}
@@ -21,11 +21,11 @@ public class Clef {
 		this.sign = sign;
 	}
 	
-	public String getLine() {
+	public int getLine() {
 		return this.line;
 	}
 	
-	public void setLine(String line) {
+	public void setLine(int line) {
 		this.line = line;
 	}
 }

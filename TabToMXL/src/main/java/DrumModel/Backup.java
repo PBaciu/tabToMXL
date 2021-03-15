@@ -2,21 +2,20 @@ package DrumModel;
 
 public class Backup {
 	
-	String duration;
+	int duration;
 	
 	public Backup() {
 	}
 
-	public Backup(String duration) {
-		super();
+	public Backup(int duration) {
 		this.duration = duration;
 	}	
 	
-	public String getDuration() {
+	public int getDuration() {
 		return this.duration;
 	}
 	
-	public void setDuration(String duration) {
+	public void setDuration(int duration) {
 		this.duration = duration;
 	}
 }

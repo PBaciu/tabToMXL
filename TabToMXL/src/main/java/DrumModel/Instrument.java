@@ -9,7 +9,6 @@ public class Instrument {
 	}
 	
 	public Instrument(String id) {
-		super();
 		this.id = id;
 	}
 	

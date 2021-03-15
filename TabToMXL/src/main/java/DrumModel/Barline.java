@@ -8,7 +8,6 @@ public class Barline {
 	}
 	
 	public Barline(String location, String barStyle) {
-		super();
 		this.location = location;
 		this.barStyle = barStyle;
 	}

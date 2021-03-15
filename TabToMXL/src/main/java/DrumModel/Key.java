@@ -2,21 +2,20 @@ package DrumModel;
 
 public class Key {
 	
-	String fifths;
+	int fifths;
 
 	public Key() {
 	}
 	
-	public Key(String fifths) {
-		super();
+	public Key(int fifths) {
 		this.fifths = fifths;
 	}	
 	
-	public String getFifths() {
+	public int getFifths() {
 		return this.fifths;
 	}
 	
-	public void setFifths(String fifths) {
+	public void setFifths(int fifths) {
 		this.fifths = fifths;
 	}
 }

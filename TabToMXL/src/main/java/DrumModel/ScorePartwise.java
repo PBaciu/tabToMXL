@@ -7,15 +7,21 @@ public class ScorePartwise {
 	String version;
 	PartList partList;
 	ArrayList<Part> parts;
+	Part part;
 	
 	public ScorePartwise() {
 	}
 	
 	public ScorePartwise(String version, PartList partList, ArrayList<Part> parts) {
-		super();
 		this.version = version;
 		this.partList = partList;
 		this.parts = parts;
+	}
+	
+	public ScorePartwise(String version, PartList partList, Part part) {
+		this.version = version;
+		this.partList = partList;
+		this.part = part;
 	}
 	
 	public String getVersion() {
@@ -40,5 +46,13 @@ public class ScorePartwise {
 	
 	public void setParts(ArrayList<Part> parts) {
 		this.parts = parts;
+	}
+	
+	public Part getPart() {
+		return this.part;
+	}
+	
+	public void setPart(Part part) {
+		this.part = part;
 	}
 }

@@ -2,13 +2,13 @@ package DrumModel;
 
 public class Unpitched {
 	
-	String displayStep, displayOctave;
+	String displayStep;
+	int displayOctave;
 	
 	public Unpitched() {	
 	}
 	
-	public Unpitched(String displayStep, String displayOctave) {
-		super();
+	public Unpitched(String displayStep, int displayOctave) {
 		this.displayStep = displayStep;
 		this.displayOctave = displayOctave;
 	}
@@ -21,11 +21,11 @@ public class Unpitched {
 		return this.displayStep; 
 	}
 	
-	public void setDisplayOctave(String displayOctave) { 
+	public void setDisplayOctave(int displayOctave) { 
 		this.displayOctave = displayOctave;
 	}
 	
-	public String getDisplayOctave() { 
+	public int getDisplayOctave() { 
 		return this.displayOctave;
 	}
 }

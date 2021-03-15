@@ -10,7 +10,6 @@ public class PartList {
 	}
 	
 	public PartList(ArrayList<ScorePart> scoreParts) {
-		super();
 		this.scoreParts = scoreParts;
 	}
 	
