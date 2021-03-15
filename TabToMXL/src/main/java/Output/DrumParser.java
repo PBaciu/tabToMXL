@@ -90,10 +90,9 @@ public class DrumParser {
                     if (match.matches("[ox]")) {
                         int prev = intermediaryGarbage2.val.indexOf(match,map.getOrDefault(intermediaryGarbage2.label, new AtomicInteger(0)).get());
                         map.put(intermediaryGarbage2.label, new AtomicInteger(prev + 1));
-                        return new Note(List.of(Integer.parseInt(match.substring(match.indexOf('[') + 1, match.indexOf(']')))),
-                                intermediaryGarbage2.label, true, null, intermediaryGarbage2.col,  prev - 1);
+                        return new DrumNote(intermediaryGarbage2.label, true, null, intermediaryGarbage2.col,  prev - 1);
                     } else {
-                        return new Note(null, intermediaryGarbage2.label, false, null, intermediaryGarbage2.col, intermediaryGarbage2.val.indexOf(match, map.getOrDefault(intermediaryGarbage2.label, new AtomicInteger(0)).get()) - 1);
+                        return new DrumNote(intermediaryGarbage2.label, false, null, intermediaryGarbage2.col, intermediaryGarbage2.val.indexOf(match, map.getOrDefault(intermediaryGarbage2.label, new AtomicInteger(0)).get()) - 1);
                     }
 
 
