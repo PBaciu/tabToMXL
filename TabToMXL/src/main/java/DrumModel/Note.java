@@ -8,8 +8,9 @@ public class Note {
 	public final int voice;
 	public final String type, stem, notehead;
 	public final Beam beam; 
+	public final int distance;
 
-	public Note(Unpitched pitch, int duration, int voice, String stem, String type, String notehead, Instrument instrument, Beam beam) {
+	public Note(Unpitched pitch, int duration, int voice, String stem, String type, String notehead, Instrument instrument, Beam beam, int distance) {
 		this.unpitch = pitch;
 		this.duration = duration;
 		this.voice = voice;
@@ -18,6 +19,7 @@ public class Note {
 		this.notehead = notehead;
 		this.instrument = instrument;
 		this.beam = beam;
+		this.distance = distance;
 	}
 }
 	

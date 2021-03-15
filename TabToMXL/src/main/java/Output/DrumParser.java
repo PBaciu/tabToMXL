@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 import DrumModel.*;
+import Models.Tab;
+import generated.ScorePartwise;
 
 public class DrumParser {
 
@@ -37,9 +39,19 @@ public class DrumParser {
 		}
 		return arrayText;
 	}
-
+	
+	public ScorePartwise parseDrumTab(String drumTab) {
+		
+		return generateDrumXML();
+	}
+	
+	public ScorePartwise generateDrumXML() {
+		
+		return null;
+	}
+	
 	public static String drumTabToXMLConversion(ArrayList<String> tabInArray) { // top to bottom from the xml file
-		try {
+		/*try {
 			// can later add <?xml version="1.0" encoding="UTF-8"?>
 			ScorePartwise scorePartwise = new ScorePartwise();
 			scorePartwise.setVersion("3.1");
@@ -118,7 +130,7 @@ public class DrumParser {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+*/
 		return null;
 	}
 }

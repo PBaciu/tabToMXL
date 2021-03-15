@@ -2,11 +2,11 @@ package Models;
 
 import java.util.List;
 
-public class Bar2 {
-    public final List<NoteDrum> notes;
+public class DrumBar {
+    public final List<Note> notes;
     public final int barLength;
 
-    public Bar2(List<NoteDrum> notes, int barLength) {
+    public DrumBar(List<Note> notes, int barLength) {
         this.notes = notes;
         this.barLength = barLength;
     }

@@ -1,19 +1,16 @@
 package Models;
 
-
 import java.util.List;
 
-public class NoteDrum implements Comparable{
-    public final List<Integer> frets;
-    public final DrumString string;
+public class DrumNote implements Comparable{
+    public final DrumInstrument instrument;
     public final boolean isHarmonic;
     public final List<NoteRelationship> relationships;
     public final int inBar;
     public final int absoluteDistance;
 
-    public NoteDrum(List<Integer> frets, DrumString label, boolean isHarmonic, List<NoteRelationship> relationships, int inBar, int absoluteDistance) {
-        this.frets = frets;
-        this.string = label;
+    public DrumNote(DrumInstrument instrument, boolean isHarmonic, List<NoteRelationship> relationships, int inBar, int absoluteDistance) {
+        this.instrument = instrument;
         this.isHarmonic = isHarmonic;
         this.relationships = relationships;
         this.inBar = inBar;
@@ -23,8 +20,7 @@ public class NoteDrum implements Comparable{
     @Override
     public String toString() {
         return "Note{" +
-                "frets=" + frets +
-                ", string=" + string +
+                ", string=" + instrument +
                 ", isHarmonic=" + isHarmonic +
                 ", relationships=" + relationships +
                 ", inBar=" + inBar +
@@ -34,7 +30,7 @@ public class NoteDrum implements Comparable{
 
     @Override
     public int compareTo(Object o) {
-        NoteDrum other = (NoteDrum)o;
+        DrumNote other = (DrumNote)o;
         return this.absoluteDistance - other.absoluteDistance;
     }
 }
