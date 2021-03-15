@@ -1,23 +1,21 @@
 package DrumModel;
 
-import java.util.ArrayList;
-
 public class PartList {
 
-	ArrayList<ScorePart> scoreParts;
+	ScorePart scorePart;
 	
 	public PartList() {
 	}
 	
-	public PartList(ArrayList<ScorePart> scoreParts) {
-		this.scoreParts = scoreParts;
+	public PartList(ScorePart scorePart) {
+		this.scorePart = scorePart;
 	}
 	
-	public ArrayList<ScorePart> getScoreParts() {
-		return this.scoreParts;
+	public ScorePart getScorePart() {
+		return this.scorePart;
 	}
 
-	public void setScoreParts(ArrayList<ScorePart> scoreParts) {
-		this.scoreParts = scoreParts;
+	public void setScorePart(ScorePart scorePart) {
+		this.scorePart = scorePart;
 	}
 }

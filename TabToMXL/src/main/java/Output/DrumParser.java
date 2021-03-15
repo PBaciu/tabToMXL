@@ -44,7 +44,6 @@ public class DrumParser {
 			ScorePartwise scorePartwise = new ScorePartwise();
 			scorePartwise.setVersion("3.1");
 
-			ArrayList<ScorePart> scoreParts = new ArrayList<ScorePart>();
 			ArrayList<String> InstrumentNames = new ArrayList<String>(Arrays.asList("Bass Drum 1", "Bass Drum 2",
 					"Side Stick", "Snare", "Low Floor Tom", "Closed Hi-Hat", "High Floor Tom", "Pedal Hi-Hat",
 					"Low Tom", "Open Hi-Hat", "Low-Mid Tom", "Hi-Mid Tom", "Crash Cymbal 1", "High Tom",
@@ -65,10 +64,9 @@ public class DrumParser {
 			}
 
 			scorepart.setScoreInstrument(instruments);
-			scoreParts.add(scorepart);
 
 			PartList partList = new PartList();
-			partList.setScoreParts(scoreParts);
+			partList.setScorePart(scorepart);
 			scorePartwise.setPartList(partList);
 
 			Part part = new Part();
