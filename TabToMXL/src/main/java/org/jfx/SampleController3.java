@@ -31,13 +31,19 @@ public class SampleController3 implements Initializable {
 	
 	FileChooser fileChooser = new FileChooser();
 	
+	String textArea2;
+	String textField2;
+	String fileContent;
+	String timeSignature;
+	String tempo;
+	
 	//Stage curStage = (Stage) rootPane.getScene().getWindow();
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		rootPane.setOpacity(0);
 		makeFade();
-		this.ViewResult();
+		this.viewResult();
 	}
 	
 	private void makeFade() {
@@ -61,9 +67,20 @@ public class SampleController3 implements Initializable {
 	private Button help;
 	
 	@FXML
+	private Button newConversion;
+	
+	@FXML
 	private TextArea textArea;
 	
-	public void SaveAction() {
+	public void initData(String textArea, String textField, String fileContent, String timeSign, String tempo2) {
+		this.textArea2 = textArea;
+		this.textField2 = textField;
+		this.fileContent = fileContent;
+		this.timeSignature = timeSign;
+		this.tempo = tempo2;
+	}
+	
+	public void saveAction() {
 		
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("MusicXML File", "*.musicxml"));
 		File file = fileChooser.showSaveDialog(new Stage());
@@ -90,7 +107,7 @@ public class SampleController3 implements Initializable {
 	}
 	
 	
-	public void ViewResult() {
+	public void viewResult() {
 		BufferedReader sampleFile = null;
 		try {
 			sampleFile = new BufferedReader(new FileReader(System.getProperty("java.io.tmpdir") + "result.xml"));
@@ -112,16 +129,20 @@ public class SampleController3 implements Initializable {
 		}
 	}
 	
-	public void HelpAction() {
-		Alert helpAlert = new Alert(Alert.AlertType.CONFIRMATION);
+	public void helpAction() {
+		Alert helpAlert = new Alert(Alert.AlertType.INFORMATION);
         helpAlert.setHeaderText("Information on Usage");
-        helpAlert.setContentText("This page displays the Converted tablature in a MusicXML format."
-        		+ "\n" + "You can save the contents that are displayed into your computer using the Save button (Can only be saved as a .musicxml file."
-        		+ "\n" + "The Back button takes you back to the previous page to help you perform a new Tablature Conversion.");
+        helpAlert.setContentText("•This page displays the Converted tablature in a MusicXML format. \n"
+        		+ "\n" + "•You can save the contents that are displayed into your computer using the Save button (Can only be saved as a .musicxml file. \n"
+        		+ "\n" + "•The Back button takes you back to the previous page to help you perform a new Tablature Conversion.");
         helpAlert.showAndWait();
 	}
 	
-	public void BackAction() {
+	public void newConvertAction() {
+		makeFadeOut2();
+	}
+	
+	public void backAction() {
 		makeFadeOut();
 	}
 	
@@ -135,7 +156,33 @@ public class SampleController3 implements Initializable {
 		fadeTransition.play();
 	}
 	
+	private void makeFadeOut2() {
+		FadeTransition fadeTransition = new FadeTransition();
+		fadeTransition.setDuration(Duration.millis(500));
+		fadeTransition.setNode(rootPane);
+		fadeTransition.setFromValue(1);
+		fadeTransition.setToValue(0);
+		fadeTransition.setOnFinished(event -> loadPrevScene2());
+		fadeTransition.play();
+	}
+	
 	private void loadPrevScene() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(getClass().getClassLoader().getResource("org.jfx/Sample2.fxml"));
+			Parent secondView = loader.load();
+			Scene newScene = new Scene(secondView);
+			SampleController2 controller = loader.getController();
+			controller.initData(textArea2, textField2, this.fileContent, this.timeSignature, this.tempo);
+			Stage curStage = (Stage) rootPane.getScene().getWindow();
+			curStage.setScene(newScene);
+			curStage.show();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+ 	}
+	
+	private void loadPrevScene2() {
 		try {
 			Parent secondView = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("org.jfx/Sample2.fxml")));
 			Scene newScene = new Scene(secondView);

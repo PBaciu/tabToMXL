@@ -8,29 +8,34 @@
 
 <AnchorPane fx:id="rootPane" prefHeight="800.0" prefWidth="900.0" style="-fx-background-color: #a0a7cc#a0a7cc #a0a7cc#a0a7cc #a0a7cc#a0a7cc #a0a7cc#a0a7cc #a0a7cc#a0a7cc #a0a7cc#a0a7cc #a0a7cc#a0a7cc #a0a7cc#a0a7cc;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jfx.SampleController3">
    <children>
-      <Button fx:id="saveButton" layoutX="503.0" layoutY="647.0" mnemonicParsing="false" onAction="#SaveAction" prefHeight="35.0" prefWidth="100.0" text="Save" AnchorPane.bottomAnchor="113.0" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="647.0">
+      <Button fx:id="saveButton" alignment="CENTER" layoutX="136.0" layoutY="711.0" mnemonicParsing="false" onAction="#saveAction" prefHeight="48.0" prefWidth="227.0" text="Save" AnchorPane.bottomAnchor="41.0" AnchorPane.leftAnchor="136.0">
          <font>
-            <Font size="20.0" />
+            <Font size="25.0" />
          </font></Button>
-      <TextArea fx:id="textArea" layoutX="50.0" layoutY="139.0" prefHeight="464.0" prefWidth="767.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="139.0" />
-      <Label layoutX="253.0" layoutY="49.0" prefHeight="44.0" prefWidth="409.0" text="   Conversion Complete" textAlignment="CENTER" AnchorPane.leftAnchor="253.0" AnchorPane.rightAnchor="238.0">
+      <TextArea fx:id="textArea" layoutX="11.0" layoutY="179.0" prefHeight="512.0" prefWidth="880.0" AnchorPane.bottomAnchor="109.0" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="9.0" AnchorPane.topAnchor="179.0" />
+      <Label alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="188.0" layoutY="45.0" prefHeight="53.0" prefWidth="480.0" text="   Conversion Complete" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS" AnchorPane.leftAnchor="188.0" AnchorPane.rightAnchor="232.0" AnchorPane.topAnchor="45.0">
          <font>
-            <Font size="36.0" />
+            <Font size="43.0" />
          </font>
       </Label>
-      <Label layoutX="317.0" layoutY="91.0" prefHeight="40.0" prefWidth="267.0" text="Copy Text or Save File" AnchorPane.leftAnchor="317.0" AnchorPane.rightAnchor="316.0">
+      <Label alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="312.0" layoutY="129.0" prefHeight="40.0" prefWidth="265.0" text="Copy Text or Save File" textOverrun="CENTER_ELLIPSIS" AnchorPane.leftAnchor="312.0" AnchorPane.rightAnchor="323.0">
          <font>
             <Font size="25.0" />
          </font>
       </Label>
-      <Button fx:id="backButton" layoutX="14.0" layoutY="71.0" mnemonicParsing="false" onAction="#BackAction" prefHeight="35.0" prefWidth="100.0" text="Back">
+      <Button fx:id="backButton" layoutX="14.0" layoutY="48.0" mnemonicParsing="false" onAction="#backAction" prefHeight="35.0" prefWidth="100.0" text="Back" AnchorPane.leftAnchor="14.0">
          <font>
-            <Font size="20.0" />
+            <Font size="25.0" />
          </font>
       </Button>
-      <Button fx:id="help" layoutX="736.0" layoutY="54.0" mnemonicParsing="false" onAction="#HelpAction" prefHeight="35.0" prefWidth="100.0" text="Help">
+      <Button fx:id="help" alignment="CENTER" layoutX="786.0" layoutY="48.0" mnemonicParsing="false" onAction="#helpAction" prefHeight="35.0" prefWidth="100.0" text="Help" AnchorPane.rightAnchor="14.0">
          <font>
-            <Font size="20.0" />
+            <Font size="25.0" />
+         </font>
+      </Button>
+      <Button fx:id="newConversion" alignment="CENTER" layoutX="506.0" layoutY="711.0" mnemonicParsing="false" onAction="#newConvertAction" prefHeight="48.0" prefWidth="227.0" text="New Conversion" AnchorPane.bottomAnchor="41.0" AnchorPane.rightAnchor="167.0">
+         <font>
+            <Font size="25.0" />
          </font>
       </Button>
       <!-- <Button fx:id="back" layoutX="721.0" layoutY="71.0" mnemonicParsing="false" onAction="#goBack" prefHeight="40.0" prefWidth="168.0" text="New Conversion">
