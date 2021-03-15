@@ -6,7 +6,7 @@ import Models.NoteRelationship;
 
 public class DrumNote implements Comparable{
     public final DrumInstrument instrument;
-    public final boolean isHarmonic;
+    public final boolean isHarmonic;				//not sure to keep or throw away
     public final List<NoteRelationship> relationships;
     public final int inBar;
     public final int absoluteDistance;

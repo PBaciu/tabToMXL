@@ -2,10 +2,10 @@ package Models_Two;
 
 import java.util.List;
 
-public class TabLine {
+public class DrumTabLine {
     public final List<DrumBar> bars;
 
-    public TabLine(List<DrumBar> bars) {
+    public DrumTabLine(List<DrumBar> bars) {
         this.bars = bars;
     }
 

@@ -53,6 +53,11 @@ public class Parser {
                 barDelimiterIndex.set(l.indexOf('|', 2));
                 var split = new FunctionalList<>(Arrays.asList(l.substring(firstPipeIndex + 1).split("\\|")));
                 var label = GuitarString.parse(!l.substring(0, firstPipeIndex).equals("") ? l.substring(0, firstPipeIndex): standard[row]);
+                //System.out.println("label: "+label);
+                //System.out.println(l);
+                //System.out.println(l.substring(0, firstPipeIndex));
+                //System.out.println(standard[row]);
+                
                 tuning.add(label);
                 return split.mapIndexed((col, it) -> new IntermediaryGarbage(label, row, col, it));
             });
@@ -111,6 +116,7 @@ public class Parser {
 
                 }).collect(Collectors.groupingBy(note -> note.inBar));
             }).collect(Collectors.toList())).collect(Collectors.toCollection(ArrayList::new));
+            
             List<Bar> barModelList = new ArrayList<>();
             for(int i = 0; i < bars.size(); i++) {
                 List<Note> notes = new ArrayList<>();

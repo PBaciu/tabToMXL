@@ -2,10 +2,22 @@ package Output;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.MatchResult;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import DrumModel.*;
-import Models.Tab;
+import Models.GuitarString;
+import Models.Note;
+import Models.NoteRelationship;
+import Models_Two.*;
+import TabToMXL.FunctionalList;
+import TabToMXL.IntermediaryGarbage2;
 import generated.ScorePartwise;
 
 public class DrumParser {
@@ -41,7 +53,57 @@ public class DrumParser {
 	}
 	
 	public ScorePartwise parseDrumTab(String drumTab) {
-		
+		String[] standard = {"CC", "HH", "SD", "HT", "MT", "BD"};
+        List<DrumTabLine> tabLines = new ArrayList<>();
+        List<DrumInstrument> tuning = new ArrayList<>();
+        var tab = drumTab.strip();
+        
+        for (var line : tab.split("\n\\s*\n")) {
+
+            var lines = new FunctionalList<>(line.lines().collect(Collectors.toList()));
+
+            AtomicInteger barDelimiterIndex = new AtomicInteger(-1);
+
+            var subListStuff = new FunctionalList<>(lines);
+
+            var mapped = subListStuff.flatMapIndexed((row, l) -> {
+                var firstPipeIndex = l.indexOf('|');
+                barDelimiterIndex.set(l.indexOf('|', 2));
+                var split = new FunctionalList<>(Arrays.asList(l.substring(firstPipeIndex + 1).split("\\|")));
+                var label = DrumInstrument.parse(!l.substring(0, firstPipeIndex).equals("") ? l.substring(0, firstPipeIndex): standard[row]);
+                tuning.add(label);
+                return split.mapIndexed((col, it) -> new IntermediaryGarbage2(label, row, col, it));
+            });
+            
+            var grouped = mapped.groupBy(intermediaryGarbage2 -> intermediaryGarbage2.col);
+            
+            var bars = grouped.values().stream().map(list -> list.stream().map(intermediaryGarbage2 -> {
+                var map = new HashMap<DrumInstrument, AtomicInteger>();
+                var matches = Pattern.compile("[ox]*")
+                        .matcher(intermediaryGarbage2.val)
+                        .results()
+                        .map(MatchResult::group);
+
+
+                return matches.map(match -> {
+                    //o or x
+                    if (match.matches("[ox]")) {
+                        int prev = intermediaryGarbage2.val.indexOf(match,map.getOrDefault(intermediaryGarbage2.label, new AtomicInteger(0)).get());
+                        map.put(intermediaryGarbage2.label, new AtomicInteger(prev + 1));
+                        return new Note(List.of(Integer.parseInt(match.substring(match.indexOf('[') + 1, match.indexOf(']')))),
+                                intermediaryGarbage2.label, true, null, intermediaryGarbage2.col,  prev - 1);
+                    } else {
+                        return new Note(null, intermediaryGarbage2.label, false, null, intermediaryGarbage2.col, intermediaryGarbage2.val.indexOf(match, map.getOrDefault(intermediaryGarbage2.label, new AtomicInteger(0)).get()) - 1);
+                    }
+
+
+                    //TODO Handle cases of mixed hammeron, pullofs, bends and slides
+
+                }).collect(Collectors.groupingBy(note -> note.inBar));
+            }).collect(Collectors.toList())).collect(Collectors.toCollection(ArrayList::new));
+            
+        }
+        
 		return generateDrumXML();
 	}
 	
