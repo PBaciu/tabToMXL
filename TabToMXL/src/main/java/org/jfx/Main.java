@@ -19,6 +19,7 @@ public class Main extends Application {
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("org.jfx/application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
+			
 			primaryStage.setTitle("TAB2MXL");
 			
 			Image icon = new Image("org.jfx/icon.png");
