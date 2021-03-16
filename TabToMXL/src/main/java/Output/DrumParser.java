@@ -2,8 +2,11 @@ package Output;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
+import java.util.PriorityQueue;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.MatchResult;
@@ -12,9 +15,11 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import DrumModel.*;
+import Models.Bar;
 import Models.GuitarString;
 import Models.Note;
 import Models.NoteRelationship;
+import Models.TabLine;
 import Models_Two.*;
 import TabToMXL.FunctionalList;
 import TabToMXL.IntermediaryGarbage2;
@@ -31,12 +36,26 @@ public class DrumParser {
 				+ "HT|----------------|----oo----------|\r\n"
 				+ "MT|----------------|------oo--------|\r\n"
 				+ "BD|o-------o-------|o-------o-------|");
-		System.out.println("DRUMTAB: " + drumTab);
+		
+		String drumTablature = "CC|x---------------|--------x-------|\r\n"
+				+ "HH|--x-x-x-x-x-x-x-|----------------|\r\n"
+				+ "SD|----o-------o---|oooo------------|\r\n"
+				+ "HT|----------------|----oo----------|\r\n"
+				+ "MT|----------------|------oo--------|\r\n"
+				+ "BD|o-------o-------|o-------o-------|";
+		//System.out.println("DRUMTAB: " + drumTab);
+		//System.out.println(parseDrumTab(drumTablature));
+		readTab(drumTablature);
 
-		String converted = drumTabToXMLConversion(drumTab);
+		//String converted = drumTabToXMLConversion(drumTab);
 
-		System.out.println(converted);
+		//System.out.println(converted);
 	}
+	
+	public static ScorePartwise readTab(String tab) {
+        //TODO Determine if tab is guitar, bass, or drum
+        return parseDrumTab(tab);
+    }
 
 	public static ArrayList<String> getTextArray(String text) {
 		ArrayList<String> arrayText = new ArrayList<>();
@@ -52,10 +71,10 @@ public class DrumParser {
 		return arrayText;
 	}
 	
-	public ScorePartwise parseDrumTab(String drumTab) {
+	public static ScorePartwise parseDrumTab(String drumTab) {
 		String[] standard = {"CC", "HH", "SD", "HT", "MT", "BD"};
         List<DrumTabLine> tabLines = new ArrayList<>();
-        List<DrumInstrument> tuning = new ArrayList<>();
+        List<DrumInstrument> device = new ArrayList<>();
         var tab = drumTab.strip();
         
         for (var line : tab.split("\n\\s*\n")) {
@@ -71,7 +90,7 @@ public class DrumParser {
                 barDelimiterIndex.set(l.indexOf('|', 2));
                 var split = new FunctionalList<>(Arrays.asList(l.substring(firstPipeIndex + 1).split("\\|")));
                 var label = DrumInstrument.parse(!l.substring(0, firstPipeIndex).equals("") ? l.substring(0, firstPipeIndex): standard[row]);
-                tuning.add(label);
+                device.add(label);
                 return split.mapIndexed((col, it) -> new IntermediaryGarbage2(label, row, col, it));
             });
             
@@ -85,7 +104,7 @@ public class DrumParser {
                         .map(MatchResult::group);
 
 
-                return matches.map(match -> {
+                return matches.map(match -> {		//unsure if correct
                     //o or x
                     if (match.matches("[ox]")) {
                         int prev = intermediaryGarbage2.val.indexOf(match,map.getOrDefault(intermediaryGarbage2.label, new AtomicInteger(0)).get());
@@ -101,12 +120,39 @@ public class DrumParser {
                 }).collect(Collectors.groupingBy(note -> note.inBar));
             }).collect(Collectors.toList())).collect(Collectors.toCollection(ArrayList::new));
             
+            List<DrumBar> barModelList = new ArrayList<>();
+            for(int i = 0; i < bars.size(); i++) {
+                List<DrumNote> notes = new ArrayList<>();
+                for (var note : bars.get(i)){
+                    notes.addAll(note.get(i));
+                }
+                int barLength = (notes.size() / 6 ) - 2;
+                
+                //unsure
+                notes = notes.parallelStream().filter(note -> Objects.nonNull(note.instrument)).collect(Collectors.toList());
+                DrumBar bar = new DrumBar(notes, barLength);
+
+                barModelList.add(bar);
+            }
+            List<DrumBar> barList = new ArrayList<>();
+            for (var bar: barModelList) {
+                PriorityQueue<DrumNote> pq = new PriorityQueue<>(bar.notes);
+                List<DrumNote> notes = new ArrayList<>();
+                while (!pq.isEmpty()) {
+                    notes.add(pq.poll());
+                }
+                DrumBar b = new DrumBar(notes, bar.barLength);
+                barList.add(b);
+            }
+            DrumTabLine tabLine = new DrumTabLine(barList);
+            tabLines.add(tabLine);
+            
         }
-        
+        Collections.reverse(device);
 		return generateDrumXML();
 	}
 	
-	public ScorePartwise generateDrumXML() {
+	public static ScorePartwise generateDrumXML() {
 		
 		return null;
 	}
