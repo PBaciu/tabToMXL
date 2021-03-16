@@ -18,6 +18,7 @@ public class Main extends Application {
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("org.jfx/application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
+			primaryStage.setTitle("TAB2MXL");
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
