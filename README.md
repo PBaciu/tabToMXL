@@ -1,7 +1,7 @@
-# tabToMXL
+# TAB2MXL
 
 # Introduction
-tabToMXL is a java application which will convert tablature made for percussion, guitar, and bass guitar from a “.txt” format to a ".musicxml" format.
+TAB2MXL is a java application which will convert tablature made for percussion, guitar, and bass guitar from a “.txt” format to a ".musicxml" format.
 
 The specific xml format being used is musicxml and there are various resources on the web that will allow conversion from the resultant musicxml file into sheet music.
 
@@ -9,7 +9,7 @@ The specific xml format being used is musicxml and there are various resources o
 Currently, our application supports input in the form of plain text (pasted into a text area), or the selection of a .txt file from the user's file system.
 
 # Requirements
-tabToMXL uses Java 15.0.2 
+TAB2MXL uses Java 15.0.2 
 Please ensure that version 15.0.2 of java is installed on your machine prior to setup.
 
 # Supported Features
