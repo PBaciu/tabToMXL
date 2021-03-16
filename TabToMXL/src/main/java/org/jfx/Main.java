@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.fxml.FXMLLoader;
 
 import java.util.Objects;
@@ -19,6 +20,10 @@ public class Main extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.show();
 			primaryStage.setTitle("TAB2MXL");
+			
+			Image icon = new Image("org.jfx/icon.png");
+			primaryStage.getIcons().add(icon);
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
