@@ -89,9 +89,13 @@ public class DrumParser {
         List<DrumInstrument> device = new ArrayList<>();
         var tab = drumTab.strip();
         
+        for (String letters: standard) {
+        	tab = tab.replaceAll(letters, "");
+        }
+        
         for (var line : tab.split("\n\\s*\n")) {
-        	line = line.substring(line.indexOf("|"));
-        	line.trim();
+        	//line = line.substring(line.indexOf("|"));
+        	//line.trim();
 
             var lines = new FunctionalList<>(line.lines().collect(Collectors.toList()));
 
@@ -112,7 +116,7 @@ public class DrumParser {
             
             var bars = grouped.values().stream().map(list -> list.stream().map(intermediaryGarbage2 -> {
                 var map = new HashMap<DrumInstrument, AtomicInteger>();
-                var matches = Pattern.compile("[ox]*")
+                var matches = Pattern.compile("[ox]*")//* means anything 
                         .matcher(intermediaryGarbage2.val)
                         .results()
                         .map(MatchResult::group);
@@ -120,7 +124,7 @@ public class DrumParser {
 
                 return matches.map(match -> {		//unsure if correct
                     //o or x
-                    if (match.matches("[ox]")) {
+                    if (match.matches("[ox]")) {	//should only match with either o or x
                         int prev = intermediaryGarbage2.val.indexOf(match,map.getOrDefault(intermediaryGarbage2.label, new AtomicInteger(0)).get());
                         map.put(intermediaryGarbage2.label, new AtomicInteger(prev + 1));
                         return new DrumNote(intermediaryGarbage2.label, true, null, intermediaryGarbage2.col,  prev - 1);
@@ -179,7 +183,7 @@ public class DrumParser {
         
         scorePart.setPartName(partName);		//how to set score-instrument?
         //scorePart.set
-        //scorePart.setScoreInstrument(
+        scorePart.getScoreInstrument().addAll(null);
         
         partList.getPartGroupOrScorePart().add(scorePart);
         scorePartwise.setPartList(partList);

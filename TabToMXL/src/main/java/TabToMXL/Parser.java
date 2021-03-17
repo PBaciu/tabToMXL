@@ -33,7 +33,11 @@ public class Parser {
 
     public ScorePartwise readTab(String tab) {
         //TODO Determine if tab is guitar, bass, or drum
-    	return DrumParser.parseDrumTab(tab);
+    	if (tab.contains("CC")) {
+    		return DrumParser.parseDrumTab(tab);
+    	} else {
+    		return parseGuitarTab(tab);
+    	}
         //return parseGuitarTab(tab);
     }
 
