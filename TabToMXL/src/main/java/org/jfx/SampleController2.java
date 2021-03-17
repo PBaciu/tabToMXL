@@ -283,13 +283,13 @@ public class SampleController2 implements Initializable {
 		Alert helpAlert = new Alert(Alert.AlertType.INFORMATION);
         helpAlert.setHeaderText("Information on Usage");
         helpAlert.setContentText("""
-				You can Drag and Drop a file in the Text Field given in this screen. You can also Browse for a File from your computer.
-				The Files should only be of a .txt format.
-				The Uploaded Files will have their content displayed on the Copy/Paste area which can be modified to the Users' preference.
-				There are text fields for Time Signature and Tempo which can be inputted if preferred in the correct format.
-				The default values set for Time Signature is 4/4 while the default Tempo is 120.
-				Hitting the Convert button converts the final variation of the Tablature in the Copy/Paste Text Area into a musicxml file.
-				The Save Changes button allows you to save the changes you made in the Tablature to a file of your choosing.""");
+				•You can Drag and Drop a file in the Text Field given in this screen. You can also Browse for a File from your computer.\n
+				•The Files should only be of a .txt format.\n
+				•The Uploaded Files will have their content displayed on the Copy/Paste area which can be modified to the Users' preference.\n
+				•There are text fields for Time Signature and Tempo which can be inputed if preferred in the correct format.\n
+				•The default values set for Time Signature is 4/4 while the default Tempo is 120.\n
+				•Hitting the Convert button converts the final variation of the Tablature in the Copy/Paste Text Area into a musicxml file.\n
+				•The Save Changes button allows you to save the changes you made in the Tablature to a file of your choosing.""");
         helpAlert.showAndWait();
 	}
 
