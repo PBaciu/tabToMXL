@@ -68,7 +68,7 @@ public class Parser {
                 return split.mapIndexed((col, it) -> new IntermediaryGarbage(label, row, col, it));
             });
 
-            var grouped = mapped.groupBy(intermediaryGarbage -> intermediaryGarbage.col);
+            var grouped = mapped.groupBy(intermediaryGarbage -> intermediaryGarbage.col);		//get the measure
 
             var bars = grouped.values().stream().map(list -> list.stream().map(intermediaryGarbage -> {
                 var map = new HashMap<GuitarString, AtomicInteger>();
@@ -115,7 +115,7 @@ public class Parser {
                                 .mapToObj(i -> NoteRelationship.SLIDE).collect(Collectors.toList()), intermediaryGarbage.col, intermediaryGarbage.val.indexOf(match, map.getOrDefault(intermediaryGarbage.label, new AtomicInteger(0)).get()) - 1);
                     } else {
                         return new Note(null, intermediaryGarbage.label, false, null, intermediaryGarbage.col, intermediaryGarbage.val.indexOf(match, map.getOrDefault(intermediaryGarbage.label, new AtomicInteger(0)).get()) - 1);
-                    }
+                    }//
 
 
                     //TODO Handle cases of mixed hammeron, pullofs, bends and slides
