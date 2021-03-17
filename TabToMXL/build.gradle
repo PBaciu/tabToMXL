@@ -3,6 +3,7 @@ plugins {
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.8'
     id 'org.beryx.jlink' version '2.6.5'
+    id 'jacoco'
 }
 mainClassName = 'org.jfx.Main'
 group 'org.jfx'
@@ -13,6 +14,7 @@ sourceCompatibility = 15.0
 targetCompatibility = 15.0
 
 repositories {
+    jcenter()
     mavenCentral()
 }
 
@@ -24,6 +26,9 @@ dependencies {
     compile 'com.sun.xml.bind:jaxb-core:2.3.0.1'
     compile 'com.sun.xml.bind:jaxb-impl:2.3.1'
     compile 'org.javassist:javassist:3.25.0-GA'
+    testCompile "org.testfx:testfx-core:4.0.16-alpha"
+    testCompile "org.testfx:testfx-junit5:4.0.16-alpha"
+    testCompile group: 'org.hamcrest', name: 'hamcrest', version: '2.1'
 }
 
 test {
@@ -31,6 +36,16 @@ test {
     testLogging {
         events 'passed', 'skipped', 'failed'
     }
+    finalizedBy jacocoTestReport
+}
+
+jacoco{
+	toolVersion = "0.8.6"
+	reportsDirectory = file("$buildDir/customJacocoReportDir")
+}
+
+jacocoTestReport{
+	dependsOn test
 }
 
 javafx {
