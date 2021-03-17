@@ -1,17 +1,50 @@
 # tabToMXL
 
 # Introduction
-tabToMXL is a java application which will convert tablature made for percussion, guitar, and bass guitar from a “.txt” format to a ".xml" format, which will output as a downloadable file.
+tabToMXL is a java application which will convert tablature made for percussion, guitar, and bass guitar from a “.txt” format to a ".musicxml" format.
 
 The specific xml format being used is musicxml and there are various resources on the web that will allow conversion from the resultant musicxml file into sheet music.
 
 # Functionality
 Currently, our application supports input in the form of plain text (pasted into a text area), or the selection of a .txt file from the user's file system.
-The parser is a work in progress and no matter what input tab is submitted, one predetermined output will be generated.
 
 # Requirements
 tabToMXL uses Java 15.0.2 
 Please ensure that version 15.0.2 of java is installed on your machine prior to setup.
+
+# Supported Features
+We support the conversion of simple guitar tabs. These tabs must not contain additional information such as title, repeats, and text between lines of the tab.
+We currently support chords.
+We currently only support 6 string guitars in standard tuning.
+Hammerons and pulloffs are only supported outside of chords and in pairs of two.
+These features are currently being added.
+
+Two example tabs are shown below.
+
+```
+e|-------5-7-----7-|-8-----8-2-----2-|-0---------0-----|-----------------|
+B|-----5-----5-----|---5-------3-----|---1---1-----1---|-0-1-1-----------|
+G|---5---------5---|-----5-------2---|-----2---------2-|-0-2-2---2-------|
+D|-7-------6-------|-5-------4-------|-3---------------|-----------------|
+A|-----------------|-----------------|-----------------|-2-0-0---0---8-7-|
+E|-----------------|-----------------|-----------------|-----------------|
+ 
+e|---------7-----7-|-8-----8-2-----2-|-0---------0-----|-----------------|
+B|-------5---5-----|---5-------3-----|---1---1-----1---|-0-1-1-----------|
+G|-----5-------5---|-----5-------2---|-----2---------2-|-0-2-2-----------|
+D|---7-----6-------|-5-------4-------|-3---------------|-----------------|
+A|-0---------------|-----------------|-----------------|-2-0-0-------0-2-|
+E|-----------------|-----------------|-----------------|-----------------|
+```
+
+```
+|-----------0-----|-0---------------|
+|---------0---0---|-0---------------|
+|-------1-------1-|-1---------------|
+|-----2-----------|-2---------------|
+|---2-------------|-2---------------|
+|-0---------------|-0---------------|
+```
 
 # Setup
 Outlined below are instructions for setting up the project in Eclipse.
@@ -53,17 +86,14 @@ Outlined below are instructions for setting up the project in Eclipse.
 
 # Usage
 Our application currently consists of three pages
-  #### Welcome Page
-  This page is a simple welcome page. It will be customized in the future.<br />
-  ![image](https://user-images.githubusercontent.com/77293069/108305546-338fac00-7178-11eb-8b37-24e8cab917cf.png)<br /><br />
   
   #### Input Page
-  This page allows the insertion of text via a .txt file or copied text. <br />
-  ![image](https://user-images.githubusercontent.com/77293069/108305639-705ba300-7178-11eb-840f-87d10623fcb0.png)<br /><br />
+  This page allows the insertion of text via a .txt file that can be selected from the file system, or copied text. <br />
+  ![image](https://user-images.githubusercontent.com/77293069/109452295-6ca00a00-7a1d-11eb-93d9-6adddd26c682.png)<br /><br />
   
   #### Output Page
-  This page allows the user to view the resulting xml and gives the option to save the file.<br />
-  ![image](https://user-images.githubusercontent.com/77293069/108305689-8ff2cb80-7178-11eb-8836-2b6fe2374cd4.png)<br /><br />
+  This page allows the user to view the resulting xml and gives the option to save the file, convert another file, or go back to the previously inputted file.<br />
+  ![image](https://user-images.githubusercontent.com/77293069/109452346-8b060580-7a1d-11eb-979a-ed912778f244.png)<br /><br />
   
 # Issues
 In case of any problems, please open an issue on this github page, or email Patrick at baciupat@my.yorku.ca

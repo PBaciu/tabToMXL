@@ -36,16 +36,16 @@ test {
     testLogging {
         events 'passed', 'skipped', 'failed'
     }
-    finalizedBy jacocoTestReport
+    finalizedBy jacocoTestReport // report is always generated after tests run
 }
 
-jacoco{
-	toolVersion = "0.8.6"
-	reportsDirectory = file("$buildDir/customJacocoReportDir")
+jacoco {
+    toolVersion = "0.8.6"
+    reportsDirectory = file("$buildDir/customJacocoReportDir")
 }
 
-jacocoTestReport{
-	dependsOn test
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
 }
 
 javafx {

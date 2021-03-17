@@ -2,13 +2,6 @@ package TabToMXL;
 
 import Models.GuitarString;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
-
-import javax.xml.bind.JAXBException;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -45,5 +38,21 @@ class ParserTest {
         assertEquals(p.standardTuningStringToInt(GuitarString.D), 4);
         assertEquals(p.standardTuningStringToInt(GuitarString.B), 2);
         assertEquals(p.standardTuningStringToInt(GuitarString.A_FLAT), 0);
+    }
+
+    @Test
+    void testBadInputHandled() {
+        Parser p = new Parser();
+
+        assertThrows(Exception.class, () -> p.readTab("a"));
+        assertThrows(Exception.class, () -> p.readTab("this should fail"));
+        assertDoesNotThrow(() -> p.readTab("""
+                |-----------0-----|-0---------------|
+                |---------0---0---|-0---------------|
+                |-------1-------1-|-1---------------|
+                |-----2-----------|-2---------------|
+                |---2-------------|-2---------------|
+                |-0---------------|-0---------------|
+                """));
     }
 }
