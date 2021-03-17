@@ -87,7 +87,7 @@ Outlined below are instructions for setting up the project in Eclipse.
 Our application currently consists of three pages
   
   #### Input Page
-  This page allows the insertion of text via a .txt file that can be selected from the file system, or copied text. incase of the user having the file already open   the user could also drag and drop the file into the designated space. <br />
+  This page allows the insertion of text via a .txt file that can be selected from the file system, or copied text. Incase of the user already having the file open,   the user could also drag and drop the file into the designated space. <br />
   ![image](https://user-images.githubusercontent.com/77293069/109452295-6ca00a00-7a1d-11eb-93d9-6adddd26c682.png)<br /><br />
   
   #### Output Page
