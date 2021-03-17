@@ -90,6 +90,8 @@ public class DrumParser {
         var tab = drumTab.strip();
         
         for (var line : tab.split("\n\\s*\n")) {
+        	line = line.substring(line.indexOf("|"));
+        	line.trim();
 
             var lines = new FunctionalList<>(line.lines().collect(Collectors.toList()));
 
