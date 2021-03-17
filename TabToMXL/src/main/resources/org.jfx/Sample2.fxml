@@ -9,36 +9,61 @@
 
 <AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="900.0" style="-fx-background-color: #a0a7cc#a0a7cc #a0a7cc#a0a7cc;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jfx.SampleController2">
    <children>
-      <Button fx:id="chooseFile" layoutX="55.0" layoutY="176.0" mnemonicParsing="false" onAction="#ButtonAction" prefHeight="40.0" prefWidth="120.0" text="Browse">
+      <Button fx:id="chooseFile" layoutX="55.0" layoutY="165.0" mnemonicParsing="false" onAction="#ButtonAction" prefHeight="45.0" prefWidth="200.0" text="Browse" AnchorPane.leftAnchor="55.0">
          <font>
-            <Font size="15.0" />
+            <Font size="20.0" />
          </font></Button>
-      <Label layoutX="55.0" layoutY="51.0" prefHeight="40.0" prefWidth="313.0" text="Choose File/Drag and Drop">
+      <Label layoutX="55.0" layoutY="51.0" prefHeight="40.0" prefWidth="313.0" text="Choose File/Drag and Drop" AnchorPane.topAnchor="51.0">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Label layoutX="55.0" layoutY="249.0" prefHeight="40.0" prefWidth="259.0" text="Copy/Paste Tablature">
+      <Label layoutX="55.0" layoutY="273.0" prefHeight="40.0" prefWidth="259.0" text="Copy/Paste Tablature">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <TextArea fx:id="textArea" layoutX="55.0" layoutY="296.0" prefHeight="363.0" prefWidth="785.0">
+      <TextArea fx:id="textArea" layoutX="55.0" layoutY="325.0" prefHeight="363.0" prefWidth="785.0" AnchorPane.bottomAnchor="112.0" AnchorPane.leftAnchor="55.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="325.0">
          <font>
             <Font name="Courier New" size="13.0" />
          </font></TextArea>
-      <Button fx:id="convert" layoutX="342.0" layoutY="683.0" mnemonicParsing="false" onAction="#ConvertAction" prefHeight="50.0" prefWidth="215.0" text="Convert" AnchorPane.leftAnchor="342.0" AnchorPane.rightAnchor="342.0">
+      <Button fx:id="convert" layoutX="640.0" layoutY="704.0" mnemonicParsing="false" onAction="#ConvertAction" prefHeight="45.0" prefWidth="200.0" text="Convert" AnchorPane.bottomAnchor="51.0" AnchorPane.rightAnchor="60.0">
          <font>
-            <Font size="17.0" />
+            <Font size="20.0" />
          </font></Button>
-      <TextField fx:id="textField" layoutX="55.0" layoutY="104.0" prefHeight="50.0" prefWidth="506.0" promptText="Drop File here (Only .txt files accepted)">
+      <TextField fx:id="textField" layoutX="55.0" layoutY="104.0" prefHeight="50.0" prefWidth="785.0" promptText="Drop File here (Only .txt files accepted)" AnchorPane.leftAnchor="55.0" AnchorPane.rightAnchor="60.0">
          <font>
             <Font size="20.0" />
          </font></TextField>
-      <Button fx:id="help" layoutX="740.0" layoutY="51.0" mnemonicParsing="false" onAction="#HelpAction" prefHeight="40.0" prefWidth="100.0" text="Help">
+      <Button fx:id="help" layoutX="730.0" layoutY="49.0" mnemonicParsing="false" onAction="#HelpAction" prefHeight="45.0" prefWidth="110.0" text="Help" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="49.0">
          <font>
             <Font size="20.0" />
          </font>
       </Button>
+      <Button fx:id="saveChanges" layoutX="55.0" layoutY="704.0" mnemonicParsing="false" onAction="#SaveChanges" prefHeight="45.0" prefWidth="200.0" text="Save Changes" AnchorPane.bottomAnchor="51.0" AnchorPane.leftAnchor="55.0">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Label layoutX="408.0" layoutY="165.0" text="Time Signature" AnchorPane.rightAnchor="340.0">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="408.0" layoutY="234.0" text="Tempo" AnchorPane.rightAnchor="420.5">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <TextField fx:id="timeSignature" layoutX="408.0" layoutY="194.0" prefHeight="40.0" prefWidth="432.0" promptText="Enter the Time Signature in the format: 4/4" AnchorPane.rightAnchor="60.0">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="tempo" layoutX="408.0" layoutY="263.0" prefHeight="40.0" prefWidth="432.0" promptText="Enter the Tempo in Beats Per Minute" AnchorPane.rightAnchor="60.0">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </TextField>
    </children>
 </AnchorPane>
