@@ -9,8 +9,7 @@ The specific xml format being used is musicxml and there are various resources o
 Currently, our application supports input in the form of plain text (pasted into a text area), or the selection of a .txt file from the user's file system.
 
 # Requirements
-TAB2MXL uses Java 15.0.2 
-Please ensure that version 15.0.2 of java is installed on your machine prior to setup.
+TAB2MXL uses Java 15.0.2, so please ensure that version 15.0.2 of java is installed on your machine prior to setup.
 
 # Supported Features
 We support the conversion of simple guitar tabs. These tabs must not contain additional information such as title, repeats, and text between lines of the tab.
