@@ -4,6 +4,7 @@ package TabToMXL;
 import Models.Note;
 import Models.*;
 import generated.*;
+import Output.DrumParser;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -32,6 +33,7 @@ public class Parser {
 
     public ScorePartwise readTab(String tab) {
         //TODO Determine if tab is guitar, bass, or drum
+    	//return DrumParser.parseDrumTab(tab);
         return parseGuitarTab(tab);
     }
 

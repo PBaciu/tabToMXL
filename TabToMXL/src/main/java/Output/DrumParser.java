@@ -1,5 +1,7 @@
 package Output;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,17 +21,27 @@ import Models.Bar;
 import Models.GuitarString;
 import Models.Note;
 import Models.NoteRelationship;
+import Models.Tab;
 import Models.TabLine;
 import Models_Two.*;
 import TabToMXL.FunctionalList;
 import TabToMXL.IntermediaryGarbage2;
+import generated.Attributes;
+import generated.Clef;
+import generated.ClefSign;
+import generated.Key;
+import generated.ObjectFactory;
+import generated.PartList;
+import generated.PartName;
+import generated.ScorePart;
 import generated.ScorePartwise;
+import generated.Time;
 
 public class DrumParser {
 
 	static ArrayList<String> drumTab;
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		drumTab = getTextArray("CC|x---------------|--------x-------|\r\n"
 				+ "HH|--x-x-x-x-x-x-x-|----------------|\r\n"
 				+ "SD|----o-------o---|oooo------------|\r\n"
@@ -69,7 +81,7 @@ public class DrumParser {
 			e.printStackTrace();
 		}
 		return arrayText;
-	}
+	}*/
 	
 	public static ScorePartwise parseDrumTab(String drumTab) {
 		String[] standard = {"CC", "HH", "SD", "HT", "MT", "BD"};
@@ -120,7 +132,7 @@ public class DrumParser {
                 }).collect(Collectors.groupingBy(note -> note.inBar));
             }).collect(Collectors.toList())).collect(Collectors.toCollection(ArrayList::new));
             
-            List<DrumBar> barModelList = new ArrayList<>();
+            List<DrumBar> barModelList = new ArrayList<>();		//note barModelList does not give right bar length
             for(int i = 0; i < bars.size(); i++) {
                 List<DrumNote> notes = new ArrayList<>();
                 for (var note : bars.get(i)){
@@ -149,11 +161,51 @@ public class DrumParser {
             
         }
         Collections.reverse(device);
-		return generateDrumXML();
+		return generateDrumXML(new DrumTab(tabLines, device));
 	}
 	
-	public static ScorePartwise generateDrumXML() {
+	public static ScorePartwise generateDrumXML(DrumTab drumTab) {
+		ObjectFactory factory = new ObjectFactory();
 		
+		ScorePartwise scorePartwise = factory.createScorePartwise();
+        scorePartwise.setVersion("3.1");
+        PartList partList = factory.createPartList();
+        ScorePart scorePart = factory.createScorePart();
+        scorePart.setId("P1");
+        PartName partName = factory.createPartName();
+        partName.setValue("Drumset");
+        
+        scorePart.setPartName(partName);		//how to set score-instrument?
+        //scorePart.set
+        //scorePart.setScoreInstrument(
+        
+        partList.getPartGroupOrScorePart().add(scorePart);
+        scorePartwise.setPartList(partList);
+        
+        int currMeasure = 0;
+        for (var line : drumTab.tabLines) {
+            for (int i = 0; i < line.bars.size(); i++) {
+                int quarterNoteLength = 4;
+                ScorePartwise.Part.Measure measure = new ScorePartwise.Part.Measure();
+                measure.setNumber(Integer.toString(currMeasure + 1));
+                Attributes attributes = new Attributes();
+                attributes.setDivisions(new BigDecimal(line.bars.get(i).barLength / quarterNoteLength));
+                Key key = new Key();
+                key.setFifths(BigInteger.valueOf(0));
+                attributes.getKey().add(key);
+                Clef clef = new Clef();
+                ClefSign cf = ClefSign.TAB;
+                clef.setSign(cf);
+                clef.setLine(BigInteger.valueOf(5));
+                attributes.getClef().add(clef);
+
+                Time time = factory.createTime();
+                var beats = factory.createTimeBeats(Integer.toString(4));
+                var beatType = factory.createTimeBeatType(Integer.toString(4));
+            }
+        }
+        
+        
 		return null;
 	}
 	

@@ -7,11 +7,11 @@ import Models.TabLine;
 
 public class DrumTab {
 
-    public List<TabLine> tabLines;
+    public List<DrumTabLine> tabLines;
     public List<DrumInstrument> device;
 
-    public DrumTab(List<TabLine> tabLines, List<DrumInstrument> device) {
-        this.tabLines = tabLines;
+    public DrumTab(List<DrumTabLine> tabLines2, List<DrumInstrument> device) {
+        this.tabLines = tabLines2;
         this.device = device;
     }
 
