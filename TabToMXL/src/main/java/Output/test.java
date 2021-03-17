@@ -21,16 +21,13 @@ public class test {
 		    System.out.println("Found match at: "  + matcher.start() + " to " + matcher.end());
 		}*/
 		
-		String drumTablature = "CC|x---------------|--------x-------|\r\n"
-				+ "HH|--x-x-x-x-x-x-x-|----------------|\r\n"
-				+ "SD|----o-------o---|oooo------------|\r\n"
-				+ "HT|----------------|----oo----------|\r\n"
-				+ "MT|----------------|------oo--------|\r\n"
-				+ "BD|o-------o-------|o-------o-------|";
-		String[] standard = {"CC", "HH", "SD", "HT", "MT", "BD"};
-		for (String letters: standard)
-		drumTablature = drumTablature.replaceAll(letters, "");
-		System.out.println(drumTablature);
+		String drumTablature = "SD|----o-------o---|oooo------------|\r\n";
+		Pattern pattern = Pattern.compile("[ox]"); //[ax]*
+		Matcher matcher = pattern.matcher(drumTablature);
+
+		while(matcher.find()){
+		    System.out.println("Found match at: "  + matcher.start() + " to " + matcher.end());
+		}
 	}
 
 }

@@ -16,13 +16,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import DrumModel.*;
-import Models.Bar;
-import Models.GuitarString;
-import Models.Note;
-import Models.NoteRelationship;
-import Models.Tab;
-import Models.TabLine;
 import Models_Two.*;
 import TabToMXL.FunctionalList;
 import TabToMXL.IntermediaryGarbage2;
@@ -136,7 +129,7 @@ public class DrumParser {
                     //TODO Handle cases of mixed hammeron, pullofs, bends and slides
 
                 }).collect(Collectors.groupingBy(note -> note.inBar));
-            }).collect(Collectors.toList())).collect(Collectors.toCollection(ArrayList::new));
+            }).collect(Collectors.toList())).collect(Collectors.toCollection(ArrayList::new));   //bars measure 2 line 3 (3), line 4 (1), 5 (1)
             
             List<DrumBar> barModelList = new ArrayList<>();		//note barModelList does not give right bar length
             for(int i = 0; i < bars.size(); i++) {
