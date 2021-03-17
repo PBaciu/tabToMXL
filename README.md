@@ -94,7 +94,7 @@ Our application currently consists of three pages
   This page allows the user to view the resulting xml and gives the option to save the file, convert another file, or go back to the previously inputted file.<br />
   ![image](https://user-images.githubusercontent.com/77293069/109452346-8b060580-7a1d-11eb-979a-ed912778f244.png)<br /><br />
    
-   #### Demonstration
+# Usage
 
 # Issues
 In case of any problems, please open an issue on this github page, or email Patrick at baciupat@my.yorku.ca
