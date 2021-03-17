@@ -144,7 +144,8 @@ public class DrumParser {
                 for (var note : bars.get(i)){
                     notes.addAll(note.get(i));
                 }
-                int barLength = (notes.size() / 6 ) - 2;
+                System.out.println(notes.size());
+                int barLength = (notes.size() / 6 ) - 1;	//15, 14 not 16
                 
                 //unsure
                 notes = notes.parallelStream().filter(note -> Objects.nonNull(note.instrument)).collect(Collectors.toList());
