@@ -90,6 +90,9 @@ Our application currently consists of three pages
   This page allows the insertion of text via a .txt file that can be selected from the file system, or copied text. Incase of the user already having the file open,   the user could also drag and drop the file into the designated space. <br />
   ![image](https://user-images.githubusercontent.com/77293069/109452295-6ca00a00-7a1d-11eb-93d9-6adddd26c682.png)<br /><br />
   
+   If the user made changes right after the user inserted the .txt file from the file explorer. The user would be notified with a message saying that changes has been made and if you would like to save those changes, where you can click the save changes button.
+  ![image](https://user-images.githubusercontent.com/42554604/111553100-0f64c200-875a-11eb-9894-b8a427270c94.JPG)<br /><br />
+  
   #### Output Page
   This page allows the user to view the resulting xml and gives the option to save the file, convert another file, or go back to the previously inputted file.<br />
   ![image](https://user-images.githubusercontent.com/77293069/109452346-8b060580-7a1d-11eb-979a-ed912778f244.png)<br /><br />
