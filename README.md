@@ -88,7 +88,8 @@ Our application currently consists of three pages
   
   #### Input Page
   This page allows the insertion of text via a .txt file that can be selected from the file system, or copied text. Incase of the user already having the file open,   the user could also drag and drop the file into the designated space. <br />
-  ![image](https://user-images.githubusercontent.com/77293069/109452295-6ca00a00-7a1d-11eb-93d9-6adddd26c682.png)<br /><br />
+  <img width="897" alt="Screen Shot 2021-03-17 at 11 22 51 PM" src="https://user-images.githubusercontent.com/77417270/111568893-fa972700-8777-11eb-8746-b4c25bfb6698.png">
+
   
    If the user made changes right after the user inserted the .txt file from the file explorer. The user would be notified with a message saying that changes has been made and if you would like to save those changes, where you can click the save changes button.
   ![image](https://user-images.githubusercontent.com/42554604/111553100-0f64c200-875a-11eb-9894-b8a427270c94.JPG)<br /><br />
