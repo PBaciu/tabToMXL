@@ -108,17 +108,17 @@ public class DrumParser {
             
             var grouped = mapped.groupBy(intermediaryGarbage2 -> intermediaryGarbage2.col);
             
+            
             var bars = grouped.values().stream().map(list -> list.stream().map(intermediaryGarbage2 -> {
                 var map = new HashMap<DrumInstrument, AtomicInteger>();
-                var matches = Pattern.compile("[ox]*")//* means anything 
+                var matches = Pattern.compile("([ox]*)")//* means anything 
                         .matcher(intermediaryGarbage2.val)
                         .results()
                         .map(MatchResult::group);
 
-
                 return matches.map(match -> {		//unsure if correct
                     //o or x
-                	Pattern pattern = Pattern.compile("[ox]");
+                	//Pattern pattern = Pattern.compile("([ox])");
                 	
                 	/*
                 	//Matcher matcher = pattern.matcher(drumTablature);
@@ -127,7 +127,11 @@ public class DrumParser {
                 	}
                 	*/
                 	
+                	
+                	//an idea, maybe matches can be a group like oooo but match is forced to take only 1 o due to .matches() so we need to loop it?
+                	//But look at the test.java though, matcher stores the found matches
                     if (match.matches("[ox]")) {	//should only match with either o or x
+ //System.out.println(match.matches("[ox]"));
                         int prev = intermediaryGarbage2.val.indexOf(match,map.getOrDefault(intermediaryGarbage2.label, new AtomicInteger(0)).get());
                         map.put(intermediaryGarbage2.label, new AtomicInteger(prev + 1));
                         return new DrumNote(intermediaryGarbage2.label, true, null, intermediaryGarbage2.col,  prev - 1);
