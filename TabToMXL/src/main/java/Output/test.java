@@ -12,7 +12,7 @@ public class test {
 		System.out.println(s1);*/
 		//System.out.println ("abc".matches ("ax"));
 		
-		/*String text = "Mary had a litxtle lamb";
+		/*String text = "Mary had a little lamb";
 
 		Pattern pattern = Pattern.compile("[ax]"); //[ax]*
 		Matcher matcher = pattern.matcher(text);

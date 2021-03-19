@@ -12,6 +12,7 @@ import java.util.PriorityQueue;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.MatchResult;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -117,6 +118,15 @@ public class DrumParser {
 
                 return matches.map(match -> {		//unsure if correct
                     //o or x
+                	Pattern pattern = Pattern.compile("[ox]");
+                	
+                	/*
+                	//Matcher matcher = pattern.matcher(drumTablature);
+                	for (var string: mapped) {
+                		Matcher matcher = pattern.matcher(string);
+                	}
+                	*/
+                	
                     if (match.matches("[ox]")) {	//should only match with either o or x
                         int prev = intermediaryGarbage2.val.indexOf(match,map.getOrDefault(intermediaryGarbage2.label, new AtomicInteger(0)).get());
                         map.put(intermediaryGarbage2.label, new AtomicInteger(prev + 1));
@@ -138,7 +148,7 @@ public class DrumParser {
                     notes.addAll(note.get(i));
                 }
                 System.out.println(notes.size());
-                int barLength = (notes.size() / 6 ) - 1;	//15, 14 not 16
+                int barLength = (notes.size() / 6 ) - 1;	//16, 15 not 16
                 
                 //unsure
                 notes = notes.parallelStream().filter(note -> Objects.nonNull(note.instrument)).collect(Collectors.toList());
