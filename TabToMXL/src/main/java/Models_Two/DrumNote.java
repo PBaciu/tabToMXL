@@ -5,16 +5,14 @@ import java.util.List;
 import Models.NoteRelationship;
 
 public class DrumNote implements Comparable{
+	public final String value;
     public final DrumInstrument instrument;
-    public final boolean isHarmonic;				//not sure to keep or throw away
-    public final List<NoteRelationship> relationships;
     public final int inBar;
     public final int absoluteDistance;
 
-    public DrumNote(DrumInstrument instrument, boolean isHarmonic, List<NoteRelationship> relationships, int inBar, int absoluteDistance) {
-        this.instrument = instrument;
-        this.isHarmonic = isHarmonic;
-        this.relationships = relationships;
+    public DrumNote(String value, DrumInstrument instrument, int inBar, int absoluteDistance) {
+        this.value = value;
+		this.instrument = instrument;
         this.inBar = inBar;
         this.absoluteDistance = absoluteDistance;
     }
@@ -22,9 +20,8 @@ public class DrumNote implements Comparable{
     @Override
     public String toString() {
         return "Note{" +
+        		"value=" + value +
                 ", string=" + instrument +
-                ", isHarmonic=" + isHarmonic +
-                ", relationships=" + relationships +
                 ", inBar=" + inBar +
                 ", relativeDistance=" + absoluteDistance +
                 '}';

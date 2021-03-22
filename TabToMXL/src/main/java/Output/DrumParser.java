@@ -111,35 +111,23 @@ public class DrumParser {
             
             var bars = grouped.values().stream().map(list -> list.stream().map(intermediaryGarbage2 -> {
                 var map = new HashMap<DrumInstrument, AtomicInteger>();
-                var matches = Pattern.compile("([ox]*)")//* means anything 
+                var matches = Pattern.compile("([-ox]{1})")//* means anything 
                         .matcher(intermediaryGarbage2.val)
                         .results()
                         .map(MatchResult::group);
 
-                return matches.map(match -> {		//unsure if correct
-                    //o or x
-                	//Pattern pattern = Pattern.compile("([ox])");
+                return matches.map(match -> {		//unsure if correct         	
                 	
-                	/*
-                	//Matcher matcher = pattern.matcher(drumTablature);
-                	for (var string: mapped) {
-                		Matcher matcher = pattern.matcher(string);
-                	}
-                	*/
-                	
-                	
+                	 //System.out.println(match);
                 	//an idea, maybe matches can be a group like oooo but match is forced to take only 1 o due to .matches() so we need to loop it?
                 	//But look at the test.java though, matcher stores the found matches
                     if (match.matches("[ox]")) {	//should only match with either o or x
- //System.out.println(match.matches("[ox]"));
                         int prev = intermediaryGarbage2.val.indexOf(match,map.getOrDefault(intermediaryGarbage2.label, new AtomicInteger(0)).get());
                         map.put(intermediaryGarbage2.label, new AtomicInteger(prev + 1));
-                        return new DrumNote(intermediaryGarbage2.label, true, null, intermediaryGarbage2.col,  prev - 1);
+                        return new DrumNote(match, intermediaryGarbage2.label, intermediaryGarbage2.col,  prev);
                     } else {
-                        return new DrumNote(null, false, null, intermediaryGarbage2.col, intermediaryGarbage2.val.indexOf(match, map.getOrDefault(intermediaryGarbage2.label, new AtomicInteger(0)).get()) - 1);
+                        return new DrumNote(null, null, intermediaryGarbage2.col, intermediaryGarbage2.val.indexOf(match, map.getOrDefault(intermediaryGarbage2.label, new AtomicInteger(0)).get()));
                     }
-
-
                     //TODO Handle cases of mixed hammeron, pullofs, bends and slides
 
                 }).collect(Collectors.groupingBy(note -> note.inBar));
@@ -151,11 +139,10 @@ public class DrumParser {
                 for (var note : bars.get(i)){
                     notes.addAll(note.get(i));
                 }
-                System.out.println(notes.size());
-                int barLength = (notes.size() / 6 ) - 1;	//16, 15 not 16
+                int barLength = notes.size() / 6;
                 
                 //unsure
-                notes = notes.parallelStream().filter(note -> Objects.nonNull(note.instrument)).collect(Collectors.toList());
+                notes = notes.parallelStream().filter(note -> Objects.nonNull(note.value)).collect(Collectors.toList());
                 DrumBar bar = new DrumBar(notes, barLength);
 
                 barModelList.add(bar);
@@ -170,6 +157,13 @@ public class DrumParser {
                 DrumBar b = new DrumBar(notes, bar.barLength);
                 barList.add(b);
             }
+            System.out.println(barList.get(0).notes.size()+barList.get(1).notes.size());
+            
+            for (var bar: barList) {
+            	for (var note: bar.notes) {
+            		System.out.println(note);
+            	}
+            }
             DrumTabLine tabLine = new DrumTabLine(barList);
             tabLines.add(tabLine);
             
@@ -177,6 +171,15 @@ public class DrumParser {
         Collections.reverse(device);
 		return generateDrumXML(new DrumTab(tabLines, device));
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public static ScorePartwise generateDrumXML(DrumTab drumTab) {
 		ObjectFactory factory = new ObjectFactory();

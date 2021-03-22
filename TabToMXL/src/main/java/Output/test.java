@@ -22,8 +22,9 @@ public class test {
 		}*/
 		
 		String drumTablature = "SD|----o-------o---|oooo------------|\r\n";
-		Pattern pattern = Pattern.compile("[ox]"); //[ax]*
+		Pattern pattern = Pattern.compile("([ox])"); //[ax]* or +
 		Matcher matcher = pattern.matcher(drumTablature);
+		System.out.println(pattern);
 
 		while(matcher.find()){
 		    System.out.println("Found match at: "  + matcher.start() + " to " + matcher.end());
