@@ -213,7 +213,8 @@ public class DrumParser {
         partList.getPartGroupOrScorePart().add(scorePart);
         scorePartwise.setPartList(partList);
         
-        
+        ScorePartwise.Part part = new ScorePartwise.Part();
+        part.setId(scorePart);
         
         
         int currMeasure = 0;
