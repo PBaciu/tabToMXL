@@ -178,6 +178,7 @@ public class Parser {
         for (var line : tab.tabLines) {
             for (int i = 0; i < line.bars.size(); i++) {
 //                int quarterNoteLength = line.bars.get(i).barLength / 4;
+            	System.out.println("i: " + i);
                 int quarterNoteLength = 4;
                 ScorePartwise.Part.Measure measure = new ScorePartwise.Part.Measure();
                 measure.setNumber(Integer.toString(currMeasure + 1));

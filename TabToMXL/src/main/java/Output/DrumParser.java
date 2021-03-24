@@ -27,6 +27,7 @@ import generated.Key;
 import generated.ObjectFactory;
 import generated.PartList;
 import generated.PartName;
+import generated.ScoreInstrument;
 import generated.ScorePart;
 import generated.ScorePartwise;
 import generated.Time;
@@ -189,15 +190,31 @@ public class DrumParser {
         PartList partList = factory.createPartList();
         ScorePart scorePart = factory.createScorePart();
         scorePart.setId("P1");
+        
         PartName partName = factory.createPartName();
         partName.setValue("Drumset");
-        
         scorePart.setPartName(partName);		//how to set score-instrument?
-        //scorePart.set
-        scorePart.getScoreInstrument().addAll(null);
+        
+        ArrayList<String> InstrumentNames = new ArrayList<String>(Arrays.asList("Bass Drum 1", "Bass Drum 2",
+				"Side Stick", "Snare", "Low Floor Tom", "Closed Hi-Hat", "High Floor Tom", "Pedal Hi-Hat",
+				"Low Tom", "Open Hi-Hat", "Low-Mid Tom", "Hi-Mid Tom", "Crash Cymbal 1", "High Tom",
+				"Ride Cymbal 1", "Chinese Cymbal", "Ride Bell", "Tambourine", "Splash Cymbal", "Cowbell",
+				"Crash Cymbal 2", "Ride Cymbal 2", "Open Hi Conga", "Low Conga"));
+		ArrayList<Integer> ScoreInstrumentID = new ArrayList<Integer>(Arrays.asList(36, 37, 38, 39, 42, 43, 44, 45,
+				46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 60, 64, 65));
+        
+		ScoreInstrument instruments = factory.createScoreInstrument();
+		for (int i = 0; i < InstrumentNames.size(); i++) {
+			instruments.setId("P1-I" + ScoreInstrumentID.get(i));
+			instruments.setInstrumentName(InstrumentNames.get(i));
+		}
+        scorePart.getScoreInstrument().add(instruments);
         
         partList.getPartGroupOrScorePart().add(scorePart);
         scorePartwise.setPartList(partList);
+        
+        
+        
         
         int currMeasure = 0;
         for (var line : drumTab.tabLines) {
@@ -219,6 +236,13 @@ public class DrumParser {
                 Time time = factory.createTime();
                 var beats = factory.createTimeBeats(Integer.toString(4));
                 var beatType = factory.createTimeBeatType(Integer.toString(4));
+                time.getTimeSignature().add(beats);
+                time.getTimeSignature().add(beatType);
+                attributes.getTime().add(time);
+                
+                if (i == 0) {
+                    measure.getNoteOrBackupOrForward().add(attributes);
+                }                
             }
         }
         
@@ -226,8 +250,8 @@ public class DrumParser {
 		return null;
 	}
 	
-	public static String drumTabToXMLConversion(ArrayList<String> tabInArray) { // top to bottom from the xml file
-		/*try {
+	/*public static String drumTabToXMLConversion(ArrayList<String> tabInArray) { // top to bottom from the xml file
+		try {
 			// can later add <?xml version="1.0" encoding="UTF-8"?>
 			ScorePartwise scorePartwise = new ScorePartwise();
 			scorePartwise.setVersion("3.1");
@@ -306,7 +330,7 @@ public class DrumParser {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-*/
+
 		return null;
-	}
+	}*/
 }
