@@ -44,6 +44,7 @@ public class SampleController2 implements Initializable {
 	String info1;
 	String info2;
 	String info3;
+	String changeCheck;
 	int numerator;
 	int denominator;
 	int tempoInt;
@@ -104,12 +105,14 @@ public class SampleController2 implements Initializable {
 	@FXML
 	private TextArea textArea;
 	
-	public void initData(String textArea2, String textField2, String fileContent, String timeSign, String tempo2) {
+	public void initData(String textArea2, String textField2, String fileContent, String timeSign, String tempo2, Boolean save) {
 		textArea.setText(textArea2);
 		textField.setText(textField2);
 		info1 = fileContent;
 		timeSignature.setText(timeSign);
 		tempo.setText(tempo2);
+		saved = save;
+		changeCheck = textArea2;
 	}
 	
 	public void ButtonAction(ActionEvent event) {
@@ -258,16 +261,17 @@ public class SampleController2 implements Initializable {
 				}
 			}
 			if(!info2.equals(info1) && textField.getText() != "") {
-				if(saved) {
+				if(saved && info2.equals(changeCheck)) {
 					if(a == 0 && b == 0 && c == 0) {
 						loadNextScene();
 					}
 				}
 				else {
 					saved = true;
+					changeCheck = info2;
 					Alert saveAlert = new Alert(Alert.AlertType.WARNING);
 					saveAlert.setHeaderText("You seem to have made changes to your Tablature");
-					saveAlert.setContentText("Please click the Save Changes button if you wish to save them to a file");
+					saveAlert.setContentText("Please click the Save Changes button if you wish to save them to a file. Alternatively, you can wish to not save the changes and continue.");
 					saveAlert.showAndWait();
 				}
 			}
@@ -308,7 +312,7 @@ public class SampleController2 implements Initializable {
 		fadeTransition.setOnFinished(event -> {
 			Scene newScene = new Scene(secondView);
 			SampleController3 controller = loader.getController();
-			controller.initData(textArea.getText(), textField.getText(), info1, timeSignature.getText(), tempo.getText());
+			controller.initData(textArea.getText(), textField.getText(), info1, timeSignature.getText(), tempo.getText(), saved);
 			Stage curStage = (Stage) rootPane.getScene().getWindow();
 			curStage.setScene(newScene);
 			curStage.show();
