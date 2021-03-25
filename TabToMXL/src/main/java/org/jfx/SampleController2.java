@@ -165,7 +165,6 @@ public class SampleController2 implements Initializable {
             errorAlert.setHeaderText("No File Chosen");
             errorAlert.setContentText("Please choose a File before you preview");
             errorAlert.showAndWait();
-			//System.out.println("No File Chosen");
 		}
 
 	}
@@ -224,8 +223,6 @@ public class SampleController2 implements Initializable {
 							}
 						}
 						if(a == 0 && b == 0) {
-//							numerator = Integer.parseInt(timeSign[0]);
-//							denominator = Integer.parseInt(timeSign[1]);
 							numerator = (int)Double.parseDouble(timeSign[0]);
 							denominator = (int)Double.parseDouble(timeSign[1]);;
 						}
@@ -255,7 +252,6 @@ public class SampleController2 implements Initializable {
 					}
 				}
 				if(c == 0) {
-//					tempoInt = Integer.parseInt(tempo.getText());
 					tempoInt = (int)Double.parseDouble(tempo.getText());
 					System.out.println(tempoInt);
 				}
@@ -443,6 +439,7 @@ public class SampleController2 implements Initializable {
 			fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text File", "*.txt"));
 			File file = fileChooser.showSaveDialog(new Stage());
 			info2 = textArea.getText();
+			info1 = info2;
 			try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))){
 				bw.write(info2);
 			} catch (IOException e) {
