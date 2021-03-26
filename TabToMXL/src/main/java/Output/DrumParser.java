@@ -24,6 +24,7 @@ import TabToMXL.FunctionalList;
 import TabToMXL.IntermediaryGarbage2;
 import generated.AboveBelow;
 import generated.Attributes;
+import generated.BarStyle;
 import generated.Clef;
 import generated.ClefSign;
 import generated.Fret;
@@ -33,6 +34,7 @@ import generated.ObjectFactory;
 import generated.PartList;
 import generated.PartName;
 import generated.Pitch;
+import generated.RightLeftMiddle;
 import generated.ScoreInstrument;
 import generated.ScorePart;
 import generated.ScorePartwise;
@@ -325,16 +327,24 @@ public class DrumParser {
                     } else {
                     	note.setVoice("2");										//got voice, duration, type and notehead
                     }
-                    measure.getNoteOrBackupOrForward().add(note);
+                    measure.getNoteOrBackupOrForward().add(note);			//need beam number, instrument, unpitched, stem
                     
                     noteIndex++;
                 }
-                
+                part.getMeasure().add(measure);
+                currMeasure++;
             }
         }
-        
-        
-		return null;
+        var bl = factory.createBarline();
+        var styleColor = factory.createBarStyleColor();
+        BarStyle bs = BarStyle.HEAVY;
+        styleColor.setValue(bs);
+        bl.setLocation(RightLeftMiddle.RIGHT);
+        bl.setBarStyle(styleColor);
+        part.getMeasure().get(currMeasure - 1).setBarline(bl);
+        scorePartwise.getPart().add(part);
+
+        return scorePartwise;
 	}
 	
 	/*public static String drumTabToXMLConversion(ArrayList<String> tabInArray) { // top to bottom from the xml file
