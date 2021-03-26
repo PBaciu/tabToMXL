@@ -41,6 +41,8 @@ import generated.StartStop;
 import generated.StartStopContinue;
 import generated.Technical;
 import generated.Time;
+import generated.Notehead;
+import generated.NoteheadValue;
 
 public class DrumParser {
 
@@ -315,10 +317,13 @@ public class DrumParser {
                     noteType.setValue(noteTypeString);
                     note.setType(noteType);
 //                  note.setDuration(BigDecimal.valueOf(duration));
+                    Notehead head = new Notehead();
+                    head.setValue(null);
                     if (n.value == "x") {
                     	note.setVoice("1");
+                    	note.getNotehead().setValue(NoteheadValue.X);
                     } else {
-                    	note.setVoice("2");										//got voice, duration, type
+                    	note.setVoice("2");										//got voice, duration, type and notehead
                     }
                     measure.getNoteOrBackupOrForward().add(note);
                     
