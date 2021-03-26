@@ -311,12 +311,15 @@ public class SampleController2 implements Initializable {
 	}
 	
 	private void loadNextScene() {
+		System.out.println("SAMPLECONTROLLER3.JAVA");
 		Parser p = new Parser();
 		try {
 			ScoreWriter writer = new ScoreWriter();
-
+System.out.println("HIT");
 			ScorePartwise scorePartwise = p.readTab(textArea.getText());
+System.out.println("HIT2");			
 			writer.writeToTempFile(scorePartwise);
+System.out.println("HIT3");
 		} catch (Exception e) {
 			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 			errorAlert.setHeaderText("Unsupported Tablature Format Error");

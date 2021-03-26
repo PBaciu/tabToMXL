@@ -41,6 +41,7 @@ import generated.ScorePartwise;
 import generated.Slur;
 import generated.StartStop;
 import generated.StartStopContinue;
+import generated.Stem;
 import generated.StemValue;
 import generated.Technical;
 import generated.Time;
@@ -157,6 +158,7 @@ public class DrumParser {
                 }
                 int barLength = notes.size() / 6;
                 
+                //System.out.println("barlength: " + barLength);		//correct 16
                 //unsure
                 notes = notes.parallelStream().filter(note -> Objects.nonNull(note.value)).collect(Collectors.toList());
                 DrumBar bar = new DrumBar(notes, barLength);
@@ -173,11 +175,11 @@ public class DrumParser {
                 DrumBar b = new DrumBar(notes, bar.barLength);
                 barList.add(b);
             }
-            System.out.println(barList.get(0).notes.size()+barList.get(1).notes.size());
+            System.out.println("measure0: " + barList.get(0).notes.size() + "\tmeasure1: " + barList.get(1).notes.size());
             
             for (var bar: barList) {
             	for (var note: bar.notes) {
-            		System.out.println(note);
+            		System.out.println("note: " + note);
             	}
             }
             DrumTabLine tabLine = new DrumTabLine(barList);
@@ -268,18 +270,16 @@ public class DrumParser {
                 var distanceMap = new HashMap<Integer, List<DrumNote>>();
                 for (var n : line.bars.get(i).notes) {
                 	
-                	System.out.println(n);
+                	System.out.println(n);	//note
                     distanceMap.putIfAbsent(n.absoluteDistance, new ArrayList<>());
                     distanceMap.get(n.absoluteDistance).add(n);
-                    System.out.println(n.absoluteDistance);
+                    //System.out.println(n.absoluteDistance);	
                     
                     generated.Note note = new generated.Note();
 
                     if (distanceMap.get(n.absoluteDistance).size() > 1) {
                         note.setChord(factory.createEmpty());
                     }
-
-
 
                     double duration;
                     if (line.bars.get(i).notes.stream().noneMatch(note1 -> note1.absoluteDistance > n.absoluteDistance)) {
@@ -325,13 +325,22 @@ public class DrumParser {
                     if (n.value == "x") {
                     	note.setVoice("1");
                     	note.getNotehead().setValue(NoteheadValue.X);
+                    	note.setStem(new Stem());
                     	note.getStem().setValue(StemValue.UP);
                     } else {
                     	note.setVoice("2");
+                    	note.setStem(new Stem());
                     	note.getStem().setValue(StemValue.DOWN);			//got voice, duration, type, notehead, stem
                     }
-                    measure.getNoteOrBackupOrForward().add(note);			//need beam number, instrument, unpitched
+                    										//need beam number, instrument, unpitched
                     
+                    
+                    
+                    
+                    
+                    
+                    
+                    measure.getNoteOrBackupOrForward().add(note);
                     noteIndex++;
                 }
                 part.getMeasure().add(measure);
