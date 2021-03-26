@@ -37,16 +37,16 @@ public class test {
 		while(matcher.find()){
 		    System.out.println("Found match at: "  + matcher.start() + " to " + matcher.end());
 		}*/
-		/*ArrayList<String> InstrumentNames = new ArrayList<String>(Arrays.asList("Bass Drum 1", "Bass Drum 2",
+		ArrayList<String> InstrumentNames = new ArrayList<String>(Arrays.asList("Bass Drum 1", "Bass Drum 2",
 				"Side Stick", "Snare", "Low Floor Tom", "Closed Hi-Hat", "High Floor Tom", "Pedal Hi-Hat",
 				"Low Tom", "Open Hi-Hat", "Low-Mid Tom", "Hi-Mid Tom", "Crash Cymbal 1", "High Tom",
 				"Ride Cymbal 1", "Chinese Cymbal", "Ride Bell", "Tambourine", "Splash Cymbal", "Cowbell",
 				"Crash Cymbal 2", "Ride Cymbal 2", "Open Hi Conga", "Low Conga"));
 		for (int i = 0; i < InstrumentNames.size(); i++) {
 			System.out.println(InstrumentNames.get(i));
-		}*/
+		}
 		
-		List<DrumNote> notes = new ArrayList<>();
+		/*List<DrumNote> notes = new ArrayList<>();
 		notes.add(new DrumNote("x", "CrashCrystal", 0, 0));
 		notes.add(new DrumNote("o", "BassDrum", 0, 0));
 		
@@ -71,7 +71,7 @@ public class test {
 			if (notes.contains(n.string)) {
 				System.out.println("true");
 			}
-		}
+		}*/
 		/*Note{value=x, string=CrashCrystal, inBar=0, relativeDistance=0}
 Note{value=o, string=BassDrum, inBar=0, relativeDistance=0}
 Note{value=x, string=HiHat, inBar=0, relativeDistance=2}

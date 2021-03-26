@@ -220,12 +220,14 @@ public class DrumParser {
 		ArrayList<Integer> ScoreInstrumentID = new ArrayList<Integer>(Arrays.asList(36, 37, 38, 39, 42, 43, 44, 45,
 				46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 60, 64, 65));
         
-		ScoreInstrument instruments = factory.createScoreInstrument();
+		
 		for (int i = 0; i < InstrumentNames.size(); i++) {
+			ScoreInstrument instruments = factory.createScoreInstrument();
 			instruments.setId("P1-I" + ScoreInstrumentID.get(i));
 			instruments.setInstrumentName(InstrumentNames.get(i));
+			scorePart.getScoreInstrument().add(instruments);
 		}
-        scorePart.getScoreInstrument().add(instruments);
+        
         
         partList.getPartGroupOrScorePart().add(scorePart);
         scorePartwise.setPartList(partList);
@@ -262,15 +264,15 @@ public class DrumParser {
                     measure.getNoteOrBackupOrForward().add(attributes);				//got attributes
                 }         
                 
-                
+                System.out.println(line.bars);
                 
                 
                 
                 int noteIndex = 0;												//notes start here
                 var distanceMap = new HashMap<Integer, List<DrumNote>>();
                 for (var n : line.bars.get(i).notes) {
-                	
-                	System.out.println(n);	//note
+                	                	
+                	//System.out.println(n);	//note
                     distanceMap.putIfAbsent(n.absoluteDistance, new ArrayList<>());
                     distanceMap.get(n.absoluteDistance).add(n);
                     //System.out.println(n.absoluteDistance);	
