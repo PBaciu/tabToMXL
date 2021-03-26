@@ -41,6 +41,7 @@ import generated.ScorePartwise;
 import generated.Slur;
 import generated.StartStop;
 import generated.StartStopContinue;
+import generated.StemValue;
 import generated.Technical;
 import generated.Time;
 import generated.Notehead;
@@ -324,10 +325,12 @@ public class DrumParser {
                     if (n.value == "x") {
                     	note.setVoice("1");
                     	note.getNotehead().setValue(NoteheadValue.X);
+                    	note.getStem().setValue(StemValue.UP);
                     } else {
-                    	note.setVoice("2");										//got voice, duration, type and notehead
+                    	note.setVoice("2");
+                    	note.getStem().setValue(StemValue.DOWN);			//got voice, duration, type, notehead, stem
                     }
-                    measure.getNoteOrBackupOrForward().add(note);			//need beam number, instrument, unpitched, stem
+                    measure.getNoteOrBackupOrForward().add(note);			//need beam number, instrument, unpitched
                     
                     noteIndex++;
                 }
