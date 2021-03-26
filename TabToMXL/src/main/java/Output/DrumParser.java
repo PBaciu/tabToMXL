@@ -28,6 +28,7 @@ import generated.BarStyle;
 import generated.Clef;
 import generated.ClefSign;
 import generated.Fret;
+import generated.Instrument;
 import generated.Key;
 import generated.Notations;
 import generated.ObjectFactory;
@@ -220,6 +221,14 @@ public class DrumParser {
 		ArrayList<Integer> ScoreInstrumentID = new ArrayList<Integer>(Arrays.asList(36, 37, 38, 39, 42, 43, 44, 45,
 				46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 60, 64, 65));
         
+		/*
+Crash Cymbal
+Hi-Hat
+Snare Drum
+High Tom
+Middle Tom
+Bass Drum
+		 */
 		
 		for (int i = 0; i < InstrumentNames.size(); i++) {
 			ScoreInstrument instruments = factory.createScoreInstrument();
@@ -322,13 +331,17 @@ public class DrumParser {
                     noteType.setValue(noteTypeString);
                     note.setType(noteType);
 //                  note.setDuration(BigDecimal.valueOf(duration));
-                    Notehead head = new Notehead();
-                    head.setValue(null);
+                    //Notehead head = new Notehead();
+                    //head.setValue(null);
+                    /*for ()
+                    Instrument instruID = new Instrument();
+                    instruID.setId("P1-I" + ScoreInstrumentID.get(i));
+                    note.setInstrument(instruID);*/
                     if (n.value == "x") {
                     	note.setVoice("1");
                     	note.getNotehead().setValue(NoteheadValue.X);
                     	note.setStem(new Stem());
-                    	note.getStem().setValue(StemValue.UP);
+                    	note.getStem().setValue(StemValue.UP);			//what if its a whole note? later I guess
                     } else {
                     	note.setVoice("2");
                     	note.setStem(new Stem());
