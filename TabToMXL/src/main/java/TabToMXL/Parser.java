@@ -178,7 +178,6 @@ public class Parser {
         for (var line : tab.tabLines) {
             for (int i = 0; i < line.bars.size(); i++) {
 //                int quarterNoteLength = line.bars.get(i).barLength / 4;
-            	System.out.println("i: " + i);
                 int quarterNoteLength = 4;
                 ScorePartwise.Part.Measure measure = new ScorePartwise.Part.Measure();
                 measure.setNumber(Integer.toString(currMeasure + 1));
@@ -206,7 +205,7 @@ public class Parser {
                         StaffTuning tuning = new StaffTuning();
                         tuning.setLine(BigInteger.valueOf(j + 1));
                         Step step;
-                        int octave;
+                        int octave;	
                         switch (tab.tuning.get(j)) {
                             case HIGH_E -> {step = Step.E; octave = 4;}
                             case B -> {step = Step.B; octave = 3;}
@@ -229,16 +228,19 @@ public class Parser {
                 int noteIndex = 0;
                 var distanceMap = new HashMap<Integer, List<Note>>();
                 for (var n : line.bars.get(i).notes) {
+                	
+                	System.out.println(n);
                     distanceMap.putIfAbsent(n.absoluteDistance, new ArrayList<>());
                     distanceMap.get(n.absoluteDistance).add(n);
-
+                    
                     generated.Note note = new generated.Note();
 
                     if (distanceMap.get(n.absoluteDistance).size() > 1) {
                         note.setChord(factory.createEmpty());
                     }
-
+System.out.println("fret size: " + n.frets.size());
                     if (n.frets.size() == 1) {
+                        
 
                         Notations notations = new Notations();
                         Technical t = factory.createTechnical();
@@ -276,6 +278,8 @@ public class Parser {
                                 }
                             }
                         }
+                        System.out.println("duration: " + duration);
+
 
                         String noteTypeString;
                         if (duration == 1.0) {

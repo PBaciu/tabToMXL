@@ -1,5 +1,6 @@
 package Models_Two;
 
+import java.util.Comparator;
 import java.util.List;
 
 import Models.NoteRelationship;
@@ -9,7 +10,7 @@ public class DrumNote implements Comparable{
     public final DrumInstrument instrument;
     public final int inBar;
     public final int absoluteDistance;
-
+    
     public DrumNote(String value, DrumInstrument instrument, int inBar, int absoluteDistance) {
         this.value = value;
 		this.instrument = instrument;
@@ -17,7 +18,8 @@ public class DrumNote implements Comparable{
         this.absoluteDistance = absoluteDistance;
     }
 
-    @Override
+
+	@Override
     public String toString() {
         return "Note{" +
         		"value=" + value +
@@ -33,7 +35,3 @@ public class DrumNote implements Comparable{
         return this.absoluteDistance - other.absoluteDistance;
     }
 }
-
-
-
-

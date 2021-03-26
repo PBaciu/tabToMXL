@@ -17,19 +17,29 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import Models.Note;
+import Models.NoteRelationship;
 import Models_Two.*;
 import TabToMXL.FunctionalList;
 import TabToMXL.IntermediaryGarbage2;
+import generated.AboveBelow;
 import generated.Attributes;
 import generated.Clef;
 import generated.ClefSign;
+import generated.Fret;
 import generated.Key;
+import generated.Notations;
 import generated.ObjectFactory;
 import generated.PartList;
 import generated.PartName;
+import generated.Pitch;
 import generated.ScoreInstrument;
 import generated.ScorePart;
 import generated.ScorePartwise;
+import generated.Slur;
+import generated.StartStop;
+import generated.StartStopContinue;
+import generated.Technical;
 import generated.Time;
 
 public class DrumParser {
@@ -239,11 +249,82 @@ public class DrumParser {
                 var beatType = factory.createTimeBeatType(Integer.toString(4));
                 time.getTimeSignature().add(beats);
                 time.getTimeSignature().add(beatType);
-                attributes.getTime().add(time);
+                attributes.getTime().add(time);					
                 
                 if (i == 0) {
-                    measure.getNoteOrBackupOrForward().add(attributes);
-                }                
+                    measure.getNoteOrBackupOrForward().add(attributes);				//got attributes
+                }         
+                
+                
+                
+                
+                
+                int noteIndex = 0;												//notes start here
+                var distanceMap = new HashMap<Integer, List<DrumNote>>();
+                for (var n : line.bars.get(i).notes) {
+                	
+                	System.out.println(n);
+                    distanceMap.putIfAbsent(n.absoluteDistance, new ArrayList<>());
+                    distanceMap.get(n.absoluteDistance).add(n);
+                    System.out.println(n.absoluteDistance);
+                    
+                    generated.Note note = new generated.Note();
+
+                    if (distanceMap.get(n.absoluteDistance).size() > 1) {
+                        note.setChord(factory.createEmpty());
+                    }
+
+
+
+                    double duration;
+                    if (line.bars.get(i).notes.stream().noneMatch(note1 -> note1.absoluteDistance > n.absoluteDistance)) {
+                        duration = (double)(line.bars.get(i).barLength  - line.bars.get(i).notes.get(noteIndex).absoluteDistance) / quarterNoteLength;
+                    }
+                    else {
+                        duration = (double)(line.bars.get(i).notes.get(noteIndex + 1).absoluteDistance - line.bars.get(i).notes.get(noteIndex).absoluteDistance) / quarterNoteLength;
+                    }
+                    if (duration == 0) {
+                        var tempIndex = noteIndex;
+                        while (tempIndex < line.bars.get(i).notes.size()) {
+                            if (line.bars.get(i).notes.get(tempIndex).absoluteDistance == n.absoluteDistance) {
+                                tempIndex++;
+                            } else {
+                                duration = (double)(line.bars.get(i).notes.get(tempIndex).absoluteDistance - n.absoluteDistance) / quarterNoteLength;
+                                break;
+                            }
+                        }
+                    }
+
+                    String noteTypeString;
+                    if (duration == 1.0) {
+                        noteTypeString = "quarter";
+                    } else if (duration == 0.5) {
+                        noteTypeString = "eighth";
+                    } else if (duration == 0.25) {
+                        noteTypeString = "sixteenth";
+                    } else if (duration == 2) {
+                        noteTypeString = "half";
+                    } else if (duration == 4) {
+                        noteTypeString = "whole";
+                    }
+                    else {
+                        noteTypeString = "quarter";
+                    }
+
+                    var noteType = factory.createNoteType();
+                    noteType.setValue(noteTypeString);
+                    note.setType(noteType);
+//                  note.setDuration(BigDecimal.valueOf(duration));
+                    if (n.value == "x") {
+                    	note.setVoice("1");
+                    } else {
+                    	note.setVoice("2");										//got voice, duration, type
+                    }
+                    measure.getNoteOrBackupOrForward().add(note);
+                    
+                    noteIndex++;
+                }
+                
             }
         }
         
