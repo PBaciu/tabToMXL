@@ -49,6 +49,7 @@ public class Parser {
             var subListStuff = new FunctionalList<>(lines);
 
             var mapped = subListStuff.flatMapIndexed((row, l) -> {
+                l = l.strip();
                 var firstPipeIndex = l.indexOf('|');
                 barDelimiterIndex.set(l.indexOf('|', 2));
                 var split = new FunctionalList<>(Arrays.asList(l.substring(firstPipeIndex + 1).split("\\|")));
