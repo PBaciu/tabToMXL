@@ -189,8 +189,8 @@ public class Parser {
                 attributes.getClef().add(clef);
 
                 Time time = factory.createTime();
-                var beats = factory.createTimeBeats(Integer.toString(4));
-                var beatType = factory.createTimeBeatType(Integer.toString(4));
+                var beats = factory.createTimeBeats(this.timeSignature.split("/")[0]);
+                var beatType = factory.createTimeBeatType(this.timeSignature.split("/")[1]);
                 time.getTimeSignature().add(beats);
                 time.getTimeSignature().add(beatType);
                 if (currMeasure == 0) {
@@ -227,10 +227,6 @@ public class Parser {
                     distanceMap.putIfAbsent(n.absoluteDistance, new ArrayList<>());
                     distanceMap.get(n.absoluteDistance).add(n);
 
-
-
-
-
                     if (n.frets.size() == 1) {
                         generated.Note note = new generated.Note();
 
@@ -239,10 +235,15 @@ public class Parser {
                         }
                         Notations notations = new Notations();
                         Technical t = factory.createTechnical();
+                        if (n.isHarmonic) {
+                            var th = factory.createTechnicalHarmonic(factory.createHarmonic());
+                            t.getUpBowOrDownBowOrHarmonic().add(th);
+                        }
 
                         int string = standardTuningStringToInt(n.string);
 
                         note.setPitch(fretboard[string - 1][n.frets.get(0)]);
+
 
                         Fret f = factory.createFret();
                         f.setValue(BigInteger.valueOf(n.frets.get(0)));
@@ -280,8 +281,12 @@ public class Parser {
                         } else if (duration == divisions / 2) {
                             noteTypeString = "eighth";
                         } else if (duration == divisions/4) {
-                            noteTypeString = "sixteenth";
-                        } else if (duration == divisions * 2) {
+                            noteTypeString = "16th";
+                        } else if (duration == divisions/8) {
+                            noteTypeString = "32nd";
+                        } else if (duration == divisions/16) {
+                            noteTypeString = "64th";
+                        }else if (duration == divisions * 2) {
                             noteTypeString = "half";
                         } else if (duration == divisions * 4) {
                             noteTypeString = "whole";
