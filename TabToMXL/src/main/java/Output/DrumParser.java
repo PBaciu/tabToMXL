@@ -1,6 +1,6 @@
 package Output;
 
-import java.math.BigDecimal;
+import java.math.BigDecimal;				//Note: will need to change the duration to make it similar like the parser in master branch
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,6 +25,8 @@ import TabToMXL.IntermediaryGarbage2;
 import generated.AboveBelow;
 import generated.Attributes;
 import generated.BarStyle;
+import generated.Beam;
+import generated.BeamValue;
 import generated.Clef;
 import generated.ClefSign;
 import generated.Fret;
@@ -244,7 +246,7 @@ Bass Drum
         ScorePartwise.Part part = new ScorePartwise.Part();
         part.setId(scorePart);
         
-        int counter = 0; 
+        double counter = 0; 
         int currMeasure = 0;
         for (var line : drumTab.tabLines) {
             for (int i = 0; i < line.bars.size(); i++) {
@@ -317,8 +319,14 @@ Bass Drum
                         noteTypeString = "quarter";
                     } else if (duration == 0.5) {
                         noteTypeString = "eighth";
+                        Beam beam = new Beam();
+                        note.getBeam().add(beam);
                     } else if (duration == 0.25) {
                         noteTypeString = "sixteenth";
+                        Beam beam1 = new Beam();
+                        note.getBeam().add(beam1);
+                        Beam beam2 = new Beam();
+                        note.getBeam().add(beam2);
                     } else if (duration == 2) {
                         noteTypeString = "half";
                     } else if (duration == 4) {
@@ -351,10 +359,46 @@ Bass Drum
                     	note.setStem(new Stem());
                     	note.getStem().setValue(StemValue.DOWN);			//got voice, duration, type, notehead, stem
                     }
-                    										//need beam number, instrument, unpitched
+                    										//need instrument, unpitched
                     list.addNode(note);
                     
+                    if (n.value.equals("x") && duration < 1) {
+                    	if (counter == 0) {
+                    		counter = counter + duration;
+                    		for (var beam: note.getBeam()) {
+                    			beam.setValue(BeamValue.BEGIN);
+                    		}
+                    	} else if ((counter + duration) == 1) {
+                    		counter = 0;
+                    		for (var beam: note.getBeam()) {
+                    			beam.setValue(BeamValue.END);
+                    		}
+                    	} else {
+                    		counter = counter + duration;
+                    		for (var beam: note.getBeam()) {
+                    			beam.setValue(BeamValue.CONTINUE);
+                    		}
+                    	}
+                    }
                     
+                    if (n.value.equals("o") && duration < 1) {
+                    	if (counter == 0) {
+                    		counter = counter + duration;
+                    		for (var beam: note.getBeam()) {
+                    			beam.setValue(BeamValue.BEGIN);
+                    		}
+                    	} else if ((counter + duration) == 1) {
+                    		counter = 0;
+                    		for (var beam: note.getBeam()) {
+                    			beam.setValue(BeamValue.END);
+                    		}
+                    	} else {
+                    		counter = counter + duration;
+                    		for (var beam: note.getBeam()) {
+                    			beam.setValue(BeamValue.CONTINUE);
+                    		}
+                    	}
+                    }
                     
                     
                     //setBeam(note);
