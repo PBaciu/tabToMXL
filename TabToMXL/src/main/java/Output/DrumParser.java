@@ -180,7 +180,7 @@ public class DrumParser {
             
             for (var bar: barList) {
             	for (var note: bar.notes) {
-            		System.out.println("note: " + note);
+            		//System.out.println("note: " + note);
             	}
             }
             DrumTabLine tabLine = new DrumTabLine(barList);
@@ -244,7 +244,7 @@ Bass Drum
         ScorePartwise.Part part = new ScorePartwise.Part();
         part.setId(scorePart);
         
-        
+        int counter = 0; 
         int currMeasure = 0;
         for (var line : drumTab.tabLines) {
             for (int i = 0; i < line.bars.size(); i++) {
@@ -273,15 +273,16 @@ Bass Drum
                     measure.getNoteOrBackupOrForward().add(attributes);				//got attributes
                 }         
                 
-                System.out.println(line.bars);
+                //System.out.println(line.bars);
                 
                 
-                
+                DoublyLinkedList list = new DoublyLinkedList();
                 int noteIndex = 0;												//notes start here
                 var distanceMap = new HashMap<Integer, List<DrumNote>>();
                 for (var n : line.bars.get(i).notes) {
                 	                	
-                	//System.out.println(n);	//note
+                	//System.out.println(line.bars.get(0));	//measure 0
+                	//System.out.println(line.bars.get(1));	//measure 1`
                     distanceMap.putIfAbsent(n.absoluteDistance, new ArrayList<>());
                     distanceMap.get(n.absoluteDistance).add(n);
                     //System.out.println(n.absoluteDistance);	
@@ -337,27 +338,70 @@ Bass Drum
                     Instrument instruID = new Instrument();
                     instruID.setId("P1-I" + ScoreInstrumentID.get(i));
                     note.setInstrument(instruID);*/
-                    if (n.value == "x") {
+                    
+                    if (n.value.equals("x")) {				//== does not works
                     	note.setVoice("1");
+                    	Notehead head = new Notehead();
+                    	note.setNotehead(head);
                     	note.getNotehead().setValue(NoteheadValue.X);
                     	note.setStem(new Stem());
                     	note.getStem().setValue(StemValue.UP);			//what if its a whole note? later I guess
-                    } else {
+                    } else if (n.value.equals("o")) {
                     	note.setVoice("2");
                     	note.setStem(new Stem());
                     	note.getStem().setValue(StemValue.DOWN);			//got voice, duration, type, notehead, stem
                     }
                     										//need beam number, instrument, unpitched
+                    list.addNode(note);
                     
                     
                     
                     
+                    //setBeam(note);
+                    
+                    //System.out.println(counter);
+                    //counter++;
+                    
+                    //System.out.println(n.instrument);
+                    //System.out.println(note.getType().getValue());
+                    //if ()
+                    //InstrumentNames
+                    /*
+                    
+                    if eigth 
+                    	beam 1
+                    if 16th
+                    	beam 1
+                    	beam 2
+                    if 32
+                    	beam 1
+                    	beam 2
+                    	beam 3
+                    
+                    */
+                    /*
+                    <note>
+                    <unpitched>
+                      <display-step>A</display-step>
+                      <display-octave>5</display-octave>
+                      </unpitched>
+                    <duration>2</duration>
+                    <instrument id="P1-I50"/>
+                    <voice>1</voice>
+                    <type>eighth</type>
+                    <stem>up</stem>
+                    <notehead>x</notehead>
+                    <beam number="1">begin</beam>
+                    </note>
+                    */
                     
                     
                     
                     measure.getNoteOrBackupOrForward().add(note);
                     noteIndex++;
                 }
+                list.printNodes();
+                //System.out.println(measure.getNoteOrBackupOrForward().toString());
                 part.getMeasure().add(measure);
                 currMeasure++;
             }
@@ -372,5 +416,9 @@ Bass Drum
         scorePartwise.getPart().add(part);
 
         return scorePartwise;
+	}
+	
+	public static void setBeam(generated.Note note) {
+
 	}
 }
