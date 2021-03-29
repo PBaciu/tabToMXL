@@ -5,11 +5,6 @@ import Models.Note;
 import Models.*;
 import generated.*;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.lang.String;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -26,12 +21,17 @@ import java.util.stream.IntStream;
  */
 public class Parser {
 
+    Tab tab;
+    String timeSignature;
+    int tempo;
 
     public Parser() {
     }
 
-    public ScorePartwise readTab(String tab) {
+    public ScorePartwise readTab(String tab, String timeSignature, int tempo) {
         //TODO Determine if tab is guitar, bass, or drum
+        this.timeSignature = timeSignature;
+        this.tempo = tempo;
         return parseGuitarTab(tab);
     }
 
@@ -137,15 +137,15 @@ public class Parser {
             tabLines.add(tabLine);
         }
         Collections.reverse(tuning);
-
-        return generateGuitarXML(new Tab(tabLines, tuning));
+        this.tab = new Tab(tabLines, tuning);
+        return generateGuitarXML(this.tab);
 
     }
     private ScorePartwise generateGuitarXML(Tab tab) {
 
         ObjectFactory factory = new ObjectFactory();
 
-        var fretboard = createStandardTuningPitches();
+        var fretboard = createTuningPitches(tab.tuning);
 
         ScorePartwise scorePartwise = factory.createScorePartwise();
         scorePartwise.setVersion("3.1");
@@ -160,17 +160,25 @@ public class Parser {
         scorePartwise.setPartList(partList);
 
         ScorePartwise.Part part = new ScorePartwise.Part();
+
         part.setId(scorePart);
 
         int currMeasure = 0;
         for (var line : tab.tabLines) {
             for (int i = 0; i < line.bars.size(); i++) {
-//                int quarterNoteLength = line.bars.get(i).barLength / 4;
-                int quarterNoteLength = 4;
+                //12/8
+                //eightnotelength = ... / 12
+                double quarterNoteLength = (double)line.bars.get(i).barLength / Integer.parseInt(this.timeSignature.split("/")[0]); //TODO rely on time signature
+                int divisions = (int)Math.ceil(quarterNoteLength);
+//                int quarterNoteLength = 4;
+
                 ScorePartwise.Part.Measure measure = new ScorePartwise.Part.Measure();
                 measure.setNumber(Integer.toString(currMeasure + 1));
+                var sound = factory.createSound();
+                sound.setTempo(BigDecimal.valueOf(this.tempo));
+                measure.getNoteOrBackupOrForward().add(sound);
                 Attributes attributes = new Attributes();
-                attributes.setDivisions(new BigDecimal(line.bars.get(i).barLength / quarterNoteLength));
+                attributes.setDivisions(new BigDecimal(divisions));
                 Key key = new Key();
                 key.setFifths(BigInteger.valueOf(0));
                 attributes.getKey().add(key);
@@ -219,14 +227,16 @@ public class Parser {
                     distanceMap.putIfAbsent(n.absoluteDistance, new ArrayList<>());
                     distanceMap.get(n.absoluteDistance).add(n);
 
-                    generated.Note note = new generated.Note();
 
-                    if (distanceMap.get(n.absoluteDistance).size() > 1) {
-                        note.setChord(factory.createEmpty());
-                    }
+
+
 
                     if (n.frets.size() == 1) {
+                        generated.Note note = new generated.Note();
 
+                        if (distanceMap.get(n.absoluteDistance).size() > 1) {
+                            note.setChord(factory.createEmpty());
+                        }
                         Notations notations = new Notations();
                         Technical t = factory.createTechnical();
 
@@ -247,10 +257,10 @@ public class Parser {
 
                         double duration;
                         if (line.bars.get(i).notes.stream().noneMatch(note1 -> note1.absoluteDistance > n.absoluteDistance)) {
-                            duration = (double)(line.bars.get(i).barLength  - line.bars.get(i).notes.get(noteIndex).absoluteDistance) / quarterNoteLength;
+                            duration = (line.bars.get(i).barLength  - line.bars.get(i).notes.get(noteIndex).absoluteDistance);
                         }
                         else {
-                            duration = (double)(line.bars.get(i).notes.get(noteIndex + 1).absoluteDistance - line.bars.get(i).notes.get(noteIndex).absoluteDistance) / quarterNoteLength;
+                            duration = (line.bars.get(i).notes.get(noteIndex + 1).absoluteDistance - line.bars.get(i).notes.get(noteIndex).absoluteDistance);
                         }
                         if (duration == 0) {
                             var tempIndex = noteIndex;
@@ -258,22 +268,22 @@ public class Parser {
                                 if (line.bars.get(i).notes.get(tempIndex).absoluteDistance == n.absoluteDistance) {
                                     tempIndex++;
                                 } else {
-                                    duration = (double)(line.bars.get(i).notes.get(tempIndex).absoluteDistance - n.absoluteDistance) / quarterNoteLength;
+                                    duration = (line.bars.get(i).notes.get(tempIndex).absoluteDistance - n.absoluteDistance);
                                     break;
                                 }
                             }
                         }
 
                         String noteTypeString;
-                        if (duration == 1.0) {
+                        if (duration == divisions) {
                             noteTypeString = "quarter";
-                        } else if (duration == 0.5) {
+                        } else if (duration == divisions / 2) {
                             noteTypeString = "eighth";
-                        } else if (duration == 0.25) {
+                        } else if (duration == divisions/4) {
                             noteTypeString = "sixteenth";
-                        } else if (duration == 2) {
+                        } else if (duration == divisions * 2) {
                             noteTypeString = "half";
-                        } else if (duration == 4) {
+                        } else if (duration == divisions * 4) {
                             noteTypeString = "whole";
                         }
                         else {
@@ -283,16 +293,17 @@ public class Parser {
                         var noteType = factory.createNoteType();
                         noteType.setValue(noteTypeString);
                         note.setType(noteType);
-//                        note.setDuration(BigDecimal.valueOf(duration));
+                        note.setDuration(BigInteger.valueOf((long)duration));
                         note.setVoice("1");
                         notations.setTechnical(t);
                         note.getNotations().add(notations);
                         measure.getNoteOrBackupOrForward().add(note);
                     }
-                    else if (n.frets.size() == 2){
+                    else if (n.frets.size() == 2) {
+
 
                         for (int index = 0; index < n.frets.size(); index ++) {
-
+                            generated.Note note = new generated.Note();
                             int string = standardTuningStringToInt(n.string);
 
                             Pitch p = fretboard[string - 1][n.frets.get(index)];
@@ -344,22 +355,54 @@ public class Parser {
 
                             }
 
-                            var noteType = factory.createNoteType();
-
                             if (distanceMap.get(n.absoluteDistance).size() > 1) {
                                 note.setChord(factory.createEmpty());
                             }
 
-                            noteType.setValue("eighth");
+                            double duration;
+                            if (line.bars.get(i).notes.stream().noneMatch(note1 -> note1.absoluteDistance > n.absoluteDistance)) {
+                                duration = (line.bars.get(i).barLength  - line.bars.get(i).notes.get(noteIndex).absoluteDistance);
+                            }
+                            else {
+                                duration = (line.bars.get(i).notes.get(noteIndex + 1).absoluteDistance - line.bars.get(i).notes.get(noteIndex).absoluteDistance);
+                            }
+                            if (duration == 0) {
+                                var tempIndex = noteIndex;
+                                while (tempIndex < line.bars.get(i).notes.size()) {
+                                    if (line.bars.get(i).notes.get(tempIndex).absoluteDistance == n.absoluteDistance) {
+                                        tempIndex++;
+                                    } else {
+                                        duration = (line.bars.get(i).notes.get(tempIndex).absoluteDistance - n.absoluteDistance);
+                                        break;
+                                    }
+                                }
+                            }
+
+                            String noteTypeString;
+                            if (duration == divisions) {
+                                noteTypeString = "quarter";
+                            } else if (duration == divisions / 2) {
+                                noteTypeString = "eighth";
+                            } else if (duration == divisions/4) {
+                                noteTypeString = "sixteenth";
+                            } else if (duration == divisions * 2) {
+                                noteTypeString = "half";
+                            } else if (duration == divisions * 4) {
+                                noteTypeString = "whole";
+                            }
+                            else {
+                                noteTypeString = "quarter";
+                            }
+                            var noteType = factory.createNoteType();
+                            noteType.setValue(noteTypeString);
                             note.setType(noteType);
-                            note.setDuration(BigDecimal.valueOf(1));
+                            note.setDuration(BigInteger.valueOf((long)duration));
                             note.setVoice("1");
                             notations.setTechnical(t);
                             notations.getTiedOrSlurOrTuplet().add(slur);
                             note.setPitch(p);
                             note.getNotations().add(notations);
                             measure.getNoteOrBackupOrForward().add(note);
-
                         }
                     }
                     noteIndex++;
@@ -380,39 +423,51 @@ public class Parser {
         return scorePartwise;
     }
 
+    private Step stepFromGuitarString(GuitarString s) {
+        return switch (s) {
+            case HIGH_E, LOW_E -> Step.E;
+            case C -> Step.C;
+            case B -> Step.B;
+            case G -> Step.G;
+            case D -> Step.D;
+            case A -> Step.A;
+            case F -> Step.F;
+            default -> null;
+        };
+    }
 
     int computePitchDiff(int fret1, int fret2) {
         return Math.abs(fret1 - fret2);
     }
 
-    Pitch[][] createStandardTuningPitches() {
+    Pitch[][] createTuningPitches(List<GuitarString> pitches) {
         Pitch[][] standardTuning = new Pitch[6][24];
 
-        Pitch lowEStringPitch = new Pitch();
-        lowEStringPitch.setStep(Step.E);
-        lowEStringPitch.setOctave(2);
+        Pitch stringSixPitch = new Pitch();
+        stringSixPitch.setStep(stepFromGuitarString(pitches.get(0)));
+        stringSixPitch.setOctave(2);
 
-        Pitch aStringPitch = new Pitch();
-        aStringPitch.setStep(Step.A);
-        aStringPitch.setOctave(2);
+        Pitch stringFivePitch = new Pitch();
+        stringFivePitch.setStep(stepFromGuitarString(pitches.get(1)));
+        stringFivePitch.setOctave(2);
 
-        Pitch dStringPitch = new Pitch();
-        dStringPitch.setStep(Step.D);
-        dStringPitch.setOctave(3);
+        Pitch stringFourPitch = new Pitch();
+        stringFourPitch.setStep(stepFromGuitarString(pitches.get(2)));
+        stringFourPitch.setOctave(3);
 
-        Pitch gStringPitch = new Pitch();
-        gStringPitch.setStep(Step.G);
-        gStringPitch.setOctave(3);
+        Pitch stringThreePitch = new Pitch();
+        stringThreePitch.setStep(stepFromGuitarString(pitches.get(3)));
+        stringThreePitch.setOctave(3);
 
-        Pitch bStringPitch = new Pitch();
-        bStringPitch.setStep(Step.B);
-        bStringPitch.setOctave(3);
+        Pitch stringTwoPitch = new Pitch();
+        stringTwoPitch.setStep(stepFromGuitarString(pitches.get(4)));
+        stringTwoPitch.setOctave(3);
 
-        Pitch highEStringPitch = new Pitch();
-        highEStringPitch.setStep(Step.E);
-        highEStringPitch.setOctave(4);
+        Pitch stringOnePitch = new Pitch();
+        stringOnePitch.setStep(stepFromGuitarString(pitches.get(5)));
+        stringOnePitch.setOctave(4);
 
-        Pitch[] basePitches = {highEStringPitch, bStringPitch, gStringPitch, dStringPitch, aStringPitch, lowEStringPitch};
+        Pitch[] basePitches = {stringOnePitch, stringTwoPitch, stringThreePitch, stringFourPitch, stringFivePitch, stringSixPitch};
 
         for (int i = 0; i < basePitches.length; i++) {
             standardTuning[i] = createPitchArray(basePitches[i]);
