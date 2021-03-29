@@ -241,19 +241,28 @@ public class SampleController2 implements Initializable {
 				tempo.setText("120");
 			}
 			else {
-				for(int i = 0; i < tempo.getText().length(); i++) {
-					if(!checker.contains(tempo.getText().charAt(i))) {
-						c = 1;
-						i = tempo.getText().length();
-						Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-			            errorAlert.setHeaderText("Incorrect Tempo specified");
-			            errorAlert.setContentText("Please enter the Tempo in the right format");
-			            errorAlert.showAndWait();
-					}
+				if(tempo.getText().equals("0")) {
+					c = 1;
+					Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+		            errorAlert.setHeaderText("Incorrect Tempo specified");
+		            errorAlert.setContentText("Please enter the Tempo in the right format");
+		            errorAlert.showAndWait();
 				}
-				if(c == 0) {
-					tempoInt = (int)Double.parseDouble(tempo.getText());
-					System.out.println(tempoInt);
+				else {
+					for(int i = 0; i < tempo.getText().length(); i++) {
+						if(!checker.contains(tempo.getText().charAt(i))) {
+							c = 1;
+							i = tempo.getText().length();
+							Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+				            errorAlert.setHeaderText("Incorrect Tempo specified");
+				            errorAlert.setContentText("Please enter the Tempo in the right format");
+				            errorAlert.showAndWait();
+						}
+					}
+					if(c == 0) {
+						tempoInt = (int)Double.parseDouble(tempo.getText());
+						System.out.println(tempoInt);
+					}
 				}
 			}
 			if(!info2.equals(info1) && textField.getText() != "") {
