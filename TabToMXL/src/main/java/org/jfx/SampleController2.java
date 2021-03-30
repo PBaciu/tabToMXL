@@ -56,6 +56,11 @@ public class SampleController2 implements Initializable {
 	File fileName;
 	FXMLLoader loader;
 	ArrayList<String> info = new ArrayList<>();
+	ArrayList<String> measureTimeSign = new ArrayList<>();
+	ArrayList<Character> checker2 = new ArrayList<Character>();
+	String totalMeasure;
+	Boolean added = false;
+	ArrayList<Character> checker3 = new ArrayList<Character>();
 	
 	@FXML
 	private AnchorPane rootPane;
@@ -94,6 +99,9 @@ public class SampleController2 implements Initializable {
 	private Button saveChanges;
 	
 	@FXML
+	private Button add;
+	
+	@FXML
 	private TextField textField;
 	
 	@FXML
@@ -101,6 +109,12 @@ public class SampleController2 implements Initializable {
 	
 	@FXML
 	private TextField tempo;
+	
+	@FXML
+	private TextField measure;
+	
+	@FXML
+	private TextField totalMeasures;
 	
 	@FXML
 	private TextArea textArea;
@@ -458,6 +472,176 @@ public class SampleController2 implements Initializable {
 				textField.setText(file.getName());
 			}
 			saved = true;
+		}
+	}
+	
+	public void AddAction() {
+		if(textArea.getText().equals("")) {
+			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setHeaderText("No Tablature inputted");
+            errorAlert.setContentText("Please input a tablature before trying to add a time signature");
+            errorAlert.showAndWait();
+		}
+		else {
+			if(totalMeasures.getText().equals("")) {
+				Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+	            errorAlert.setHeaderText("Total number of Measures is not specified");
+	            errorAlert.setContentText("Please specify the total number of Measures to continue");
+	            errorAlert.showAndWait();
+			}
+			else {
+				checker2.add('1');
+				checker2.add('2');
+				checker2.add('3');
+				checker2.add('4');
+				checker2.add('5');
+				checker2.add('6');
+				checker2.add('7');
+				checker2.add('8');
+				checker2.add('9');
+				checker2.add('0');
+				totalMeasure = totalMeasures.getText();
+				int x = 0;
+				int y = 0;
+				int z = 0;
+				int w = 0;
+				if(totalMeasure.equals("0")) {
+					x = 1;
+					Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+		            errorAlert.setHeaderText("Invalid number of Measures specified");
+		            errorAlert.setContentText("Please specify the total number of Measures to continue. 0 is not valid");
+		            errorAlert.showAndWait();
+				}
+				else {
+					for(int i = 0; i < totalMeasure.length(); i++) {
+						if(!checker2.contains(totalMeasure.charAt(i))) {
+							x = 1;
+							i = totalMeasure.length();
+							Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+				            errorAlert.setHeaderText("Invalid format of Measures specified");
+				            errorAlert.setContentText("Please specify the total number of Measures to continue");
+				            errorAlert.showAndWait();
+						}
+					}
+					if(x == 0 && added == false) {
+						int nMeasure = Integer.parseInt(totalMeasure);
+						for(int j = 0; j < nMeasure + 1; j++) {
+							measureTimeSign.add("4/4");
+						}
+						added = true;
+					}
+				}
+				checker3.add('1');
+				checker3.add('2');
+				checker3.add('3');
+				checker3.add('4');
+				checker3.add('5');
+				checker3.add('6');
+				checker3.add('7');
+				checker3.add('8');
+				checker3.add('9');
+				checker3.add('0');
+				checker3.add('.');
+				if(x == 0) {
+					if(timeSignature.getText().equals("")) {
+						timeSignature.setText("4/4");
+					}
+					else {
+						if(timeSignature.getText().contains("/")) {
+							timeSign = timeSignature.getText().split("/");
+							if(timeSign.length > 2 || timeSign.length < 2) {
+								z = 1;
+								Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+					            errorAlert.setHeaderText("Incorrect Time Signature specified");
+					            errorAlert.setContentText("Please enter the Time Signature in the right format");
+					            errorAlert.showAndWait();
+							}
+							else {
+								for(int i = 0; i < timeSign[0].length(); i++) {
+									if(!checker3.contains(timeSign[0].charAt(i))) {
+										z = 1;
+										i = timeSign[0].length();
+										Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+							            errorAlert.setHeaderText("Incorrect Time Signature specified");
+							            errorAlert.setContentText("Please enter the Time Signature in the right format");
+							            errorAlert.showAndWait();
+									}
+								}
+								for(int j = 0; j < timeSign[1].length(); j++) {
+									if(!checker3.contains(timeSign[1].charAt(j))) {
+										w = 1;
+										j = timeSign[1].length();
+										Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+							            errorAlert.setHeaderText("Incorrect Time Signature specified");
+							            errorAlert.setContentText("Please enter the Time Signature in the right format");
+							            errorAlert.showAndWait();
+									}
+								}
+								if(z == 0 && w == 0) {
+									numerator = (int)Double.parseDouble(timeSign[0]);
+									denominator = (int)Double.parseDouble(timeSign[1]);;
+								}
+							}
+						}
+					}
+					if(!timeSignature.getText().equals("")) {
+						int nMeasure = Integer.parseInt(totalMeasure);
+						String currentMeasure = "";
+						if(measure.getText().equals("")) {
+							for(int k = 1; k < measureTimeSign.size(); k++) {
+								if(measureTimeSign.get(k).equals("")) {
+									measureTimeSign.set(k, timeSignature.getText());
+								}
+							}
+						}
+						else {
+							currentMeasure = measure.getText();
+							for(int l = 0; l < currentMeasure.length(); l++) {
+								if(!checker2.contains(currentMeasure.charAt(l))) {
+									y = 1;
+									l = totalMeasure.length();
+									Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+						            errorAlert.setHeaderText("Invalid format of Measure specified");
+						            errorAlert.setContentText("Please specify the correct Measure number you wish to add the Time Signature to");
+						            errorAlert.showAndWait();
+								}
+							}
+							if(y == 0) {
+								int measureNumber = Integer.parseInt(currentMeasure);
+								if(nMeasure < measureNumber) {
+									Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+						            errorAlert.setHeaderText("Measure number specified is incorrect");
+						            errorAlert.setContentText("The specified measure number exceeds the total number of measure. Please correct this to continue");
+						            errorAlert.showAndWait();
+								}
+								else {
+									measureTimeSign.set(measureNumber, timeSignature.getText());
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	public void MeasureTyped() {
+		if(!measure.getText().equals("")) {
+			int measureNumber = Integer.parseInt(measure.getText());
+			if(added == true && measureNumber < measureTimeSign.size()) {
+				timeSignature.setText(measureTimeSign.get(measureNumber));
+			}
+			else if(added == true){
+				Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+	            errorAlert.setHeaderText("Measure number specified is incorrect");
+	            errorAlert.setContentText("The specified measure number exceeds the total number of measure. Please correct this to continue");
+	            errorAlert.showAndWait();
+	            timeSignature.setText("");
+	            measure.setText("");
+			}
+			else if(added == false) {
+				
+			}
 		}
 	}
 	
