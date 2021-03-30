@@ -14,6 +14,12 @@ import Models_Two.DrumNote;
 public class test {
 
 	public static void main(String[] args) {
+		/*
+		String s1="My name is Khan. My name is Bob. My name is Sonoo.";  
+		String replaceString = s1.replaceAll("Khan","was");
+		System.out.println(replaceString);  
+		*/
+	
 		/*String s = "the text=text=hello";
 		String s1 = s.substring(s.indexOf("=")+1);
 		//s1.trim();
@@ -37,13 +43,15 @@ public class test {
 		while(matcher.find()){
 		    System.out.println("Found match at: "  + matcher.start() + " to " + matcher.end());
 		}*/
+		
 		ArrayList<String> InstrumentNames = new ArrayList<String>(Arrays.asList("Bass Drum 1", "Bass Drum 2",
 				"Side Stick", "Snare", "Low Floor Tom", "Closed Hi-Hat", "High Floor Tom", "Pedal Hi-Hat",
 				"Low Tom", "Open Hi-Hat", "Low-Mid Tom", "Hi-Mid Tom", "Crash Cymbal 1", "High Tom",
 				"Ride Cymbal 1", "Chinese Cymbal", "Ride Bell", "Tambourine", "Splash Cymbal", "Cowbell",
 				"Crash Cymbal 2", "Ride Cymbal 2", "Open Hi Conga", "Low Conga"));
 		for (int i = 0; i < InstrumentNames.size(); i++) {
-			System.out.println(InstrumentNames.get(i));
+			System.out.println(InstrumentNames.indexOf("Open Hi-Hat"));
+			System.out.println(InstrumentNames.get(9));
 		}
 		
 		/*List<DrumNote> notes = new ArrayList<>();

@@ -46,8 +46,10 @@ import generated.StartStop;
 import generated.StartStopContinue;
 import generated.Stem;
 import generated.StemValue;
+import generated.Step;
 import generated.Technical;
 import generated.Time;
+import generated.Unpitched;
 import generated.Notehead;
 import generated.NoteheadValue;
 
@@ -232,7 +234,7 @@ Middle Tom
 Bass Drum
 		 */
 		
-		for (int i = 0; i < InstrumentNames.size(); i++) {
+		for (int i = 0; i < InstrumentNames.size(); i++) {			
 			ScoreInstrument instruments = factory.createScoreInstrument();
 			instruments.setId("P1-I" + ScoreInstrumentID.get(i));
 			instruments.setInstrumentName(InstrumentNames.get(i));
@@ -245,7 +247,7 @@ Bass Drum
         
         ScorePartwise.Part part = new ScorePartwise.Part();
         part.setId(scorePart);
-        
+                
         double counter = 0; 
         int currMeasure = 0;
         for (var line : drumTab.tabLines) {
@@ -400,46 +402,97 @@ Bass Drum
                     	}
                     }
                     
+                    String instruName = n.instrument.name().replaceAll("(.)([A-Z])", "$1 $2").replaceAll("Hi Hat", "Hi-Hat").replaceAll("Low Mid", "Low-Mid").replaceAll("Hi Mid", "Hi-Mid");//.replaceAll("(.)([A-Z])", "$1 $2");
+                    //System.out.println(n.instrument.toString());	//either n.instrument.name() or .toString() works
+                    //String instrument = n.instrument.toString()
+                   
                     
-                    //setBeam(note);
+                    Unpitched variable = new Unpitched();
+                    Instrument instru = new Instrument();
                     
-                    //System.out.println(counter);
-                    //counter++;
+                    String s = "P1-I" + ScoreInstrumentID.get(InstrumentNames.indexOf("Closed Hi-Hat"));
+                    instru.setId((Object) "HELP");
                     
-                    //System.out.println(n.instrument);
-                    //System.out.println(note.getType().getValue());
-                    //if ()
-                    //InstrumentNames
+                    variable.setDisplayStep(Step.G);
+            		variable.setDisplayOctave(5);
+                    
+                    
+                    note.setInstrument(instru);
+                    
+                    
+            		note.setUnpitched(variable);	//variable is safe but not instru
                     /*
-                    
-                    if eigth 
-                    	beam 1
-                    if 16th
-                    	beam 1
-                    	beam 2
-                    if 32
-                    	beam 1
-                    	beam 2
-                    	beam 3
-                    
-                    */
-                    /*
-                    <note>
-                    <unpitched>
-                      <display-step>A</display-step>
-                      <display-octave>5</display-octave>
-                      </unpitched>
-                    <duration>2</duration>
-                    <instrument id="P1-I50"/>
-                    <voice>1</voice>
-                    <type>eighth</type>
-                    <stem>up</stem>
-                    <notehead>x</notehead>
-                    <beam number="1">begin</beam>
-                    </note>
-                    */
-                    
-                    
+                    switch (n.instrument.toString().replaceAll("(.)([A-Z])", "$1 $2")) {
+                    	case "Hi Hat":
+                    		variable.setDisplayStep(Step.G);
+                    		variable.setDisplayOctave(5);
+                    		if (n.value.equals("x")) {
+                    			instru.setId("P1-I" + ScoreInstrumentID.get(InstrumentNames.indexOf("Closed Hi-Hat")));
+                    		} else if (n.value.equals("o") {
+                    			instru.setId("P1-I" + ScoreInstrumentID.get(InstrumentNames.indexOf("Open Hi-Hat")));
+                    		}
+                    		note.setInstrument(instru);
+                    		note.setUnpitched(variable);
+                    		break;
+                    	
+                    	case "Bass Drum":
+                    	case "Kick Drum":
+                    		variable.setDisplayStep(Step.F);
+                    		variable.setDisplayOctave(4);
+                    		instru.setId("P1-I" + ScoreInstrumentID.get(InstrumentNames.indexOf("Bass Drum 1")));
+                    		note.setInstrument(instru);
+                    		note.setUnpitched(variable);
+                    		break;
+                    		
+                    	case "Snare Drum":
+                    		variable.setDisplayStep(Step.C);
+                    		variable.setDisplayOctave(5);
+                    		instru.setId("P1-I" + ScoreInstrumentID.get(InstrumentNames.indexOf("Snare")));
+                    		note.setInstrument(instru);
+                    		note.setUnpitched(variable);
+                    		break;
+                    		
+                    	case "Ride Cymbal":
+                    		variable.setDisplayStep(Step.F);
+                    		variable.setDisplayOctave(5);
+                    		instru.setId("P1-I" + ScoreInstrumentID.get(InstrumentNames.indexOf("Ride Cymbal 1")));
+                    		note.setInstrument(instru);
+                    		note.setUnpitched(variable);
+                    		break;
+                    		
+                    	case "Crash Cymbal":
+                    		variable.setDisplayStep(Step.A);
+                    		variable.setDisplayOctave(5);
+                    		instru.setId("P1-I" + ScoreInstrumentID.get(InstrumentNames.indexOf("Crash Cymbal 1")));
+                    		note.setInstrument(instru);
+                    		note.setUnpitched(variable);
+                    		break;
+                    		
+                    	case "High Tom":
+                    		variable.setDisplayStep(Step.E);
+                    		variable.setDisplayOctave(5);
+                    		instru.setId("P1-I" + ScoreInstrumentID.get(InstrumentNames.indexOf("Low-Mid Tom")));
+                    		note.setInstrument(instru);
+                    		note.setUnpitched(variable);
+                    		break;
+                    		
+                    	case "Medium Tom":
+                    		variable.setDisplayStep(Step.D);
+                    		variable.setDisplayOctave(5);
+                    		instru.setId("P1-I" + ScoreInstrumentID.get(InstrumentNames.indexOf("Low Tom")));
+                    		note.setInstrument(instru);
+                    		note.setUnpitched(variable);
+                    		break;
+                    		
+                    	case "Floor Tom":
+                    		variable.setDisplayStep(Step.A);
+                    		variable.setDisplayOctave(4);
+                    		instru.setId("P1-I" + ScoreInstrumentID.get(InstrumentNames.indexOf("Low Floor Tom")));
+                    		note.setInstrument(instru);
+                    		note.setUnpitched(variable);
+                    		break;
+                    	
+                    }*/
                     
                     measure.getNoteOrBackupOrForward().add(note);
                     noteIndex++;
@@ -460,9 +513,5 @@ Bass Drum
         scorePartwise.getPart().add(part);
 
         return scorePartwise;
-	}
-	
-	public static void setBeam(generated.Note note) {
-
 	}
 }

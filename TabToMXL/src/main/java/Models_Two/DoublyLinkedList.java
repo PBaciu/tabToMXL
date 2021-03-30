@@ -41,7 +41,7 @@ public class DoublyLinkedList {
         System.out.println();
         System.out.print("Here: ");
         while (current != null) {  
-            System.out.print(current.item.getVoice() + " ");  
+            System.out.print(current.item.getInstrument() + " ");  
             current = current.next;  
         }  
     }  
