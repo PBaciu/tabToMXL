@@ -17,37 +17,26 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import Models.Note;
-import Models.NoteRelationship;
 import Models_Two.*;
 import TabToMXL.FunctionalList;
 import TabToMXL.IntermediaryGarbage2;
-import generated.AboveBelow;
 import generated.Attributes;
 import generated.BarStyle;
 import generated.Beam;
 import generated.BeamValue;
 import generated.Clef;
 import generated.ClefSign;
-import generated.Fret;
 import generated.Instrument;
 import generated.Key;
-import generated.Notations;
 import generated.ObjectFactory;
 import generated.PartList;
 import generated.PartName;
-import generated.Pitch;
 import generated.RightLeftMiddle;
 import generated.ScoreInstrument;
 import generated.ScorePart;
 import generated.ScorePartwise;
-import generated.Slur;
-import generated.StartStop;
-import generated.StartStopContinue;
 import generated.Stem;
 import generated.StemValue;
-import generated.Step;
-import generated.Technical;
 import generated.Time;
 import generated.Unpitched;
 import generated.Notehead;
@@ -376,22 +365,17 @@ public class DrumParser {
                     	}
                     }
                     
-                    String instruName = n.instrument.name().replaceAll("(.)([A-Z])", "$1 $2").replaceAll("Hi Hat", "Hi-Hat").replaceAll("Low Mid", "Low-Mid").replaceAll("Hi Mid", "Hi-Mid");//.replaceAll("(.)([A-Z])", "$1 $2");
-                    
-                   /*for ()
-                    Instrument instruID = new Instrument();
-                    instruID.setId("P1-I" + ScoreInstrumentID.get(i));
-                    note.setInstrument(instruID);*/
+                    //String instruName = n.instrument.name().replaceAll("(.)([A-Z])", "$1 $2").replaceAll("Hi Hat", "Hi-Hat").replaceAll("Low Mid", "Low-Mid").replaceAll("Hi Mid", "Hi-Mid");//.replaceAll("(.)([A-Z])", "$1 $2");
                     
                     
                     // [com.sun.istack.SAXException2: Object "P1-I43" is found in an IDREF property but this object doesnt have an ID.]
                     Unpitched variable = new Unpitched();
                     Instrument instru = new Instrument();
-                    //note.setInstrument(instru);
+                    note.setInstrument(instru);
                     
-                    String s = "P1-I" + ScoreInstrumentID.get(InstrumentNames.indexOf("Closed Hi-Hat"));
-                    /*Object obj = new Object();
-                    ObjectFactory object = new ObjectFactory();
+                    Object s = "P1-I" + ScoreInstrumentID.get(InstrumentNames.indexOf("Closed Hi-Hat"));
+                    //Object obj = new Object();
+                    /*ObjectFactory object = new ObjectFactory();
                     var obj2 = factory.createInstrument();
                     obj = s;
                     obj2.setId("P1-I");
@@ -399,32 +383,11 @@ public class DrumParser {
                     note.setInstrument(obj2);
                     */
                     
-                    ObjectFactory object = new ObjectFactory();
-                    var help = object.createInstrument();
-                    help.setId(s);
-                    note.setInstrument(help);
+                    instru.setId(s);
+
                     
-                    /*Instrument thing2 = new Instrument();
-                    Object thing = "P1-I";
-                    //thing2.setId(thing);
-                    System.out.println("thing2: " + thing2.getId());
-                    ID id = new ID("P1-I");
-                    
-                    note.setInstrument(thing2);
-                    note.getInstrument().setId("P1-I");*/
-                    
-                    
-                    //System.out.println(note.getInstrument());
-                    //note.getInstrument().setId(s);		//try later
-                    
-                    variable.setDisplayStep(Step.G);
-            		variable.setDisplayOctave(5);
-                    
-                    
-                    
-                    
-                    
-            		note.setUnpitched(variable);	//variable is safe but not instru
+
+//variable is safe but not instru
                     /*
                     switch (n.instrument.toString().replaceAll("(.)([A-Z])", "$1 $2")) {
                     	case "Hi Hat":
