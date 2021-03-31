@@ -193,7 +193,7 @@ public class DrumParser {
                 Clef clef = new Clef();
                 ClefSign cf = ClefSign.PERCUSSION;
                 clef.setSign(cf);
-                clef.setLine(BigInteger.valueOf(5));
+                clef.setLine(BigInteger.valueOf(2));
                 attributes.getClef().add(clef);
 
                 Time time = factory.createTime();
