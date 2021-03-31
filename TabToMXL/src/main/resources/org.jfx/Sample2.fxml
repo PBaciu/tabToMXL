@@ -90,5 +90,6 @@
             <Font size="24.0" />
          </font>
       </Label>
+      <Button fx:id="Additional" layoutX="512.0" layoutY="416.0" mnemonicParsing="false" onAction="#Additional" text="Additional information" />
    </children>
 </AnchorPane>

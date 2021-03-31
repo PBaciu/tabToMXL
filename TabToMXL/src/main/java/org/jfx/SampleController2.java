@@ -34,6 +34,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -118,6 +119,9 @@ public class SampleController2 implements Initializable {
 	
 	@FXML
 	private TextArea textArea;
+	
+	@FXML
+	private Button Additional;
 	
 	public void initData(String textArea2, String textField2, String fileContent, String timeSign, String tempo2, Boolean save) {
 		textArea.setText(textArea2);
@@ -645,6 +649,20 @@ public class SampleController2 implements Initializable {
 		}
 	}
 	
+	public void Additional() {
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("org.jfx/Options.fxml"));
+			final Stage popup = new Stage();
+			popup.initModality(Modality.APPLICATION_MODAL);
+			popup.setTitle("Tranlation Options");
+			popup.setScene(new Scene(root, 322, 240));
+			
+			popup.show();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public void TimeAction() {
 		
 	}
