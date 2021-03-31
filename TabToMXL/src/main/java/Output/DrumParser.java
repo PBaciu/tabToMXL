@@ -37,6 +37,7 @@ import generated.ScorePart;
 import generated.ScorePartwise;
 import generated.Stem;
 import generated.StemValue;
+import generated.Step;
 import generated.Time;
 import generated.Unpitched;
 import generated.Notehead;
@@ -366,37 +367,19 @@ public class DrumParser {
                     }
                     
                     //String instruName = n.instrument.name().replaceAll("(.)([A-Z])", "$1 $2").replaceAll("Hi Hat", "Hi-Hat").replaceAll("Low Mid", "Low-Mid").replaceAll("Hi Mid", "Hi-Mid");//.replaceAll("(.)([A-Z])", "$1 $2");
-                    
-                    
                     // [com.sun.istack.SAXException2: Object "P1-I43" is found in an IDREF property but this object doesnt have an ID.]
-                    Unpitched variable = new Unpitched();
+                    
                     Instrument instru = new Instrument();
-                    instru.setId("P1-I");
-                    note.setInstrument(instru);
+                    Unpitched variable = new Unpitched();  
                     
-                    Object s = "P1-I" + ScoreInstrumentID.get(InstrumentNames.indexOf("Closed Hi-Hat"));
-                    //Object obj = new Object();
-                    /*ObjectFactory object = new ObjectFactory();
-                    var obj2 = factory.createInstrument();
-                    obj = s;
-                    obj2.setId("P1-I");
-                    
-                    note.setInstrument(obj2);
-                    */
-                    
-
-                    
-
-//variable is safe but not instru
-                    /*
                     switch (n.instrument.toString().replaceAll("(.)([A-Z])", "$1 $2")) {
                     	case "Hi Hat":
                     		variable.setDisplayStep(Step.G);
                     		variable.setDisplayOctave(5);
                     		if (n.value.equals("x")) {
-                    			instru.setId("P1-I" + ScoreInstrumentID.get(InstrumentNames.indexOf("Closed Hi-Hat")));
-                    		} else if (n.value.equals("o") {
-                    			instru.setId("P1-I" + ScoreInstrumentID.get(InstrumentNames.indexOf("Open Hi-Hat")));
+                    			instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Closed Hi-Hat")));
+                    		} else if (n.value.equals("o")) {
+                    			instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Open Hi-Hat")));
                     		}
                     		note.setInstrument(instru);
                     		note.setUnpitched(variable);
@@ -406,7 +389,7 @@ public class DrumParser {
                     	case "Kick Drum":
                     		variable.setDisplayStep(Step.F);
                     		variable.setDisplayOctave(4);
-                    		instru.setId("P1-I" + ScoreInstrumentID.get(InstrumentNames.indexOf("Bass Drum 1")));
+                    		instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Bass Drum 1")));
                     		note.setInstrument(instru);
                     		note.setUnpitched(variable);
                     		break;
@@ -414,7 +397,7 @@ public class DrumParser {
                     	case "Snare Drum":
                     		variable.setDisplayStep(Step.C);
                     		variable.setDisplayOctave(5);
-                    		instru.setId("P1-I" + ScoreInstrumentID.get(InstrumentNames.indexOf("Snare")));
+                    		instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Snare")));
                     		note.setInstrument(instru);
                     		note.setUnpitched(variable);
                     		break;
@@ -422,7 +405,7 @@ public class DrumParser {
                     	case "Ride Cymbal":
                     		variable.setDisplayStep(Step.F);
                     		variable.setDisplayOctave(5);
-                    		instru.setId("P1-I" + ScoreInstrumentID.get(InstrumentNames.indexOf("Ride Cymbal 1")));
+                    		instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Ride Cymbal 1")));
                     		note.setInstrument(instru);
                     		note.setUnpitched(variable);
                     		break;
@@ -430,7 +413,7 @@ public class DrumParser {
                     	case "Crash Cymbal":
                     		variable.setDisplayStep(Step.A);
                     		variable.setDisplayOctave(5);
-                    		instru.setId("P1-I" + ScoreInstrumentID.get(InstrumentNames.indexOf("Crash Cymbal 1")));
+                    		instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Crash Cymbal 1")));
                     		note.setInstrument(instru);
                     		note.setUnpitched(variable);
                     		break;
@@ -438,7 +421,7 @@ public class DrumParser {
                     	case "High Tom":
                     		variable.setDisplayStep(Step.E);
                     		variable.setDisplayOctave(5);
-                    		instru.setId("P1-I" + ScoreInstrumentID.get(InstrumentNames.indexOf("Low-Mid Tom")));
+                    		instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Low-Mid Tom")));
                     		note.setInstrument(instru);
                     		note.setUnpitched(variable);
                     		break;
@@ -446,7 +429,7 @@ public class DrumParser {
                     	case "Medium Tom":
                     		variable.setDisplayStep(Step.D);
                     		variable.setDisplayOctave(5);
-                    		instru.setId("P1-I" + ScoreInstrumentID.get(InstrumentNames.indexOf("Low Tom")));
+                    		instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Low Tom")));
                     		note.setInstrument(instru);
                     		note.setUnpitched(variable);
                     		break;
@@ -454,12 +437,12 @@ public class DrumParser {
                     	case "Floor Tom":
                     		variable.setDisplayStep(Step.A);
                     		variable.setDisplayOctave(4);
-                    		instru.setId("P1-I" + ScoreInstrumentID.get(InstrumentNames.indexOf("Low Floor Tom")));
+                    		instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Low Floor Tom")));
                     		note.setInstrument(instru);
                     		note.setUnpitched(variable);
                     		break;
                     	
-                    }*/
+                    }
                     
                     measure.getNoteOrBackupOrForward().add(note);
                     noteIndex++;
