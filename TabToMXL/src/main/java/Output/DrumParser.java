@@ -1,7 +1,7 @@
 package Output;
 
 import java.math.BigDecimal;				//Note: will need to change the duration to make it similar like the parser in master branch
-import java.math.BigInteger;
+import java.math.BigInteger;				//Note: Need to change order
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
