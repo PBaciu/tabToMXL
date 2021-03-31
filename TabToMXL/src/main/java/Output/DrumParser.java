@@ -180,7 +180,7 @@ public class DrumParser {
                 DrumBar b = new DrumBar(notes, bar.barLength);
                 barList.add(b);
             }
-            System.out.println("measure0: " + barList.get(0).notes.size() + "\tmeasure1: " + barList.get(1).notes.size());
+            //System.out.println("measure0: " + barList.get(0).notes.size() + "\tmeasure1: " + barList.get(1).notes.size());
             
             for (var bar: barList) {
             	for (var note: bar.notes) {
@@ -194,15 +194,6 @@ public class DrumParser {
         Collections.reverse(device);
 		return generateDrumXML(new DrumTab(tabLines, device));
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	public static ScorePartwise generateDrumXML(DrumTab drumTab) {
 		ObjectFactory factory = new ObjectFactory();
@@ -224,15 +215,6 @@ public class DrumParser {
 				"Crash Cymbal 2", "Ride Cymbal 2", "Open Hi Conga", "Low Conga"));
 		ArrayList<Integer> ScoreInstrumentID = new ArrayList<Integer>(Arrays.asList(36, 37, 38, 39, 42, 43, 44, 45,
 				46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 60, 64, 65));
-        
-		/*
-Crash Cymbal
-Hi-Hat
-Snare Drum
-High Tom
-Middle Tom
-Bass Drum
-		 */
 		
 		for (int i = 0; i < InstrumentNames.size(); i++) {			
 			ScoreInstrument instruments = factory.createScoreInstrument();
@@ -277,9 +259,6 @@ Bass Drum
                     measure.getNoteOrBackupOrForward().add(attributes);				//got attributes
                 }         
                 
-                //System.out.println(line.bars);
-                
-                
                 DoublyLinkedList list = new DoublyLinkedList();
                 int noteIndex = 0;												//notes start here
                 var distanceMap = new HashMap<Integer, List<DrumNote>>();
@@ -289,7 +268,6 @@ Bass Drum
                 	//System.out.println(line.bars.get(1));	//measure 1`
                     distanceMap.putIfAbsent(n.absoluteDistance, new ArrayList<>());
                     distanceMap.get(n.absoluteDistance).add(n);
-                    //System.out.println(n.absoluteDistance);	
                     
                     generated.Note note = new generated.Note();
 
@@ -341,13 +319,9 @@ Bass Drum
                     var noteType = factory.createNoteType();
                     noteType.setValue(noteTypeString);
                     note.setType(noteType);
-//                  note.setDuration(BigDecimal.valueOf(duration));
-                    //Notehead head = new Notehead();
-                    //head.setValue(null);
-                    /*for ()
-                    Instrument instruID = new Instrument();
-                    instruID.setId("P1-I" + ScoreInstrumentID.get(i));
-                    note.setInstrument(instruID);*/
+                    note.setDuration(BigDecimal.valueOf(duration));
+
+                    
                     
                     if (n.value.equals("x")) {				//== does not works
                     	note.setVoice("1");
@@ -403,21 +377,51 @@ Bass Drum
                     }
                     
                     String instruName = n.instrument.name().replaceAll("(.)([A-Z])", "$1 $2").replaceAll("Hi Hat", "Hi-Hat").replaceAll("Low Mid", "Low-Mid").replaceAll("Hi Mid", "Hi-Mid");//.replaceAll("(.)([A-Z])", "$1 $2");
-                    //System.out.println(n.instrument.toString());	//either n.instrument.name() or .toString() works
-                    //String instrument = n.instrument.toString()
-                   
                     
+                   /*for ()
+                    Instrument instruID = new Instrument();
+                    instruID.setId("P1-I" + ScoreInstrumentID.get(i));
+                    note.setInstrument(instruID);*/
+                    
+                    
+                    // [com.sun.istack.SAXException2: Object "P1-I43" is found in an IDREF property but this object doesnt have an ID.]
                     Unpitched variable = new Unpitched();
                     Instrument instru = new Instrument();
+                    //note.setInstrument(instru);
                     
                     String s = "P1-I" + ScoreInstrumentID.get(InstrumentNames.indexOf("Closed Hi-Hat"));
-                    instru.setId((Object) "HELP");
+                    /*Object obj = new Object();
+                    ObjectFactory object = new ObjectFactory();
+                    var obj2 = factory.createInstrument();
+                    obj = s;
+                    obj2.setId("P1-I");
+                    
+                    note.setInstrument(obj2);
+                    */
+                    
+                    ObjectFactory object = new ObjectFactory();
+                    var help = object.createInstrument();
+                    help.setId(s);
+                    note.setInstrument(help);
+                    
+                    /*Instrument thing2 = new Instrument();
+                    Object thing = "P1-I";
+                    //thing2.setId(thing);
+                    System.out.println("thing2: " + thing2.getId());
+                    ID id = new ID("P1-I");
+                    
+                    note.setInstrument(thing2);
+                    note.getInstrument().setId("P1-I");*/
+                    
+                    
+                    //System.out.println(note.getInstrument());
+                    //note.getInstrument().setId(s);		//try later
                     
                     variable.setDisplayStep(Step.G);
             		variable.setDisplayOctave(5);
                     
                     
-                    note.setInstrument(instru);
+                    
                     
                     
             		note.setUnpitched(variable);	//variable is safe but not instru
@@ -497,7 +501,7 @@ Bass Drum
                     measure.getNoteOrBackupOrForward().add(note);
                     noteIndex++;
                 }
-                list.printNodes();
+                //list.printNodes();
                 //System.out.println(measure.getNoteOrBackupOrForward().toString());
                 part.getMeasure().add(measure);
                 currMeasure++;
