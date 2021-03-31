@@ -371,6 +371,7 @@ public class DrumParser {
                     // [com.sun.istack.SAXException2: Object "P1-I43" is found in an IDREF property but this object doesnt have an ID.]
                     Unpitched variable = new Unpitched();
                     Instrument instru = new Instrument();
+                    instru.setId("P1-I");
                     note.setInstrument(instru);
                     
                     Object s = "P1-I" + ScoreInstrumentID.get(InstrumentNames.indexOf("Closed Hi-Hat"));
@@ -383,7 +384,6 @@ public class DrumParser {
                     note.setInstrument(obj2);
                     */
                     
-                    instru.setId(s);
 
                     
 
