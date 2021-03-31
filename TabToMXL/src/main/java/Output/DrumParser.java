@@ -194,7 +194,7 @@ public class DrumParser {
                 ClefSign cf = ClefSign.PERCUSSION;
                 clef.setSign(cf);
                 clef.setLine(BigInteger.valueOf(2));
-                attributes.getClef().add(clef);
+                attributes.getClef().add(clef); 
 
                 Time time = factory.createTime();
                 var beats = factory.createTimeBeats(Integer.toString(4));
