@@ -46,48 +46,6 @@ import generated.NoteheadValue;
 public class DrumParser {
 
 	static ArrayList<String> drumTab;
-
-	/*public static void main(String[] args) {
-		drumTab = getTextArray("CC|x---------------|--------x-------|\r\n"
-				+ "HH|--x-x-x-x-x-x-x-|----------------|\r\n"
-				+ "SD|----o-------o---|oooo------------|\r\n"
-				+ "HT|----------------|----oo----------|\r\n"
-				+ "MT|----------------|------oo--------|\r\n"
-				+ "BD|o-------o-------|o-------o-------|");
-		
-		String drumTablature = "CC|x---------------|--------x-------|\r\n"
-				+ "HH|--x-x-x-x-x-x-x-|----------------|\r\n"
-				+ "SD|----o-------o---|oooo------------|\r\n"
-				+ "HT|----------------|----oo----------|\r\n"
-				+ "MT|----------------|------oo--------|\r\n"
-				+ "BD|o-------o-------|o-------o-------|";
-		//System.out.println("DRUMTAB: " + drumTab);
-		//System.out.println(parseDrumTab(drumTablature));
-		readTab(drumTablature);
-
-		//String converted = drumTabToXMLConversion(drumTab);
-
-		//System.out.println(converted);
-	}
-	
-	public static ScorePartwise readTab(String tab) {
-        //TODO Determine if tab is guitar, bass, or drum
-        return parseDrumTab(tab);
-    }
-
-	public static ArrayList<String> getTextArray(String text) {
-		ArrayList<String> arrayText = new ArrayList<>();
-		try {
-			Scanner input = new Scanner(text);
-			while (input.hasNextLine()) {
-				arrayText.add(input.nextLine());
-			}
-			input.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return arrayText;
-	}*/
 	
 	public static ScorePartwise parseDrumTab(String drumTab) {
 		String[] standard = {"CC", "HH", "SD", "HT", "MT", "BD"};
