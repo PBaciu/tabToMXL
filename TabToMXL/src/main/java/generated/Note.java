@@ -110,7 +110,7 @@ public class Note {
     protected Pitch pitch;
     protected Unpitched unpitched;
     protected Rest rest;
-    protected BigDecimal duration;
+    protected BigInteger duration;
     protected List<Tie> tie;
     protected Instrument instrument;
     protected FormattedText footnote;
@@ -325,20 +325,20 @@ public class Note {
      *     {@link BigDecimal }
      *     
      */
-    public BigDecimal getDuration() {
+    public BigInteger getDuration() {
         return duration;
     }
 
     /**
      * Sets the value of the duration property.
      * 
-     * @param value
+     * @param bigInteger
      *     allowed object is
      *     {@link BigDecimal }
      *     
      */
-    public void setDuration(BigDecimal value) {
-        this.duration = value;
+    public void setDuration(BigInteger bigInteger) {
+        this.duration = bigInteger;
     }
 
     /**
