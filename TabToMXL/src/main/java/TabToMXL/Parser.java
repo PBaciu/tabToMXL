@@ -22,9 +22,9 @@ import java.util.stream.IntStream;
  */
 public class Parser {
 
-    Tab tab;
-    String timeSignature;
-    int tempo;
+    public Tab tab;
+    public String timeSignature;
+    public int tempo;
 
     public Parser() {
     }
@@ -35,7 +35,7 @@ public class Parser {
         this.tempo = tempo;
     	tab = tab.trim();
     	if (tab.charAt(2) == '|') {
-    		return DrumParser.parseDrumTab(tab);
+    		return DrumParser.parseDrumTab(tab, timeSignature, tempo);
     	} else {
     		return parseGuitarTab(tab);
     	}
