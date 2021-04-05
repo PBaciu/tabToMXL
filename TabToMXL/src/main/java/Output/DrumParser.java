@@ -47,7 +47,7 @@ public class DrumParser {
 
 	static ArrayList<String> drumTab;
 	
-	public static ScorePartwise parseDrumTab(String drumTab, String timeSignature, int tempo) {//(tab, timeSignature, tempo)
+	public static ScorePartwise parseDrumTab(String drumTab) {
 		String[] standard = {"CC", "HH", "SD", "HT", "MT", "BD"};
         List<DrumTabLine> tabLines = new ArrayList<>();
         List<DrumInstrument> device = new ArrayList<>();
@@ -140,10 +140,10 @@ public class DrumParser {
             
         }
         Collections.reverse(device);
-		return generateDrumXML(new DrumTab(tabLines, device), timeSignature, tempo);
+		return generateDrumXML(new DrumTab(tabLines, device));
 	}
 	
-	public static ScorePartwise generateDrumXML(DrumTab drumTab, String timeSignature, int tempo) {
+	public static ScorePartwise generateDrumXML(DrumTab drumTab) {
 		ObjectFactory factory = new ObjectFactory();
 		
 		ScorePartwise scorePartwise = factory.createScorePartwise();
@@ -182,11 +182,7 @@ public class DrumParser {
         int currMeasure = 0;
         for (var line : drumTab.tabLines) {
             for (int i = 0; i < line.bars.size(); i++) {
-                //int quarterNoteLength = 4;
-                
-                double quarterNoteLength = (double)line.bars.get(i).barLength / Integer.parseInt(timeSignature.split("/")[0]); //TODO rely on time signature
-                int divisions = (int)Math.ceil(quarterNoteLength);
-                
+                int quarterNoteLength = 4;
                 ScorePartwise.Part.Measure measure = new ScorePartwise.Part.Measure();
                 measure.setNumber(Integer.toString(currMeasure + 1));
                 Attributes attributes = new Attributes();
@@ -229,10 +225,10 @@ public class DrumParser {
 
                     double duration;
                     if (line.bars.get(i).notes.stream().noneMatch(note1 -> note1.absoluteDistance > n.absoluteDistance)) {
-                        duration = (line.bars.get(i).barLength  - line.bars.get(i).notes.get(noteIndex).absoluteDistance);
+                        duration = (double)(line.bars.get(i).barLength  - line.bars.get(i).notes.get(noteIndex).absoluteDistance) / quarterNoteLength;
                     }
                     else {
-                        duration = (line.bars.get(i).notes.get(noteIndex + 1).absoluteDistance - line.bars.get(i).notes.get(noteIndex).absoluteDistance);
+                        duration = (double)(line.bars.get(i).notes.get(noteIndex + 1).absoluteDistance - line.bars.get(i).notes.get(noteIndex).absoluteDistance) / quarterNoteLength;
                     }
                     if (duration == 0) {
                         var tempIndex = noteIndex;
@@ -240,21 +236,21 @@ public class DrumParser {
                             if (line.bars.get(i).notes.get(tempIndex).absoluteDistance == n.absoluteDistance) {
                                 tempIndex++;
                             } else {
-                                duration = (line.bars.get(i).notes.get(tempIndex).absoluteDistance - n.absoluteDistance);
+                                duration = (double)(line.bars.get(i).notes.get(tempIndex).absoluteDistance - n.absoluteDistance) / quarterNoteLength;
                                 break;
                             }
                         }
                     }
 
                     String noteTypeString;
-                    if (duration == divisions) {
+                    if (duration == 1.0) {
                         noteTypeString = "quarter";
-                    } else if (duration == divisions / 2) {
+                    } else if (duration == 0.5) {
                         noteTypeString = "eighth";
                         Beam beam = new Beam();
                         beam.setNumber(1);
                         note.getBeam().add(beam);
-                    } else if (duration == divisions/4) {
+                    } else if (duration == 0.25) {
                         noteTypeString = "16th";
                         Beam beam1 = new Beam();
                         beam1.setNumber(1);
@@ -262,34 +258,9 @@ public class DrumParser {
                         Beam beam2 = new Beam();
                         beam2.setNumber(2);
                         note.getBeam().add(beam2);
-                    } else if (duration == divisions/8) {
-                        noteTypeString = "32nd";
-                        Beam beam1 = new Beam();
-                        beam1.setNumber(1);
-                        note.getBeam().add(beam1);
-                        Beam beam2 = new Beam();
-                        beam2.setNumber(2);
-                        note.getBeam().add(beam2);
-                        Beam beam3 = new Beam();
-                        beam3.setNumber(2);
-                        note.getBeam().add(beam3);
-                    } else if (duration == divisions/16) {
-                        noteTypeString = "64th";
-                        Beam beam1 = new Beam();
-                        beam1.setNumber(1);
-                        note.getBeam().add(beam1);
-                        Beam beam2 = new Beam();
-                        beam2.setNumber(2);
-                        note.getBeam().add(beam2);
-                        Beam beam3 = new Beam();
-                        beam3.setNumber(2);
-                        note.getBeam().add(beam3);
-                        Beam beam4 = new Beam();
-                        beam4.setNumber(2);
-                        note.getBeam().add(beam4);
-                    }else if (duration == divisions * 2) {
+                    } else if (duration == 2) {
                         noteTypeString = "half";
-                    } else if (duration == divisions * 4) {
+                    } else if (duration == 4) {
                         noteTypeString = "whole";
                     }
                     else {
@@ -299,7 +270,8 @@ public class DrumParser {
                     var noteType = factory.createNoteType();
                     noteType.setValue(noteTypeString);
                     note.setType(noteType);
-                    note.setDuration(BigInteger.valueOf((long)duration));
+                    note.setDuration(BigDecimal.valueOf(duration));
+
                     
                     
                     if (n.value.equals("x")) {				//== does not works
