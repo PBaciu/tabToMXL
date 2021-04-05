@@ -248,12 +248,15 @@ public class DrumParser {
                     } else if (duration == 0.5) {
                         noteTypeString = "eighth";
                         Beam beam = new Beam();
+                        beam.setNumber(1);
                         note.getBeam().add(beam);
                     } else if (duration == 0.25) {
-                        noteTypeString = "sixteenth";
+                        noteTypeString = "16th";
                         Beam beam1 = new Beam();
+                        beam1.setNumber(1);
                         note.getBeam().add(beam1);
                         Beam beam2 = new Beam();
+                        beam2.setNumber(2);
                         note.getBeam().add(beam2);
                     } else if (duration == 2) {
                         noteTypeString = "half";
