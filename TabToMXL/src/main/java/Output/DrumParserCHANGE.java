@@ -43,7 +43,7 @@ import generated.Unpitched;
 import generated.Notehead;
 import generated.NoteheadValue;
 
-public class DrumParser {
+public class DrumParserCHANGE {
 
 	static ArrayList<String> drumTab;
 	
