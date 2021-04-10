@@ -953,8 +953,6 @@ static ArrayList<String> drumTab;
                     measure.getNoteOrBackupOrForward().add(note);
                     noteIndex++;
                 }
-                //list.printNodes();
-                //System.out.println(measure.getNoteOrBackupOrForward().toString());
                 part.getMeasure().add(measure);
                 currMeasure++;
             }
