@@ -31,13 +31,13 @@ class ParserTest {
     @Test
     void standardTuningStringToInt() {
         Parser p = new Parser();
-        assertEquals(p.standardTuningStringToInt(GuitarString.G),3);
-        assertEquals(p.standardTuningStringToInt(GuitarString.HIGH_E), 1);
-        assertEquals(p.standardTuningStringToInt(GuitarString.LOW_E), 6);
-        assertEquals(p.standardTuningStringToInt(GuitarString.A), 5);
-        assertEquals(p.standardTuningStringToInt(GuitarString.D), 4);
-        assertEquals(p.standardTuningStringToInt(GuitarString.B), 2);
-        assertEquals(p.standardTuningStringToInt(GuitarString.A_FLAT), 0);
+        assertEquals(p.standardTuningStringToIntGuitar(GuitarString.G),3);
+        assertEquals(p.standardTuningStringToIntGuitar(GuitarString.HIGH_E), 1);
+        assertEquals(p.standardTuningStringToIntGuitar(GuitarString.LOW_E), 6);
+        assertEquals(p.standardTuningStringToIntGuitar(GuitarString.A), 5);
+        assertEquals(p.standardTuningStringToIntGuitar(GuitarString.D), 4);
+        assertEquals(p.standardTuningStringToIntGuitar(GuitarString.B), 2);
+        assertEquals(p.standardTuningStringToIntGuitar(GuitarString.A_FLAT), 0);
     }
 
     @Test
@@ -46,13 +46,14 @@ class ParserTest {
 
         assertThrows(Exception.class, () -> p.readTab("a"));
         assertThrows(Exception.class, () -> p.readTab("this should fail"));
-        assertDoesNotThrow(() -> p.readTab("""
+        assertDoesNotThrow(() -> p.readTab("""                
                 |-----------0-----|-0---------------|
                 |---------0---0---|-0---------------|
                 |-------1-------1-|-1---------------|
                 |-----2-----------|-2---------------|
                 |---2-------------|-2---------------|
                 |-0---------------|-0---------------|
+                
                 """));
     }
 }

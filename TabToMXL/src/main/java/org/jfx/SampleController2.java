@@ -318,6 +318,7 @@ public class SampleController2 implements Initializable {
 			ScorePartwise scorePartwise = p.readTab(textArea.getText(), timeSignature.getText(), tempoInt);
 			writer.writeToTempFile(scorePartwise);
 		} catch (Exception e) {
+			e.printStackTrace();
 			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 			errorAlert.setHeaderText("Unsupported Tablature Format Error");
 			errorAlert.setContentText("Please ensure that the tablature provided matches the format provided in .README");
