@@ -682,7 +682,8 @@ static ArrayList<String> drumTab;
         ScorePartwise.Part part = new ScorePartwise.Part();
         part.setId(scorePart);
                 
-        double counter = 0; 
+        double counter1 = 0; 
+        double counter2 = 0;
         int currMeasure = 0;
         for (var line : drumTab.tabLines) {
             for (int i = 0; i < line.bars.size(); i++) {
@@ -809,24 +810,24 @@ static ArrayList<String> drumTab;
                     note.setDuration(BigInteger.valueOf((long)duration));
                     
                     if (n.value.equals("x")) {				//== does not works
-                    	note.setVoice("1");
-                    	Notehead head = new Notehead();
-                    	note.setNotehead(head);
-                    	note.getNotehead().setValue(NoteheadValue.X);
+                    	//note.setVoice("1");
+                    	//Notehead head = new Notehead();
+                    	//note.setNotehead(head);
+                    	//note.getNotehead().setValue(NoteheadValue.X);
                     	
                     } else if (n.value.equals("o")) {
-                    	note.setVoice("2");
+                    	//note.setVoice("2");
                     }
                     										//need instrument, unpitched
                     list.addNode(note);
                     
-                    if (n.value.equals("x") && duration < 1) {
+                    /*if (n.value.equals("x") && duration < 1) {
                     	if (counter == 0) {
                     		counter = counter + duration;
                     		for (var beam: note.getBeam()) {
                     			beam.setValue(BeamValue.BEGIN);
                     		}
-                    	} else if ((counter + duration) == 1) {
+                    	} else if ((counter1 + duration) == 1) {
                     		counter = 0;
                     		for (var beam: note.getBeam()) {
                     			beam.setValue(BeamValue.END);
@@ -856,7 +857,7 @@ static ArrayList<String> drumTab;
                     			beam.setValue(BeamValue.CONTINUE);
                     		}
                     	}
-                    }
+                    }*/
                     
                     //String instruName = n.instrument.name().replaceAll("(.)([A-Z])", "$1 $2").replaceAll("Hi Hat", "Hi-Hat").replaceAll("Low Mid", "Low-Mid").replaceAll("Hi Mid", "Hi-Mid");//.replaceAll("(.)([A-Z])", "$1 $2");
                     // [com.sun.istack.SAXException2: Object "P1-I43" is found in an IDREF property but this object doesnt have an ID.]
@@ -865,10 +866,14 @@ static ArrayList<String> drumTab;
                     Unpitched variable = new Unpitched();  
                     
                     System.out.println(n.instrument.toString().replaceAll("(.)([A-Z])", "$1 $2"));
+                    Notehead head = new Notehead();
                     
                     note.setStem(new Stem());                    
                     switch (n.instrument.toString().replaceAll("(.)([A-Z])", "$1 $2")) {
                     	case "Hi Hat":
+                    		note.setVoice("1");
+                        	note.setNotehead(head);
+                        	note.getNotehead().setValue(NoteheadValue.X);
                     		variable.setDisplayStep(Step.G);
                     		variable.setDisplayOctave(5);
                     		if (n.value.equals("x")) {
@@ -883,6 +888,7 @@ static ArrayList<String> drumTab;
                     	
                     	case "Bass Drum":
                     	case "Kick Drum":
+                    		note.setVoice("2");
                     		variable.setDisplayStep(Step.F);
                     		variable.setDisplayOctave(4);
                     		instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Bass Drum 1")));
@@ -892,6 +898,7 @@ static ArrayList<String> drumTab;
                     		break;
                     		
                     	case "Snare Drum":
+                    		note.setVoice("1");
                     		variable.setDisplayStep(Step.C);
                     		variable.setDisplayOctave(5);
                     		instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Snare")));
@@ -901,6 +908,10 @@ static ArrayList<String> drumTab;
                     		break;
                     		
                     	case "Ride Cymbal":
+                    		note.setVoice("1");
+                    		
+                        	note.setNotehead(head);
+                        	note.getNotehead().setValue(NoteheadValue.X);
                     		variable.setDisplayStep(Step.F);
                     		variable.setDisplayOctave(5);
                     		instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Ride Cymbal 1")));
@@ -911,6 +922,10 @@ static ArrayList<String> drumTab;
                     		
                     	case "Crash Cymbal":
                     	case "Crash Crystal":
+                    		note.setVoice("1");
+                    		
+                        	note.setNotehead(head);
+                        	note.getNotehead().setValue(NoteheadValue.X);
                     		variable.setDisplayStep(Step.A);
                     		variable.setDisplayOctave(5);
                     		instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Crash Cymbal 1")));
@@ -920,6 +935,7 @@ static ArrayList<String> drumTab;
                     		break;
                     		
                     	case "High Tom":
+                    		note.setVoice("1");
                     		variable.setDisplayStep(Step.E);
                     		variable.setDisplayOctave(5);
                     		instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Low-Mid Tom")));
@@ -930,6 +946,7 @@ static ArrayList<String> drumTab;
                     		
                     	case "Medium Tom":
                     	case "Middle Tom":
+                    		note.setVoice("1");
                     		variable.setDisplayStep(Step.D);
                     		variable.setDisplayOctave(5);
                     		instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Low Tom")));
@@ -940,6 +957,10 @@ static ArrayList<String> drumTab;
                     		
                     	case "Floor Tom":
                     	case "Low Tom":
+                    		note.setVoice("1");
+                    		
+                        	note.setNotehead(head);
+                        	note.getNotehead().setValue(NoteheadValue.X);
                     		variable.setDisplayStep(Step.A);
                     		variable.setDisplayOctave(4);
                     		instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Low Floor Tom")));
@@ -948,6 +969,44 @@ static ArrayList<String> drumTab;
                     		note.getStem().setValue(StemValue.UP);
                     		break;
                     	
+                    }
+                    
+                    if (note.getVoice() == "1" && duration < 1) {
+                    	if (counter1 == 0) {
+                    		counter1 = counter1 + duration;
+                    		for (var beam: note.getBeam()) {
+                    			beam.setValue(BeamValue.BEGIN);
+                    		}
+                    	} else if ((counter1 + duration) == 1) {
+                    		counter1 = 0;
+                    		for (var beam: note.getBeam()) {
+                    			beam.setValue(BeamValue.END);
+                    		}
+                    	} else {
+                    		counter1 = counter1 + duration;
+                    		for (var beam: note.getBeam()) {
+                    			beam.setValue(BeamValue.CONTINUE);
+                    		}
+                    	}
+                    }
+                    
+                    if (note.getVoice() == "2" && duration < 1) {
+                    	if (counter2 == 0) {
+                    		counter2 = counter2 + duration;
+                    		for (var beam: note.getBeam()) {
+                    			beam.setValue(BeamValue.BEGIN);
+                    		}
+                    	} else if ((counter2 + duration) == 1) {
+                    		counter2 = 0;
+                    		for (var beam: note.getBeam()) {
+                    			beam.setValue(BeamValue.END);
+                    		}
+                    	} else {
+                    		counter2 = counter2 + duration;
+                    		for (var beam: note.getBeam()) {
+                    			beam.setValue(BeamValue.CONTINUE);
+                    		}
+                    	}
                     }
                     
                     measure.getNoteOrBackupOrForward().add(note);
