@@ -18,6 +18,7 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Scanner;
@@ -25,6 +26,9 @@ import java.util.Scanner;
 public class SampleController3 implements Initializable {
 	
 	StringBuilder musicXMLBuilder = new StringBuilder();
+	Boolean added;
+	ArrayList<String> measureTimeSign = new ArrayList<String>();
+	String total;
 	
 	@FXML
 	private AnchorPane rootPane;
@@ -36,6 +40,7 @@ public class SampleController3 implements Initializable {
 	String fileContent;
 	String timeSignature;
 	String tempo;
+	Boolean save;
 	
 	//Stage curStage = (Stage) rootPane.getScene().getWindow();
 	
@@ -72,12 +77,16 @@ public class SampleController3 implements Initializable {
 	@FXML
 	private TextArea textArea;
 	
-	public void initData(String textArea, String textField, String fileContent, String timeSign, String tempo2) {
+	public void initData(String textArea, String textField, String fileContent, String timeSign, String tempo2, Boolean saved, Boolean added2, ArrayList<String> list, String total2) {
 		this.textArea2 = textArea;
 		this.textField2 = textField;
 		this.fileContent = fileContent;
 		this.timeSignature = timeSign;
 		this.tempo = tempo2;
+		this.save = saved;
+		this.added = added2;
+		this.measureTimeSign = list;
+		this.total = total2;
 	}
 	
 	public void saveAction() {
@@ -132,9 +141,9 @@ public class SampleController3 implements Initializable {
 	public void helpAction() {
 		Alert helpAlert = new Alert(Alert.AlertType.INFORMATION);
         helpAlert.setHeaderText("Information on Usage");
-        helpAlert.setContentText("•This page displays the Converted tablature in a MusicXML format. \n"
-        		+ "\n" + "•You can save the contents that are displayed into your computer using the Save button (Can only be saved as a .musicxml file. \n"
-        		+ "\n" + "•The Back button takes you back to the previous page to help you perform a new Tablature Conversion.");
+        helpAlert.setContentText("- This page displays the Converted tablature in a MusicXML format. \n"
+        		+ "\n" + "- You can save the contents that are displayed into your computer using the Save button (Can only be saved as a .musicxml file. \n"
+        		+ "\n" + "- The Back button takes you back to the previous page to help you perform a new Tablature Conversion.");
         helpAlert.showAndWait();
 	}
 	
@@ -173,7 +182,7 @@ public class SampleController3 implements Initializable {
 			Parent secondView = loader.load();
 			Scene newScene = new Scene(secondView);
 			SampleController2 controller = loader.getController();
-			controller.initData(textArea2, textField2, this.fileContent, this.timeSignature, this.tempo);
+			controller.initData(textArea2, textField2, this.fileContent, this.timeSignature, this.tempo, this.save, this.added, this.measureTimeSign, this.total);
 			Stage curStage = (Stage) rootPane.getScene().getWindow();
 			curStage.setScene(newScene);
 			curStage.show();

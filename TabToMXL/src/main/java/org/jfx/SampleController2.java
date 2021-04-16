@@ -26,10 +26,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
@@ -44,16 +46,24 @@ public class SampleController2 implements Initializable {
 	String info1;
 	String info2;
 	String info3;
+	String changeCheck;
 	int numerator;
 	int denominator;
 	int tempoInt;
 	String[] timeSign;
 	ArrayList<Character> checker = new ArrayList<Character>();
+	File file;
 //	char[] checker;
 	Boolean saved = false;
 	File fileName;
 	FXMLLoader loader;
 	ArrayList<String> info = new ArrayList<>();
+	ArrayList<String> measureTimeSign = new ArrayList<>();
+	ArrayList<Character> checker2 = new ArrayList<Character>();
+	String totalMeasure;
+	Boolean added = false;
+	ArrayList<Character> checker3 = new ArrayList<Character>();
+	int finalTotal;
 	
 	@FXML
 	private AnchorPane rootPane;
@@ -92,6 +102,9 @@ public class SampleController2 implements Initializable {
 	private Button saveChanges;
 	
 	@FXML
+	private Button add;
+	
+	@FXML
 	private TextField textField;
 	
 	@FXML
@@ -101,22 +114,42 @@ public class SampleController2 implements Initializable {
 	private TextField tempo;
 	
 	@FXML
+	private TextField measureFrom;
+	
+	@FXML
+	private TextField measureTo;
+	
+	@FXML
+	private TextField totalMeasures;
+	
+	@FXML
 	private TextArea textArea;
 	
-	public void initData(String textArea2, String textField2, String fileContent, String timeSign, String tempo2) {
+	public void initData(String textArea2, String textField2, String fileContent, String timeSign, String tempo2, Boolean save, Boolean added2, ArrayList<String> list, String total2) {
 		textArea.setText(textArea2);
 		textField.setText(textField2);
 		info1 = fileContent;
 		timeSignature.setText(timeSign);
 		tempo.setText(tempo2);
+		saved = save;
+		changeCheck = textArea2;
+		added = added2;
+		measureTimeSign = list;
+		totalMeasure = total2;
+		totalMeasures.setText(total2);
 	}
 	
 	public void ButtonAction(ActionEvent event) {
 		FileChooser fc = new FileChooser();
+		if(file != null) {
+			fc.setInitialDirectory(file.getParentFile());
+		}
 		fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text File", "*.txt"));
 		File selectedFile = fc.showOpenDialog(null);
+		file = selectedFile;
 		info1 = "";
 		if(selectedFile != null) {
+//			System.out.println(file);
 			if(selectedFile.getName().endsWith(".txt")) {
 				//listView.getItems().add(selectedFile.getName());
 				textField.setText(selectedFile.getName());
@@ -156,7 +189,6 @@ public class SampleController2 implements Initializable {
             errorAlert.setHeaderText("No File Chosen");
             errorAlert.setContentText("Please choose a File before you preview");
             errorAlert.showAndWait();
-			//System.out.println("No File Chosen");
 		}
 
 	}
@@ -215,8 +247,6 @@ public class SampleController2 implements Initializable {
 							}
 						}
 						if(a == 0 && b == 0) {
-//							numerator = Integer.parseInt(timeSign[0]);
-//							denominator = Integer.parseInt(timeSign[1]);
 							numerator = (int)Double.parseDouble(timeSign[0]);
 							denominator = (int)Double.parseDouble(timeSign[1]);;
 						}
@@ -235,33 +265,42 @@ public class SampleController2 implements Initializable {
 				tempo.setText("120");
 			}
 			else {
-				for(int i = 0; i < tempo.getText().length(); i++) {
-					if(!checker.contains(tempo.getText().charAt(i))) {
-						c = 1;
-						i = tempo.getText().length();
-						Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-			            errorAlert.setHeaderText("Incorrect Tempo specified");
-			            errorAlert.setContentText("Please enter the Tempo in the right format");
-			            errorAlert.showAndWait();
-					}
+				if(tempo.getText().equals("0")) {
+					c = 1;
+					Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+		            errorAlert.setHeaderText("Incorrect Tempo specified");
+		            errorAlert.setContentText("Please enter the Tempo in the right format");
+		            errorAlert.showAndWait();
 				}
-				if(c == 0) {
-//					tempoInt = Integer.parseInt(tempo.getText());
-					tempoInt = (int)Double.parseDouble(tempo.getText());
-					System.out.println(tempoInt);
+				else {
+					for(int i = 0; i < tempo.getText().length(); i++) {
+						if(!checker.contains(tempo.getText().charAt(i))) {
+							c = 1;
+							i = tempo.getText().length();
+							Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+				            errorAlert.setHeaderText("Incorrect Tempo specified");
+				            errorAlert.setContentText("Please enter the Tempo in the right format");
+				            errorAlert.showAndWait();
+						}
+					}
+					if(c == 0) {
+						tempoInt = (int)Double.parseDouble(tempo.getText());
+						System.out.println(tempoInt);
+					}
 				}
 			}
 			if(!info2.equals(info1) && textField.getText() != "") {
-				if(saved) {
+				if(saved && info2.equals(changeCheck)) {
 					if(a == 0 && b == 0 && c == 0) {
 						loadNextScene();
 					}
 				}
 				else {
 					saved = true;
+					changeCheck = info2;
 					Alert saveAlert = new Alert(Alert.AlertType.WARNING);
 					saveAlert.setHeaderText("You seem to have made changes to your Tablature");
-					saveAlert.setContentText("Please click the Save Changes button if you wish to save them to a file");
+					saveAlert.setContentText("Please click the Save Changes button if you wish to save them to a file. Alternatively, you can wish to not save the changes and continue.");
 					saveAlert.showAndWait();
 				}
 			}
@@ -283,13 +322,13 @@ public class SampleController2 implements Initializable {
 		Alert helpAlert = new Alert(Alert.AlertType.INFORMATION);
         helpAlert.setHeaderText("Information on Usage");
         helpAlert.setContentText("""
-				•You can Drag and Drop a file in the Text Field given in this screen. You can also Browse for a File from your computer.\n
-				•The Files should only be of a .txt format.\n
-				•The Uploaded Files will have their content displayed on the Copy/Paste area which can be modified to the Users' preference.\n
-				•There are text fields for Time Signature and Tempo which can be inputed if preferred in the correct format.\n
-				•The default values set for Time Signature is 4/4 while the default Tempo is 120.\n
-				•Hitting the Convert button converts the final variation of the Tablature in the Copy/Paste Text Area into a musicxml file.\n
-				•The Save Changes button allows you to save the changes you made in the Tablature to a file of your choosing.""");
+				- You can Drag and Drop a file in the Text Field given in this screen. You can also Browse for a File from your computer.\n
+				- The Files should only be of a .txt format.\n
+				- The Uploaded Files will have their content displayed on the Copy/Paste area which can be modified to the Users' preference.\n
+				- There are text fields for Time Signature and Tempo which can be inputed if preferred in the correct format.\n
+				- The default values set for Time Signature is 4/4 while the default Tempo is 120.\n
+				- Hitting the Convert button converts the final variation of the Tablature in the Copy/Paste Text Area into a musicxml file.\n
+				- The Save Changes button allows you to save the changes you made in the Tablature to a file of your choosing.""");
         helpAlert.showAndWait();
 	}
 
@@ -302,7 +341,7 @@ public class SampleController2 implements Initializable {
 		fadeTransition.setOnFinished(event -> {
 			Scene newScene = new Scene(secondView);
 			SampleController3 controller = loader.getController();
-			controller.initData(textArea.getText(), textField.getText(), info1, timeSignature.getText(), tempo.getText());
+			controller.initData(textArea.getText(), textField.getText(), info1, timeSignature.getText(), tempo.getText(), saved, added, measureTimeSign, totalMeasure);
 			Stage curStage = (Stage) rootPane.getScene().getWindow();
 			curStage.setScene(newScene);
 			curStage.show();
@@ -434,6 +473,7 @@ public class SampleController2 implements Initializable {
 			fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text File", "*.txt"));
 			File file = fileChooser.showSaveDialog(new Stage());
 			info2 = textArea.getText();
+			info1 = info2;
 			try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))){
 				bw.write(info2);
 			} catch (IOException e) {
@@ -443,6 +483,243 @@ public class SampleController2 implements Initializable {
 				textField.setText(file.getName());
 			}
 			saved = true;
+		}
+	}
+	
+	public void AddAction() {
+		if(textArea.getText().equals("")) {
+			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setHeaderText("No Tablature inputted");
+            errorAlert.setContentText("Please input a tablature before trying to add a time signature");
+            errorAlert.showAndWait();
+		}
+		else {
+			if(totalMeasures.getText().equals("")) {
+				Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+	            errorAlert.setHeaderText("Total number of Measures is not specified");
+	            errorAlert.setContentText("Please specify the total number of Measures to continue");
+	            errorAlert.showAndWait();
+			}
+			else {
+				checker2.add('1');
+				checker2.add('2');
+				checker2.add('3');
+				checker2.add('4');
+				checker2.add('5');
+				checker2.add('6');
+				checker2.add('7');
+				checker2.add('8');
+				checker2.add('9');
+				checker2.add('0');
+				totalMeasure = totalMeasures.getText();
+				int x = 0;
+				int y = 0;
+				int z = 0;
+				int w = 0;
+				if(totalMeasure.equals("0")) {
+					x = 1;
+					Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+		            errorAlert.setHeaderText("Invalid number of Measures specified");
+		            errorAlert.setContentText("Please specify the total number of Measures to continue. 0 is not valid");
+		            errorAlert.showAndWait();
+				}
+				else {
+					for(int i = 0; i < totalMeasure.length(); i++) {
+						if(!checker2.contains(totalMeasure.charAt(i))) {
+							x = 1;
+							i = totalMeasure.length();
+							Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+				            errorAlert.setHeaderText("Invalid format of Measures specified");
+				            errorAlert.setContentText("Please specify the total number of Measures to continue");
+				            errorAlert.showAndWait();
+						}
+					}
+					if(x == 0 && added == false) {
+						int nMeasure = Integer.parseInt(totalMeasure);
+						finalTotal = nMeasure;
+						for(int j = 0; j < nMeasure + 1; j++) {
+							measureTimeSign.add("4/4");
+						}
+						added = true;
+					}
+					else if(x == 0 && added == true) {
+						int nMeasure = Integer.parseInt(totalMeasure);
+						if(finalTotal != nMeasure) {
+							ButtonType YES = new ButtonType("Yes");
+							ButtonType NO = new ButtonType("No");
+							AlertType type = AlertType.WARNING; 
+							Alert alert = new Alert(type, "Are you sure you want to Overwrite your previous Data with this new Total Measure value?", YES, NO);
+							alert.setHeaderText("Confirmation");
+							alert.getDialogPane();
+							alert.showAndWait().ifPresent(response ->{
+								if(response == YES) {
+									measureTimeSign.clear();
+									for(int k = 0; k < nMeasure + 1; k++) {
+										measureTimeSign.add("4/4");
+										measureFrom.setText("");
+										measureTo.setText("");
+									}
+								}
+								if(response == NO) {
+									totalMeasures.setText(finalTotal + "");
+								}
+								
+							});;
+						}
+					}
+				}
+				checker3.add('1');
+				checker3.add('2');
+				checker3.add('3');
+				checker3.add('4');
+				checker3.add('5');
+				checker3.add('6');
+				checker3.add('7');
+				checker3.add('8');
+				checker3.add('9');
+				checker3.add('0');
+				checker3.add('.');
+				if(x == 0) {
+					if(timeSignature.getText().equals("")) {
+						timeSignature.setText("4/4");
+					}
+					else {
+						if(timeSignature.getText().contains("/")) {
+							timeSign = timeSignature.getText().split("/");
+							if(timeSign.length > 2 || timeSign.length < 2) {
+								z = 1;
+								Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+					            errorAlert.setHeaderText("Incorrect Time Signature specified");
+					            errorAlert.setContentText("Please enter the Time Signature in the right format");
+					            errorAlert.showAndWait();
+							}
+							else {
+								for(int i = 0; i < timeSign[0].length(); i++) {
+									if(!checker3.contains(timeSign[0].charAt(i))) {
+										z = 1;
+										i = timeSign[0].length();
+										Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+							            errorAlert.setHeaderText("Incorrect Time Signature specified");
+							            errorAlert.setContentText("Please enter the Time Signature in the right format");
+							            errorAlert.showAndWait();
+									}
+								}
+								for(int j = 0; j < timeSign[1].length(); j++) {
+									if(!checker3.contains(timeSign[1].charAt(j))) {
+										w = 1;
+										j = timeSign[1].length();
+										Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+							            errorAlert.setHeaderText("Incorrect Time Signature specified");
+							            errorAlert.setContentText("Please enter the Time Signature in the right format");
+							            errorAlert.showAndWait();
+									}
+								}
+								if(z == 0 && w == 0) {
+									numerator = (int)Double.parseDouble(timeSign[0]);
+									denominator = (int)Double.parseDouble(timeSign[1]);;
+								}
+							}
+						}
+					}
+					if(!timeSignature.getText().equals("")) {
+						int nMeasure = Integer.parseInt(totalMeasure);
+						String currentMeasure = "";
+						String destMeasure = "";
+						if(measureFrom.getText().equals("") && measureTo.getText().equals("")) {
+							for(int k = 1; k < measureTimeSign.size(); k++) {
+								if(measureTimeSign.get(k).equals("")) {
+									measureTimeSign.set(k, timeSignature.getText());
+								}
+							}
+						}
+						else {
+							currentMeasure = measureFrom.getText();
+							destMeasure = measureTo.getText();
+							for(int l = 0; l < currentMeasure.length(); l++) {
+								if(!checker2.contains(currentMeasure.charAt(l))) {
+									y = 1;
+									l = totalMeasure.length();
+									Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+						            errorAlert.setHeaderText("Invalid format of Measure (From) specified");
+						            errorAlert.setContentText("Please specify the correct Measure range you wish to add the Time Signature to");
+						            errorAlert.showAndWait();
+								}
+							}
+							for(int m = 0; m < destMeasure.length(); m++) {
+								if(!checker2.contains(destMeasure.charAt(m))) {
+									y = 1;
+									m = totalMeasure.length();
+									Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+						            errorAlert.setHeaderText("Invalid format of Measure (To) specified");
+						            errorAlert.setContentText("Please specify the correct Measure range you wish to add the Time Signature to");
+						            errorAlert.showAndWait();
+								}
+							}
+							if(y == 0) {
+								int measureNumberFrom = Integer.parseInt(currentMeasure);
+								int measureNumberTo = Integer.parseInt(destMeasure);
+								if(nMeasure < measureNumberFrom) {
+									Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+						            errorAlert.setHeaderText("Measure range specified is incorrect");
+						            errorAlert.setContentText("The specified measure range exceeds the total number of measures. Please correct this to continue");
+						            errorAlert.showAndWait();
+						            timeSignature.setText("");
+								}
+								else if(nMeasure < measureNumberTo) {
+									Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+						            errorAlert.setHeaderText("Measure range specified is incorrect");
+						            errorAlert.setContentText("The specified measure range exceeds the total number of measures. Please correct this to continue");
+						            errorAlert.showAndWait();
+						            timeSignature.setText("");
+								}
+								else if(measureNumberTo < measureNumberFrom) {
+									Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+						            errorAlert.setHeaderText("Measure range specified is incorrect");
+						            errorAlert.setContentText("The specified measure range is invalid.\n"
+						            		+ "The range should be in the format (From - To).\n"
+						            		+ "Please correct this to continue");
+						            errorAlert.showAndWait();
+						            timeSignature.setText("");
+								}
+								else {
+									for(int n = measureNumberFrom; n <= measureNumberTo; n++) {
+										measureTimeSign.set(n, timeSignature.getText());
+									}
+//									measureTimeSign.set(measureNumberFrom, timeSignature.getText());
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	public void MeasureTyped() {
+		if(!measureFrom.getText().equals("") && !measureTo.getText().equals("")) {
+			int measureNumberFrom = Integer.parseInt(measureFrom.getText());
+			int measureNumberTo = Integer.parseInt(measureTo.getText());
+			if(added == true && measureNumberFrom < measureTimeSign.size() && measureNumberTo < measureTimeSign.size() && measureNumberFrom <= measureNumberTo) {
+				if(measureTimeSign.get(measureNumberFrom).equals(measureTimeSign.get(measureNumberTo))){
+					timeSignature.setText(measureTimeSign.get(measureNumberFrom));
+				}
+				else {
+					timeSignature.setPromptText("Different Time Signatures apply");
+					timeSignature.setText("Different Time Signatures apply");
+				}
+			}
+			else if(added == true){
+				Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+	            errorAlert.setHeaderText("Measure range specified is incorrect");
+	            errorAlert.setContentText("The specified measure range exceeds the total number of measures. Please correct this to continue");
+	            errorAlert.showAndWait();
+	            timeSignature.setText("");
+	            measureFrom.setText("");
+	            measureTo.setText("");
+			}
+			else if(added == false) {
+				
+			}
 		}
 	}
 	
