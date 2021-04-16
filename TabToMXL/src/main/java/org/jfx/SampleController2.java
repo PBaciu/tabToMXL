@@ -125,7 +125,7 @@ public class SampleController2 implements Initializable {
 	@FXML
 	private TextArea textArea;
 	
-	public void initData(String textArea2, String textField2, String fileContent, String timeSign, String tempo2, Boolean save, Boolean added2, ArrayList<String> list) {
+	public void initData(String textArea2, String textField2, String fileContent, String timeSign, String tempo2, Boolean save, Boolean added2, ArrayList<String> list, String total2) {
 		textArea.setText(textArea2);
 		textField.setText(textField2);
 		info1 = fileContent;
@@ -135,6 +135,8 @@ public class SampleController2 implements Initializable {
 		changeCheck = textArea2;
 		added = added2;
 		measureTimeSign = list;
+		totalMeasure = total2;
+		totalMeasures.setText(total2);
 	}
 	
 	public void ButtonAction(ActionEvent event) {
@@ -339,7 +341,7 @@ public class SampleController2 implements Initializable {
 		fadeTransition.setOnFinished(event -> {
 			Scene newScene = new Scene(secondView);
 			SampleController3 controller = loader.getController();
-			controller.initData(textArea.getText(), textField.getText(), info1, timeSignature.getText(), tempo.getText(), saved, added, measureTimeSign);
+			controller.initData(textArea.getText(), textField.getText(), info1, timeSignature.getText(), tempo.getText(), saved, added, measureTimeSign, totalMeasure);
 			Stage curStage = (Stage) rootPane.getScene().getWindow();
 			curStage.setScene(newScene);
 			curStage.show();
@@ -702,6 +704,7 @@ public class SampleController2 implements Initializable {
 				}
 				else {
 					timeSignature.setPromptText("Different Time Signatures apply");
+					timeSignature.setText("Different Time Signatures apply");
 				}
 			}
 			else if(added == true){
