@@ -75,7 +75,7 @@
             <Font size="20.0" />
          </font>
       </Button>
-      <TextField fx:id="measure" layoutX="468.0" layoutY="276.0" onKeyTyped="#MeasureTyped" prefHeight="40.0" prefWidth="380.0" promptText="Measure corresponding to Time Signature">
+      <TextField fx:id="measureFrom" layoutX="509.0" layoutY="275.0" onKeyTyped="#MeasureTyped" prefHeight="40.0" prefWidth="79.0" promptText="From">
          <font>
             <Font size="18.0" />
          </font>
@@ -85,10 +85,15 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <Label layoutX="468.0" layoutY="242.0" text="Measure">
+      <Label layoutX="509.0" layoutY="241.0" text="Measures">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
+      <TextField fx:id="measureTo" layoutX="619.0" layoutY="275.0" onKeyTyped="#MeasureTyped" prefHeight="40.0" prefWidth="79.0" promptText="To">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </TextField>
    </children>
 </AnchorPane>

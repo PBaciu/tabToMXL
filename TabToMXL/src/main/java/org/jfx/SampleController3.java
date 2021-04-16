@@ -18,6 +18,7 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Scanner;
@@ -25,6 +26,8 @@ import java.util.Scanner;
 public class SampleController3 implements Initializable {
 	
 	StringBuilder musicXMLBuilder = new StringBuilder();
+	Boolean added;
+	ArrayList<String> measureTimeSign = new ArrayList<String>();
 	
 	@FXML
 	private AnchorPane rootPane;
@@ -73,7 +76,7 @@ public class SampleController3 implements Initializable {
 	@FXML
 	private TextArea textArea;
 	
-	public void initData(String textArea, String textField, String fileContent, String timeSign, String tempo2, Boolean saved) {
+	public void initData(String textArea, String textField, String fileContent, String timeSign, String tempo2, Boolean saved, Boolean added2, ArrayList<String> list) {
 		this.textArea2 = textArea;
 		this.textField2 = textField;
 		this.fileContent = fileContent;
@@ -175,7 +178,7 @@ public class SampleController3 implements Initializable {
 			Parent secondView = loader.load();
 			Scene newScene = new Scene(secondView);
 			SampleController2 controller = loader.getController();
-			controller.initData(textArea2, textField2, this.fileContent, this.timeSignature, this.tempo, this.save);
+			controller.initData(textArea2, textField2, this.fileContent, this.timeSignature, this.tempo, this.save, this.added, this.measureTimeSign);
 			Stage curStage = (Stage) rootPane.getScene().getWindow();
 			curStage.setScene(newScene);
 			curStage.show();
