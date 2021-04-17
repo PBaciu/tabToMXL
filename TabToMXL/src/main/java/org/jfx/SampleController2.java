@@ -218,7 +218,7 @@ public class SampleController2 implements Initializable {
 			else {
 				if(timeSignature.getText().contains("/")) {
 					timeSign = timeSignature.getText().split("/");
-					if(timeSign.length > 2 || timeSign.length < 2) {
+					if(timeSign.length != 2) {
 						a = 1;
 						Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 			            errorAlert.setHeaderText("Incorrect Time Signature specified");
@@ -289,7 +289,7 @@ public class SampleController2 implements Initializable {
 					}
 				}
 			}
-			if(!info2.equals(info1) && textField.getText() != "") {
+			if(!info2.equals(info1) && !textField.getText().equals("")) {
 				if(saved && info2.equals(changeCheck)) {
 					if(a == 0 && b == 0 && c == 0) {
 						loadNextScene();
@@ -537,7 +537,7 @@ public class SampleController2 implements Initializable {
 				            errorAlert.showAndWait();
 						}
 					}
-					if(x == 0 && added == false) {
+					if(x == 0 && !added) {
 						int nMeasure = Integer.parseInt(totalMeasure);
 						finalTotal = nMeasure;
 						for(int j = 0; j < nMeasure + 1; j++) {
@@ -545,7 +545,7 @@ public class SampleController2 implements Initializable {
 						}
 						added = true;
 					}
-					else if(x == 0 && added == true) {
+					else if(x == 0 && added) {
 						int nMeasure = Integer.parseInt(totalMeasure);
 						if(finalTotal != nMeasure) {
 							ButtonType YES = new ButtonType("Yes");
@@ -589,7 +589,7 @@ public class SampleController2 implements Initializable {
 					else {
 						if(timeSignature.getText().contains("/")) {
 							timeSign = timeSignature.getText().split("/");
-							if(timeSign.length > 2 || timeSign.length < 2) {
+							if(timeSign.length != 2) {
 								z = 1;
 								Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 					            errorAlert.setHeaderText("Incorrect Time Signature specified");
@@ -750,7 +750,7 @@ public class SampleController2 implements Initializable {
 			if(e == 0) {
 				int measureNumberFrom = Integer.parseInt(measureFrom.getText());
 				int measureNumberTo = Integer.parseInt(measureTo.getText());
-				if(added == true && measureNumberFrom < measureTimeSign.size() && measureNumberTo < measureTimeSign.size() && measureNumberFrom <= measureNumberTo) {
+				if(added && measureNumberFrom < measureTimeSign.size() && measureNumberTo < measureTimeSign.size() && measureNumberFrom <= measureNumberTo) {
 					if(measureTimeSign.get(measureNumberFrom).equals(measureTimeSign.get(measureNumberTo))){
 						timeSignature.setText(measureTimeSign.get(measureNumberFrom));
 					}
@@ -759,7 +759,7 @@ public class SampleController2 implements Initializable {
 						timeSignature.setText("Different Time Signatures apply");
 					}
 				}
-				else if(added == true){
+				else if(added){
 					Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 		            errorAlert.setHeaderText("Measure range specified is incorrect");
 		            errorAlert.setContentText("The specified measure range exceeds the total number of measures. Please correct this to continue");
@@ -768,7 +768,7 @@ public class SampleController2 implements Initializable {
 		            measureFrom.setText("");
 		            measureTo.setText("");
 				}
-				else if(added == false) {
+				else if(!added) {
 					
 				}
 			}
