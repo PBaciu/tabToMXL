@@ -332,7 +332,7 @@ public class Note {
     /**
      * Sets the value of the duration property.
      * 
-     * @param value
+     * @param bigInteger
      *     allowed object is
      *     {@link BigDecimal }
      *     

@@ -23,7 +23,6 @@ public class Main extends Application {
 			primaryStage.setMinHeight(800);
 			primaryStage.setMinWidth(900);
 			
-			
 			primaryStage.setTitle("TAB2MXL");
 			
 			Image icon = new Image("org.jfx/icon.png");
