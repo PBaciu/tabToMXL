@@ -348,7 +348,7 @@ public class SampleController2 implements Initializable {
 		try {
 			ScoreWriter writer = new ScoreWriter();
 
-			ScorePartwise scorePartwise = p.readTab(textArea.getText());
+			ScorePartwise scorePartwise = p.readTab(textArea.getText(), timeSignature.getText(), tempoInt);
 			writer.writeToTempFile(scorePartwise);
 		} catch (Exception e) {
 			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
