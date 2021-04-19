@@ -10,8 +10,11 @@ group 'org.jfx'
 version '1.0-SNAPSHOT'
 
 
-sourceCompatibility = 15.0
-targetCompatibility = 15.0
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(15)
+    }
+}
 
 repositories {
     jcenter()

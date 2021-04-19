@@ -96,16 +96,16 @@ public class SampleController3 implements Initializable {
 				content.append(line);
 				content.append("\n");
 			}
-			saveSystem(file, content.toString());
+			saveSystem(file);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
 	
-	public void saveSystem(File file, String content) {
+	public void saveSystem(File file) {
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))){
-			bw.write(content);
+			bw.write(textArea.getText());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

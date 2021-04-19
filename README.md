@@ -1,7 +1,7 @@
-# tabToMXL
+# TAB2MXL
 
 # Introduction
-tabToMXL is a java application which will convert tablature made for percussion, guitar, and bass guitar from a “.txt” format to a ".musicxml" format.
+TAB2MXL is a java application which will convert tablature made for percussion, guitar, and bass guitar from a “.txt” format to a ".musicxml" format.
 
 The specific xml format being used is musicxml and there are various resources on the web that will allow conversion from the resultant musicxml file into sheet music.
 
@@ -9,8 +9,7 @@ The specific xml format being used is musicxml and there are various resources o
 Currently, our application supports input in the form of plain text (pasted into a text area), or the selection of a .txt file from the user's file system.
 
 # Requirements
-tabToMXL uses Java 15.0.2 
-Please ensure that version 15.0.2 of java is installed on your machine prior to setup.
+TAB2MXL uses Java 15.0.2, so please ensure that version 15.0.2 of java is installed on your machine prior to setup.
 
 # Supported Features
 We support the conversion of simple guitar tabs. These tabs must not contain additional information such as title, repeats, and text between lines of the tab.
@@ -88,12 +87,18 @@ Outlined below are instructions for setting up the project in Eclipse.
 Our application currently consists of three pages
   
   #### Input Page
-  This page allows the insertion of text via a .txt file that can be selected from the file system, or copied text. <br />
-  ![image](https://user-images.githubusercontent.com/77293069/109452295-6ca00a00-7a1d-11eb-93d9-6adddd26c682.png)<br /><br />
+  This page allows the insertion of text via a .txt file that can be selected from the file system, or copied text. Incase of the user already having the file open,   the user could also drag and drop the file into the designated space. <br />
+  <img width="897" alt="Screen Shot 2021-03-17 at 11 22 51 PM" src="https://user-images.githubusercontent.com/77417270/111568893-fa972700-8777-11eb-8746-b4c25bfb6698.png">
+  
+  A successful input should look like the following:
+  <img width="897" alt="Screen Shot 2021-03-17 at 11 30 47 PM" src="https://user-images.githubusercontent.com/77417270/111569376-e4d63180-8778-11eb-8737-ea2204f13689.png">
+  
+   If the user made changes right after the user inserted the .txt file from the file explorer. The user would be notified with a message saying that changes has been made and if you would like to save those changes, where you can click the save changes button.
+  ![image](https://user-images.githubusercontent.com/42554604/111553100-0f64c200-875a-11eb-9894-b8a427270c94.JPG)<br /><br />
   
   #### Output Page
   This page allows the user to view the resulting xml and gives the option to save the file, convert another file, or go back to the previously inputted file.<br />
   ![image](https://user-images.githubusercontent.com/77293069/109452346-8b060580-7a1d-11eb-979a-ed912778f244.png)<br /><br />
-  
+
 # Issues
 In case of any problems, please open an issue on this github page, or email Patrick at baciupat@my.yorku.ca

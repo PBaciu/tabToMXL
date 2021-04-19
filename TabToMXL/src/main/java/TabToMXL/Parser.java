@@ -5,11 +5,6 @@ import Models.Note;
 import Models.*;
 import generated.*;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.lang.String;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -26,21 +21,58 @@ import java.util.stream.IntStream;
  */
 public class Parser {
 
+    Tab tab;
+    String timeSignature;
+    int tempo;
 
     public Parser() {
     }
 
-    public ScorePartwise readTab(String tab) {
+    public ScorePartwise readTab(String tab, String timeSignature, int tempo) {
         //TODO Determine if tab is guitar, bass, or drum
-        return parseGuitarTab(tab);
+        StringBuilder alteredTab = new StringBuilder();
+        for (String s : tab.split("\n")) {
+            if (s.equals("\n")|| s.isBlank()) {
+                alteredTab.append("\n");
+                continue;
+            }
+            int count = 0;
+            for (int i = 0; i < s.length(); i++) {
+                if (s.charAt(i) == '-') {
+                    count++;
+                }
+            }
+            if ((double)count / s.length() >= 4.0/10) {
+                alteredTab.append(s);
+                alteredTab.append('\n');
+            }
+        }
+        this.timeSignature = timeSignature;
+        this.tempo = tempo;
+        String tabString = alteredTab.toString();
+        tabString = tabString.strip();
+        tabString = tabString.replaceAll("^\n+","\n");
+
+        if (tabString.split("\n+\\s*\n+")[0].split("\n").length == 6) {
+            return parseGuitarTab(tabString, false);
+        }
+        else {
+            return parseGuitarTab(tabString, true);
+        }
     }
 
-    private ScorePartwise parseGuitarTab(String t) {
-        String[] standard = {"e", "B", "G", "D", "A", "E"};
+    private ScorePartwise parseGuitarTab(String t, boolean isBass) {
+        String[] standard;
+        if (!isBass) {
+            standard = new String[]{"e", "B", "G", "D", "A", "E"};
+        }
+        else {
+            standard = new String[]{"G", "D", "A", "E"};
+        }
         List<TabLine> tabLines = new ArrayList<>();
         List<GuitarString> tuning = new ArrayList<>();
         var tab = t.strip();
-        for (var line : tab.split("\n\\s*\n")) {
+        for (var line : tab.split("\n+\\s*\n+")) {
 
             var lines = new FunctionalList<>(line.lines().collect(Collectors.toList()));
 
@@ -49,6 +81,7 @@ public class Parser {
             var subListStuff = new FunctionalList<>(lines);
 
             var mapped = subListStuff.flatMapIndexed((row, l) -> {
+                l = l.strip();
                 var firstPipeIndex = l.indexOf('|');
                 barDelimiterIndex.set(l.indexOf('|', 2));
                 var split = new FunctionalList<>(Arrays.asList(l.substring(firstPipeIndex + 1).split("\\|")));
@@ -137,15 +170,20 @@ public class Parser {
             tabLines.add(tabLine);
         }
         Collections.reverse(tuning);
-
-        return generateGuitarXML(new Tab(tabLines, tuning));
+        this.tab = new Tab(tabLines, tuning);
+        return generateGuitarXML(this.tab, isBass);
 
     }
-    private ScorePartwise generateGuitarXML(Tab tab) {
+    private ScorePartwise generateGuitarXML(Tab tab, boolean isBass) {
 
         ObjectFactory factory = new ObjectFactory();
 
-        var fretboard = createStandardTuningPitches();
+        Pitch[][] fretboard;
+        if (!isBass) {
+            fretboard = createGuitarTuningPitches(tab.tuning);
+        } else {
+            fretboard = createBassTuningPitches(tab.tuning);
+        }
 
         ScorePartwise scorePartwise = factory.createScorePartwise();
         scorePartwise.setVersion("3.1");
@@ -153,24 +191,34 @@ public class Parser {
         ScorePart scorePart = factory.createScorePart();
         scorePart.setId("P1");
         PartName partName = factory.createPartName();
-        partName.setValue("Classical Guitar");
+        if (!isBass) {
+            partName.setValue("Guitar");
+        } else {
+            partName.setValue("Bass Guitar");
+        }
 
         scorePart.setPartName(partName);
         partList.getPartGroupOrScorePart().add(scorePart);
         scorePartwise.setPartList(partList);
 
         ScorePartwise.Part part = new ScorePartwise.Part();
+
         part.setId(scorePart);
 
         int currMeasure = 0;
         for (var line : tab.tabLines) {
             for (int i = 0; i < line.bars.size(); i++) {
-//                int quarterNoteLength = line.bars.get(i).barLength / 4;
-                int quarterNoteLength = 4;
+
+                double quarterNoteLength = (double) line.bars.get(i).barLength / Integer.parseInt(this.timeSignature.split("/")[0]);
+                int divisions = (int) Math.ceil(quarterNoteLength);
+
                 ScorePartwise.Part.Measure measure = new ScorePartwise.Part.Measure();
                 measure.setNumber(Integer.toString(currMeasure + 1));
+                var sound = factory.createSound();
+                sound.setTempo(BigDecimal.valueOf(this.tempo));
+                measure.getNoteOrBackupOrForward().add(sound);
                 Attributes attributes = new Attributes();
-                attributes.setDivisions(new BigDecimal(line.bars.get(i).barLength / quarterNoteLength));
+                attributes.setDivisions(new BigDecimal(divisions));
                 Key key = new Key();
                 key.setFifths(BigInteger.valueOf(0));
                 attributes.getKey().add(key);
@@ -181,30 +229,81 @@ public class Parser {
                 attributes.getClef().add(clef);
 
                 Time time = factory.createTime();
-                var beats = factory.createTimeBeats(Integer.toString(4));
-                var beatType = factory.createTimeBeatType(Integer.toString(4));
+                var beats = factory.createTimeBeats(this.timeSignature.split("/")[0]);
+                var beatType = factory.createTimeBeatType(this.timeSignature.split("/")[1]);
                 time.getTimeSignature().add(beats);
                 time.getTimeSignature().add(beatType);
                 if (currMeasure == 0) {
                     StaffDetails details = new StaffDetails();
-                    details.setStaffLines(BigInteger.valueOf(6));
+                    if (!isBass) {
+                        details.setStaffLines(BigInteger.valueOf(6));
+                    } else {
+                        details.setStaffLines(BigInteger.valueOf(4));
+                    }
 
                     for (int j = 0; j < details.getStaffLines().intValue(); j++) {
                         StaffTuning tuning = new StaffTuning();
                         tuning.setLine(BigInteger.valueOf(j + 1));
                         Step step;
                         int octave;
-                        switch (tab.tuning.get(j)) {
-                            case HIGH_E -> {step = Step.E; octave = 4;}
-                            case B -> {step = Step.B; octave = 3;}
-                            case G -> {step = Step.G; octave = 3;}
-                            case D -> {step = Step.D; octave = 3;}
-                            case A -> {step = Step.A; octave = 2;}
-                            case LOW_E -> {step = Step.E; octave = 2;}
-                            default -> {step = Step.E; octave = 3;}
+                        if (!isBass) {
+                            switch (tab.tuning.get(j)) {
+                                case HIGH_E -> {
+                                    step = Step.E;
+                                    octave = 4;
+                                }
+                                case B -> {
+                                    step = Step.B;
+                                    octave = 3;
+                                }
+                                case G -> {
+                                    step = Step.G;
+                                    octave = 3;
+                                }
+                                case D -> {
+                                    step = Step.D;
+                                    octave = 3;
+                                }
+                                case A -> {
+                                    step = Step.A;
+                                    octave = 2;
+                                }
+                                case LOW_E -> {
+                                    step = Step.E;
+                                    octave = 2;
+                                }
+                                default -> {
+                                    step = Step.E;
+                                    octave = 3;
+                                }
+                            }
+                        } else {
+                            switch (tab.tuning.get(j)) {
+                                case G -> {
+                                    step = Step.G;
+                                    octave = 2;
+                                }
+                                case D -> {
+                                    step = Step.D;
+                                    octave = 2;
+                                }
+                                case A -> {
+                                    step = Step.A;
+                                    octave = 1;
+                                }
+                                case LOW_E -> {
+                                    step = Step.E;
+                                    octave = 1;
+                                }
+                                default -> {
+                                    step = Step.E;
+                                    octave = 3;
+                                }
+                            }
                         }
                         tuning.setTuningStep(step);
                         tuning.setTuningOctave(octave);
+                        //
                         details.getStaffTuning().add(tuning);
                     }
                     attributes.getStaffDetails().add(details);
@@ -219,20 +318,29 @@ public class Parser {
                     distanceMap.putIfAbsent(n.absoluteDistance, new ArrayList<>());
                     distanceMap.get(n.absoluteDistance).add(n);
 
-                    generated.Note note = new generated.Note();
-
-                    if (distanceMap.get(n.absoluteDistance).size() > 1) {
-                        note.setChord(factory.createEmpty());
-                    }
-
                     if (n.frets.size() == 1) {
+                        generated.Note note = new generated.Note();
 
+                        if (distanceMap.get(n.absoluteDistance).size() > 1) {
+                            note.setChord(factory.createEmpty());
+                        }
                         Notations notations = new Notations();
                         Technical t = factory.createTechnical();
+                        if (n.isHarmonic) {
+                            var th = factory.createTechnicalHarmonic(factory.createHarmonic());
+                            t.getUpBowOrDownBowOrHarmonic().add(th);
+                        }
 
-                        int string = standardTuningStringToInt(n.string);
+                        int string = -1;
+                        if (!isBass) {
+                            string = standardTuningStringToIntGuitar(n.string);
+                        } else {
+                            string = standardTuningStringToIntBass(n.string);
+                        }
+
 
                         note.setPitch(fretboard[string - 1][n.frets.get(0)]);
+
 
                         Fret f = factory.createFret();
                         f.setValue(BigInteger.valueOf(n.frets.get(0)));
@@ -244,13 +352,11 @@ public class Parser {
                         t.getUpBowOrDownBowOrHarmonic().add(ts);
 
 
-
                         double duration;
                         if (line.bars.get(i).notes.stream().noneMatch(note1 -> note1.absoluteDistance > n.absoluteDistance)) {
-                            duration = (double)(line.bars.get(i).barLength  - line.bars.get(i).notes.get(noteIndex).absoluteDistance) / quarterNoteLength;
-                        }
-                        else {
-                            duration = (double)(line.bars.get(i).notes.get(noteIndex + 1).absoluteDistance - line.bars.get(i).notes.get(noteIndex).absoluteDistance) / quarterNoteLength;
+                            duration = (line.bars.get(i).barLength - line.bars.get(i).notes.get(noteIndex).absoluteDistance);
+                        } else {
+                            duration = (line.bars.get(i).notes.get(noteIndex + 1).absoluteDistance - line.bars.get(i).notes.get(noteIndex).absoluteDistance);
                         }
                         if (duration == 0) {
                             var tempIndex = noteIndex;
@@ -258,112 +364,122 @@ public class Parser {
                                 if (line.bars.get(i).notes.get(tempIndex).absoluteDistance == n.absoluteDistance) {
                                     tempIndex++;
                                 } else {
-                                    duration = (double)(line.bars.get(i).notes.get(tempIndex).absoluteDistance - n.absoluteDistance) / quarterNoteLength;
+                                    duration = (line.bars.get(i).notes.get(tempIndex).absoluteDistance - n.absoluteDistance);
                                     break;
                                 }
                             }
                         }
 
                         String noteTypeString;
-                        if (duration == 1.0) {
+                        if (duration == divisions) {
                             noteTypeString = "quarter";
-                        } else if (duration == 0.5) {
+                        } else if (duration == (double)divisions / 2) {
                             noteTypeString = "eighth";
-                        } else if (duration == 0.25) {
-                            noteTypeString = "sixteenth";
-                        } else if (duration == 2) {
-                            noteTypeString = "half";
-                        } else if (duration == 4) {
-                            noteTypeString = "whole";
+                        } else if (duration == (double)divisions / 4) {
+                            noteTypeString = "16th";
+                        } else if (duration == (double)divisions / 8) {
+                            noteTypeString = "32nd";
+                        } else if (duration == (double)divisions / 16) {
+                            noteTypeString = "64th";
+                        } else if (duration == (double)divisions / 32) {
+                            noteTypeString = "128th";
                         }
-                        else {
+                        else if (duration == divisions * 2) {
+                            noteTypeString = "half";
+                        } else if (duration == divisions * 4) {
+                            noteTypeString = "whole";
+                        } else {
                             noteTypeString = "quarter";
+                            //representing abnormal durations as slurred notes.
                         }
 
                         var noteType = factory.createNoteType();
                         noteType.setValue(noteTypeString);
                         note.setType(noteType);
-//                        note.setDuration(BigDecimal.valueOf(duration));
+                        note.setDuration(BigInteger.valueOf((long) duration));
                         note.setVoice("1");
                         notations.setTechnical(t);
                         note.getNotations().add(notations);
                         measure.getNoteOrBackupOrForward().add(note);
-                    }
-                    else if (n.frets.size() == 2){
-
-                        for (int index = 0; index < n.frets.size(); index ++) {
-
-                            int string = standardTuningStringToInt(n.string);
-
-                            Pitch p = fretboard[string - 1][n.frets.get(index)];
-
-                            generated.String s = factory.createString();
-                            generated.Fret f = factory.createFret();
-                            Technical t = factory.createTechnical();
-                            Slur slur = factory.createSlur();
-                            slur.setPlacement(AboveBelow.ABOVE);
-                            Notations notations = new Notations();
-
-                            int diff = computePitchDiff(n.frets.get(0), n.frets.get(1));
-
-
-                            var hp = factory.createHammerOnPullOff();
-                            hp.setNumber(diff);
-                            if (index == 0) {
-                                hp.setType(StartStop.START);
-                                slur.setType(StartStopContinue.START);
-                            }
-                            if (index == 1) {
-                                hp.setType(StartStop.STOP);
-                                slur.setType(StartStopContinue.STOP);
-                            }
-
-                            s.setValue(BigInteger.valueOf(string));
+                    } else if (n.frets.size() > 1) {
+                        List<generated.Note> noteList = new ArrayList<>();
+                        List<NoteRelationship> relationships = new ArrayList<>();
+                        for (int index = 0; index < n.frets.size(); index++) {
+                            generated.Note note = new generated.Note();
+                            int string = standardTuningStringToIntGuitar(n.string);
+                            var t = factory.createTechnical();
+                            Fret f = factory.createFret();
                             f.setValue(BigInteger.valueOf(n.frets.get(index)));
-
-                            var ts = factory.createTechnicalString(s);
                             var tf = factory.createTechnicalFret(f);
-
-                            if (n.relationships.get(0) == NoteRelationship.HAMMERON) {
-                                hp.setValue("H");
-                                slur.setNumber(diff);
-
-                                var hammerOn = factory.createTechnicalHammerOn(hp);
-
-                                t.getUpBowOrDownBowOrHarmonic().add(hammerOn);
-                                t.getUpBowOrDownBowOrHarmonic().add(ts);
-                                t.getUpBowOrDownBowOrHarmonic().add(tf);
-
-                            } else if (n.relationships.get(0) == NoteRelationship.PULLOFF) {
-                                hp.setValue("P");
-                                var pullOff = factory.createTechnicalPullOff(hp);
-
-                                t.getUpBowOrDownBowOrHarmonic().add(pullOff);
-                                t.getUpBowOrDownBowOrHarmonic().add(ts);
-                                t.getUpBowOrDownBowOrHarmonic().add(tf);
-
+                            var s = factory.createString();
+                            s.setValue(BigInteger.valueOf(string));
+                            var ts = factory.createTechnicalString(s);
+                            t.getUpBowOrDownBowOrHarmonic().add(ts);
+                            t.getUpBowOrDownBowOrHarmonic().add(tf);
+                            var notations = factory.createNotations();
+                            notations.setTechnical(t);
+                            note.getNotations().add(notations);
+                            Pitch p = fretboard[string - 1][n.frets.get(index)];
+                            note.setPitch(p);
+                            noteList.add(note);
+                            if (index != n.frets.size() - 1) {
+                                relationships.add(n.relationships.get(index));
                             }
-
-                            var noteType = factory.createNoteType();
-
+                        }
+                        int pairIndex = 1;
+                        for (int nIndex = 0; nIndex < noteList.size() - 1; nIndex++) {
+                            createHammerPulloffHelper(noteList.get(nIndex), noteList.get(nIndex + 1), relationships.get(nIndex),  pairIndex);
+                            pairIndex++;
+                        }
+                        for (generated.Note note : noteList) {
                             if (distanceMap.get(n.absoluteDistance).size() > 1) {
                                 note.setChord(factory.createEmpty());
                             }
 
-                            noteType.setValue("eighth");
-                            note.setType(noteType);
-                            note.setDuration(BigDecimal.valueOf(1));
-                            note.setVoice("1");
-                            notations.setTechnical(t);
-                            notations.getTiedOrSlurOrTuplet().add(slur);
-                            note.setPitch(p);
-                            note.getNotations().add(notations);
-                            measure.getNoteOrBackupOrForward().add(note);
+                            double duration;
+                            if (line.bars.get(i).notes.stream().noneMatch(note1 -> note1.absoluteDistance > n.absoluteDistance)) {
+                                duration = (line.bars.get(i).barLength - line.bars.get(i).notes.get(noteIndex).absoluteDistance);
+                            } else {
+                                duration = (line.bars.get(i).notes.get(noteIndex + 1).absoluteDistance - line.bars.get(i).notes.get(noteIndex).absoluteDistance);
+                            }
+                            if (duration == 0) {
+                                var tempIndex = noteIndex;
+                                while (tempIndex < line.bars.get(i).notes.size()) {
+                                    if (line.bars.get(i).notes.get(tempIndex).absoluteDistance == n.absoluteDistance) {
+                                        tempIndex++;
+                                    } else {
+                                        duration = (line.bars.get(i).notes.get(tempIndex).absoluteDistance - n.absoluteDistance);
+                                        break;
+                                    }
+                                }
+                            }
 
+                            String noteTypeString;
+                            if (duration == divisions) {
+                                noteTypeString = "quarter";
+                            } else if (duration == divisions / 2) {
+                                noteTypeString = "eighth";
+                            } else if (duration == divisions / 4) {
+                                noteTypeString = "16th";
+                            } else if (duration == divisions * 2) {
+                                noteTypeString = "half";
+                            } else if (duration == divisions * 4) {
+                                noteTypeString = "whole";
+                            } else {
+                                noteTypeString = "quarter";
+                                //representing abnormal durations as slurred notes.
+                            }
+                            var noteType = factory.createNoteType();
+                            noteType.setValue(noteTypeString);
+                            note.setType(noteType);
+                            note.setDuration(BigInteger.valueOf((long) duration));
+                            note.setVoice("1");
+                            measure.getNoteOrBackupOrForward().add(note);
                         }
                     }
                     noteIndex++;
                 }
+
                 part.getMeasure().add(measure);
                 currMeasure++;
             }
@@ -376,43 +492,129 @@ public class Parser {
         bl.setBarStyle(styleColor);
         part.getMeasure().get(currMeasure - 1).setBarline(bl);
         scorePartwise.getPart().add(part);
-
         return scorePartwise;
     }
 
+
+    private void createHammerPulloffHelper(generated.Note note1, generated.Note note2, NoteRelationship relationship, int slurNumber) {
+        ObjectFactory factory = new ObjectFactory();
+
+        Slur slurStart = factory.createSlur();
+        slurStart.setPlacement(AboveBelow.ABOVE);
+        slurStart.setNumber(slurNumber);
+        slurStart.setType(StartStopContinue.START);
+
+        Slur slurStop = factory.createSlur();
+        slurStop.setPlacement(AboveBelow.ABOVE);
+        slurStop.setNumber(slurNumber);
+        slurStop.setType(StartStopContinue.STOP);
+
+        var hpStart = factory.createHammerOnPullOff();
+        var hpEnd = factory.createHammerOnPullOff();
+        hpStart.setType(StartStop.START);
+        hpEnd.setType(StartStop.STOP);
+
+        if (relationship == NoteRelationship.HAMMERON) {
+            hpStart.setNumber(slurNumber);
+            hpStart.setValue("H");
+
+            hpEnd.setNumber(slurNumber);
+            hpEnd.setValue("H");
+
+            var hammerOnStart = factory.createTechnicalHammerOn(hpStart);
+            var hammerOnEnd = factory.createTechnicalHammerOn(hpEnd);
+            note1.getNotations().get(0).getTechnical().getUpBowOrDownBowOrHarmonic().add(hammerOnStart);
+            note2.getNotations().get(0).getTechnical().getUpBowOrDownBowOrHarmonic().add(hammerOnEnd);
+        }
+        if (relationship == NoteRelationship.PULLOFF) {
+            hpStart.setNumber(slurNumber);
+            hpStart.setValue("P");
+
+            hpEnd.setNumber(slurNumber);
+            hpEnd.setValue("P");
+
+            var pullOffStart = factory.createTechnicalHammerOn(hpStart);
+            var pullOffEnd = factory.createTechnicalHammerOn(hpEnd);
+            note1.getNotations().get(0).getTechnical().getUpBowOrDownBowOrHarmonic().add(pullOffStart);
+            note2.getNotations().get(0).getTechnical().getUpBowOrDownBowOrHarmonic().add(pullOffEnd);
+        }
+
+        note1.getNotations().get(0).getTiedOrSlurOrTuplet().add(slurStart);
+        note2.getNotations().get(0).getTiedOrSlurOrTuplet().add(slurStop);
+
+    }
+    private Step stepFromGuitarString(GuitarString s) {
+        return switch (s) {
+            case HIGH_E, LOW_E -> Step.E;
+            case C -> Step.C;
+            case B -> Step.B;
+            case G -> Step.G;
+            case D -> Step.D;
+            case A -> Step.A;
+            case F -> Step.F;
+            default -> null;
+        };
+    }
 
     int computePitchDiff(int fret1, int fret2) {
         return Math.abs(fret1 - fret2);
     }
 
-    Pitch[][] createStandardTuningPitches() {
+    Pitch[][] createGuitarTuningPitches(List<GuitarString> pitches) {
         Pitch[][] standardTuning = new Pitch[6][24];
 
-        Pitch lowEStringPitch = new Pitch();
-        lowEStringPitch.setStep(Step.E);
-        lowEStringPitch.setOctave(2);
+        Pitch stringSixPitch = new Pitch();
+        stringSixPitch.setStep(stepFromGuitarString(pitches.get(0)));
+        stringSixPitch.setOctave(2);
 
-        Pitch aStringPitch = new Pitch();
-        aStringPitch.setStep(Step.A);
-        aStringPitch.setOctave(2);
+        Pitch stringFivePitch = new Pitch();
+        stringFivePitch.setStep(stepFromGuitarString(pitches.get(1)));
+        stringFivePitch.setOctave(2);
 
-        Pitch dStringPitch = new Pitch();
-        dStringPitch.setStep(Step.D);
-        dStringPitch.setOctave(3);
+        Pitch stringFourPitch = new Pitch();
+        stringFourPitch.setStep(stepFromGuitarString(pitches.get(2)));
+        stringFourPitch.setOctave(3);
 
-        Pitch gStringPitch = new Pitch();
-        gStringPitch.setStep(Step.G);
-        gStringPitch.setOctave(3);
+        Pitch stringThreePitch = new Pitch();
+        stringThreePitch.setStep(stepFromGuitarString(pitches.get(3)));
+        stringThreePitch.setOctave(3);
 
-        Pitch bStringPitch = new Pitch();
-        bStringPitch.setStep(Step.B);
-        bStringPitch.setOctave(3);
+        Pitch stringTwoPitch = new Pitch();
+        stringTwoPitch.setStep(stepFromGuitarString(pitches.get(4)));
+        stringTwoPitch.setOctave(3);
 
-        Pitch highEStringPitch = new Pitch();
-        highEStringPitch.setStep(Step.E);
-        highEStringPitch.setOctave(4);
+        Pitch stringOnePitch = new Pitch();
+        stringOnePitch.setStep(stepFromGuitarString(pitches.get(5)));
+        stringOnePitch.setOctave(4);
 
-        Pitch[] basePitches = {highEStringPitch, bStringPitch, gStringPitch, dStringPitch, aStringPitch, lowEStringPitch};
+        Pitch[] basePitches = {stringOnePitch, stringTwoPitch, stringThreePitch, stringFourPitch, stringFivePitch, stringSixPitch};
+
+        for (int i = 0; i < basePitches.length; i++) {
+            standardTuning[i] = createPitchArray(basePitches[i]);
+        }
+
+        return standardTuning;
+    }
+    Pitch[][] createBassTuningPitches(List<GuitarString> pitches) {
+        Pitch[][] standardTuning = new Pitch[4][24];
+
+        Pitch stringFourPitch = new Pitch();
+        stringFourPitch.setStep(stepFromGuitarString(pitches.get(0)));
+        stringFourPitch.setOctave(1);
+
+        Pitch stringThreePitch = new Pitch();
+        stringThreePitch.setStep(stepFromGuitarString(pitches.get(1)));
+        stringThreePitch.setOctave(1);
+
+        Pitch stringTwoPitch = new Pitch();
+        stringTwoPitch.setStep(stepFromGuitarString(pitches.get(2)));
+        stringTwoPitch.setOctave(2);
+
+        Pitch stringOnePitch = new Pitch();
+        stringOnePitch.setStep(stepFromGuitarString(pitches.get(3)));
+        stringOnePitch.setOctave(2);
+
+        Pitch[] basePitches = {stringOnePitch, stringTwoPitch, stringThreePitch, stringFourPitch};
 
         for (int i = 0; i < basePitches.length; i++) {
             standardTuning[i] = createPitchArray(basePitches[i]);
@@ -445,7 +647,7 @@ public class Parser {
         return stringPitches;
     }
 
-    int standardTuningStringToInt(GuitarString string) {
+    int standardTuningStringToIntGuitar(GuitarString string) {
         switch (string) {
             case HIGH_E -> {
                 return 1;
@@ -464,6 +666,25 @@ public class Parser {
             }
             case LOW_E -> {
                 return 6;
+            }
+            default -> {
+                return 0;
+            }
+        }
+    }
+    int standardTuningStringToIntBass(GuitarString string) {
+        switch (string) {
+            case G -> {
+                return 1;
+            }
+            case D -> {
+                return 2;
+            }
+            case A -> {
+                return 3;
+            }
+            case LOW_E -> {
+                return 4;
             }
             default -> {
                 return 0;
