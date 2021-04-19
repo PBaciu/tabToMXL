@@ -45,52 +45,42 @@
             <Font size="20.0" />
          </font>
       </Button>
-      <Label layoutX="52.0" layoutY="242.0" text="Time Signature" AnchorPane.rightAnchor="676.5">
+      <Label layoutX="117.0" layoutY="228.0" text="Time Signature" AnchorPane.rightAnchor="611.5">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Label layoutX="52.0" layoutY="330.0" text="Tempo" AnchorPane.rightAnchor="769.0">
+      <Label layoutX="117.0" layoutY="316.0" text="Tempo" AnchorPane.rightAnchor="704.0">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <TextField fx:id="timeSignature" layoutX="52.0" layoutY="278.0" prefHeight="35.0" prefWidth="390.0" promptText="Enter the Time Signature in the format: 4/4" AnchorPane.rightAnchor="458.0">
+      <TextField fx:id="timeSignature" layoutX="117.0" layoutY="264.0" prefHeight="35.0" prefWidth="390.0" promptText="Enter the Time Signature in the format: 4/4" AnchorPane.rightAnchor="393.0">
          <font>
             <Font size="18.0" />
          </font>
       </TextField>
-      <TextField fx:id="tempo" layoutX="52.0" layoutY="366.0" prefHeight="40.0" prefWidth="390.0" promptText="Enter the Tempo in Beats Per Minute" AnchorPane.rightAnchor="458.0">
+      <TextField fx:id="tempo" layoutX="117.0" layoutY="352.0" prefHeight="40.0" prefWidth="390.0" promptText="Enter the Tempo in Beats Per Minute" AnchorPane.rightAnchor="393.0">
          <font>
             <Font size="18.0" />
          </font>
       </TextField>
-      <TextField fx:id="totalMeasures" layoutX="305.0" layoutY="188.0" prefHeight="40.0" prefWidth="326.0" promptText="Enter the total number of measures">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </TextField>
-      <Button fx:id="add" layoutX="603.0" layoutY="337.0" mnemonicParsing="false" onAction="#AddAction" prefHeight="45.0" prefWidth="110.0" text="Add">
+      <Button fx:id="add" layoutX="609.0" layoutY="323.0" mnemonicParsing="false" onAction="#AddAction" prefHeight="45.0" prefWidth="110.0" text="Add">
          <font>
             <Font size="20.0" />
          </font>
       </Button>
-      <TextField fx:id="measureFrom" layoutX="509.0" layoutY="275.0" onKeyTyped="#MeasureTyped" prefHeight="40.0" prefWidth="79.0" promptText="From">
+      <TextField fx:id="measureFrom" layoutX="574.0" layoutY="261.0" onKeyTyped="#MeasureTyped" prefHeight="40.0" prefWidth="79.0" promptText="From">
          <font>
             <Font size="18.0" />
          </font>
       </TextField>
-      <Label layoutX="363.0" layoutY="151.0" text="Total Measures">
+      <Label layoutX="574.0" layoutY="227.0" text="Measures">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Label layoutX="509.0" layoutY="241.0" text="Measures">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
-      <TextField fx:id="measureTo" layoutX="619.0" layoutY="275.0" onKeyTyped="#MeasureTyped" prefHeight="40.0" prefWidth="79.0" promptText="To">
+      <TextField fx:id="measureTo" layoutX="684.0" layoutY="261.0" onKeyTyped="#MeasureTyped" prefHeight="40.0" prefWidth="79.0" promptText="To">
          <font>
             <Font size="18.0" />
          </font>
