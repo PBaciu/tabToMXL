@@ -819,7 +819,7 @@ static ArrayList<String> drumTab;
                     	//note.setVoice("2");
                     }
                     										//need instrument, unpitched
-                    list.addNode(note);
+                    //list.addNode(note);
                     
                     /*if (n.value.equals("x") && duration < 1) {
                     	if (counter == 0) {
@@ -968,10 +968,11 @@ static ArrayList<String> drumTab;
                     		note.setUnpitched(variable);
                     		note.getStem().setValue(StemValue.UP);
                     		break;
-                    	
                     }
+
+                    list.addNode(note);
                     
-                    if (note.getVoice() == "1" && duration < 1) {
+                    if (note.getVoice() == "1" && duration < 1 && counter1 <= 1) {
                     	if (counter1 == 0) {
                     		counter1 = counter1 + duration;
                     		for (var beam: note.getBeam()) {
@@ -990,7 +991,7 @@ static ArrayList<String> drumTab;
                     	}
                     }
                     
-                    if (note.getVoice() == "2" && duration < 1) {
+                    if (note.getVoice() == "2" && duration < 1 && counter2 <= 1) {
                     	if (counter2 == 0) {
                     		counter2 = counter2 + duration;
                     		for (var beam: note.getBeam()) {
