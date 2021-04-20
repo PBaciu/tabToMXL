@@ -209,7 +209,7 @@ public class SampleController2 implements Initializable {
 			else {
 				if(timeSignature.getText().contains("/")) {
 					timeSign = timeSignature.getText().split("/");
-					if(timeSign.length > 2 || timeSign.length < 2) {
+					if(timeSign.length != 2) {
 						a = 1;
 						Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 			            errorAlert.setHeaderText("Incorrect Time Signature specified");
@@ -280,7 +280,7 @@ public class SampleController2 implements Initializable {
 					}
 				}
 			}
-			if(!info2.equals(info1) && textField.getText() != "") {
+			if(!info2.equals(info1) && !textField.getText().equals("")) {
 				if(saved && info2.equals(changeCheck)) {
 					if(a == 0 && b == 0 && c == 0) {
 						loadNextScene();
@@ -313,15 +313,24 @@ public class SampleController2 implements Initializable {
 		Alert helpAlert = new Alert(Alert.AlertType.INFORMATION);
         helpAlert.setHeaderText("Information on Usage");
         helpAlert.setContentText("""
-				- You can Drag and Drop a file in the Text Field given in this screen. You can also Browse for a File from your computer.\n
-				- The Files should only be of a .txt format.\n
-				- The Uploaded Files will have their content displayed on the Copy/Paste area which can be modified to the Users' preference.\n
-				- There are text fields for Time Signature and Tempo which can be inputed if preferred in the correct format.\n
-				- The default values set for Time Signature is 4/4 while the default Tempo is 120.\n
-				- You can specify the total measures you have for your tablature and input the desired Time Signatures for your desired Measure Ranges.\n
-				- You have to hit the Add button to initiate and add the Time Signature that you have specified.\n
-				- When left blank, the values of all your measures are defaulted to 4/4.\n
-				- Hitting the Convert button converts the final variation of the Tablature in the Copy/Paste Text Area into a musicxml file.\n
+				- You can Drag and Drop a file in the Text Field given in this screen. You can also Browse for a File from your computer.
+				    
+				- The Files should only be of a .txt format.
+				    
+				- The Uploaded Files will have their content displayed on the Copy/Paste area which can be modified to the Users' preference.
+				    
+				- There are text fields for Time Signature and Tempo which can be inputed if preferred in the correct format.
+				    
+				- The default values set for Time Signature is 4/4 while the default Tempo is 120.
+				    
+				- You can specify the total measures you have for your tablature and input the desired Time Signatures for your desired Measure Ranges.
+				    
+				- You have to hit the Add button to initiate and add the Time Signature that you have specified.
+				    
+				- When left blank, the values of all your measures are defaulted to 4/4.
+				    
+				- Hitting the Convert button converts the final variation of the Tablature in the Copy/Paste Text Area into a musicxml file.
+				    
 				- The Save Changes button allows you to save the changes you made in the Tablature to a file of your choosing.""");
         helpAlert.showAndWait();
 	}
@@ -351,6 +360,7 @@ public class SampleController2 implements Initializable {
 			ScorePartwise scorePartwise = p.readTab(textArea.getText(), timeSignature.getText(), tempoInt);
 			writer.writeToTempFile(scorePartwise);
 		} catch (Exception e) {
+			e.printStackTrace();
 			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 			errorAlert.setHeaderText("Unsupported Tablature Format Error");
 			errorAlert.setContentText("Please ensure that the tablature provided matches the format provided in .README");
@@ -499,133 +509,98 @@ public class SampleController2 implements Initializable {
 						measureTimeSign.add("4/4");
 					}
 				}
-				checker2.add('1');
-				checker2.add('2');
-				checker2.add('3');
-				checker2.add('4');
-				checker2.add('5');
-				checker2.add('6');
-				checker2.add('7');
-				checker2.add('8');
-				checker2.add('9');
-				checker2.add('0');
+				for (char c = '0'; c <='9'; c++) {
+					checker2.add(c);
+				}
 				int x = 0;
 				int y = 0;
 				int z = 0;
 				int w = 0;
-				if(measureFrom.equals("0") || measureFrom.equals("0")) {
-					x = 1;
+				if(measureFrom.getText().equals("0") || measureTo.getText().equals("0")) {
 					Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 		            errorAlert.setHeaderText("Invalid number of Measure range specified");
 		            errorAlert.setContentText("Please specify the correct Measure range to add a Time Signature to");
 		            errorAlert.showAndWait();
 				}
 				else {
-					for(int i = 0; i < measureFrom.getText().length(); i++) {
-						if(!checker2.contains(measureFrom.getText().charAt(i))) {
-							x = 1;
-							i = measureFrom.getText().length();
-							Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-				            errorAlert.setHeaderText("Invalid format of Measures specified");
-				            errorAlert.setContentText("Please specify the total number of Measures to continue");
-				            errorAlert.showAndWait();
-						}
-					}
-					for(int j = 0; j < measureTo.getText().length(); j++) {
-						if(!checker2.contains(measureTo.getText().charAt(j))) {
-							x = 1;
-							j = measureTo.getText().length();
-							Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-				            errorAlert.setHeaderText("Invalid format of Measures specified");
-				            errorAlert.setContentText("Please specify the total number of Measures to continue");
-				            errorAlert.showAndWait();
-						}
-					}
+					x = getX(x, measureFrom);
+					x = getX(x, measureTo);
 					if(x == 0) {
 						int from = Integer.parseInt(measureFrom.getText());
 						int to = Integer.parseInt(measureTo.getText());
 						if(from < measureTimeSign.size() && to < measureTimeSign.size() && from <= to) {
-							checker3.add('1');
-							checker3.add('2');
-							checker3.add('3');
-							checker3.add('4');
-							checker3.add('5');
-							checker3.add('6');
-							checker3.add('7');
-							checker3.add('8');
-							checker3.add('9');
-							checker3.add('0');
-							if(x == 0) {
-								if(timeSignature.getText().equals("")) {
-									timeSignature.setText("4/4");
-								}
-								else {
-									if(timeSignature.getText().contains("/")) {
-										timeSign = timeSignature.getText().split("/");
-										if(timeSign.length > 2 || timeSign.length < 2) {
-											z = 1;
-											Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-								            errorAlert.setHeaderText("Incorrect Time Signature specified");
-								            errorAlert.setContentText("Please enter the Time Signature in the right format");
-								            errorAlert.showAndWait();
-										}
-										else {
-											for(int i = 0; i < timeSign[0].length(); i++) {
-												if(!checker3.contains(timeSign[0].charAt(i))) {
-													z = 1;
-													i = timeSign[0].length();
-													Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-										            errorAlert.setHeaderText("Incorrect Time Signature specified");
-										            errorAlert.setContentText("Please enter the Time Signature in the right format");
-										            errorAlert.showAndWait();
-												}
-											}
-											for(int j = 0; j < timeSign[1].length(); j++) {
-												if(!checker3.contains(timeSign[1].charAt(j))) {
-													w = 1;
-													j = timeSign[1].length();
-													Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-										            errorAlert.setHeaderText("Incorrect Time Signature specified");
-										            errorAlert.setContentText("Please enter the Time Signature in the right format");
-										            errorAlert.showAndWait();
-												}
-											}
-											if(z == 0 && w == 0) {
-												int numerator = Integer.parseInt(timeSign[0]);
-												int denominator = Integer.parseInt(timeSign[1]);
-												int[] timeCheck = {1, 2, 3, 4};
-												for(int l = 0; l < timeCheck.length; l++) {
-													if(timeCheck[l] == numerator) {
-														y = 1;
-													}
-												}
-												if(4 != denominator) {
-													y = 0;
-												}
-												if(y == 1) {
-													for(int k = from; k <= to; k++) {
-														measureTimeSign.set(k, timeSignature.getText());
-													}
-													Alert confirmAlert = new Alert(Alert.AlertType.INFORMATION);
-													confirmAlert.setHeaderText("Time Signature Added");
-													confirmAlert.setContentText("The Time Signature has been added to the specified Measure Range");
-													confirmAlert.showAndWait();
-												}
-												else if(y == 0) {
-													Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-										            errorAlert.setHeaderText("Incorrect Time Signature specified");
-										            errorAlert.setContentText("Please enter the Time Signature in the right format");
-										            errorAlert.showAndWait();
-												}
-											}
-										}
+							for (char c = '0'; c <= '9'; c++) {
+								checker3.add(c);
+							}
+							if(timeSignature.getText().equals("")) {
+								timeSignature.setText("4/4");
+							}
+							else {
+								if(timeSignature.getText().contains("/")) {
+									timeSign = timeSignature.getText().split("/");
+									if(timeSign.length != 2) {
+										Alert errorAlert = new Alert(AlertType.ERROR);
+										errorAlert.setHeaderText("Incorrect Time Signature specified");
+										errorAlert.setContentText("Please enter the Time Signature in the right format");
+										errorAlert.showAndWait();
 									}
 									else {
-										Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-							            errorAlert.setHeaderText("Incorrect Time Signature specified");
-							            errorAlert.setContentText("Please enter the Time Signature in the right format");
-							            errorAlert.showAndWait();
+										for(int i = 0; i < timeSign[0].length(); i++) {
+											if(!checker3.contains(timeSign[0].charAt(i))) {
+												z = 1;
+												i = timeSign[0].length();
+												Alert errorAlert = new Alert(AlertType.ERROR);
+												errorAlert.setHeaderText("Incorrect Time Signature specified");
+												errorAlert.setContentText("Please enter the Time Signature in the right format");
+												errorAlert.showAndWait();
+											}
+										}
+										for(int j = 0; j < timeSign[1].length(); j++) {
+											if(!checker3.contains(timeSign[1].charAt(j))) {
+												w = 1;
+												j = timeSign[1].length();
+												Alert errorAlert = new Alert(AlertType.ERROR);
+												errorAlert.setHeaderText("Incorrect Time Signature specified");
+												errorAlert.setContentText("Please enter the Time Signature in the right format");
+												errorAlert.showAndWait();
+											}
+										}
+										if(z == 0 && w == 0) {
+											int numerator = Integer.parseInt(timeSign[0]);
+											int denominator = Integer.parseInt(timeSign[1]);
+											int[] timeCheck = {1, 2, 3, 4};
+											for (int i : timeCheck) {
+												if (i == numerator) {
+													y = 1;
+													break;
+												}
+											}
+											if(4 != denominator) {
+												y = 0;
+											}
+											if(y == 1) {
+												for(int k = from; k <= to; k++) {
+													measureTimeSign.set(k, timeSignature.getText());
+												}
+												Alert confirmAlert = new Alert(AlertType.INFORMATION);
+												confirmAlert.setHeaderText("Time Signature Added");
+												confirmAlert.setContentText("The Time Signature has been added to the specified Measure Range");
+												confirmAlert.showAndWait();
+											}
+											else {
+												Alert errorAlert = new Alert(AlertType.ERROR);
+												errorAlert.setHeaderText("Incorrect Time Signature specified");
+												errorAlert.setContentText("Please enter the Time Signature in the right format");
+												errorAlert.showAndWait();
+											}
+										}
 									}
+								}
+								else {
+									Alert errorAlert = new Alert(AlertType.ERROR);
+									errorAlert.setHeaderText("Incorrect Time Signature specified");
+									errorAlert.setContentText("Please enter the Time Signature in the right format");
+									errorAlert.showAndWait();
 								}
 							}
 						}
@@ -644,20 +619,27 @@ public class SampleController2 implements Initializable {
 			}
 		}
 	}
-	
+
+	private int getX(int x, TextField measureTo) {
+		for(int j = 0; j < measureTo.getText().length(); j++) {
+			if(!checker2.contains(measureTo.getText().charAt(j))) {
+				x = 1;
+				j = measureTo.getText().length();
+				Alert errorAlert = new Alert(AlertType.ERROR);
+				errorAlert.setHeaderText("Invalid format of Measures specified");
+				errorAlert.setContentText("Please specify the total number of Measures to continue");
+				errorAlert.showAndWait();
+			}
+		}
+		return x;
+	}
+
 	public void MeasureTyped() {
 		if(measureTimeSign.size() > 0) {
 			if(checker2.isEmpty()) {
-				checker2.add('1');
-				checker2.add('2');
-				checker2.add('3');
-				checker2.add('4');
-				checker2.add('5');
-				checker2.add('6');
-				checker2.add('7');
-				checker2.add('8');
-				checker2.add('9');
-				checker2.add('0');
+				for (char c = '0'; c <= '9'; c++) {
+					checker.add(c);
+				}
 			}
 			String currentMeasure = measureFrom.getText();
 			String destMeasure = measureTo.getText();
