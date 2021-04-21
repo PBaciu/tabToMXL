@@ -11,6 +11,7 @@ import Models_Two.DrumTabLine;
 import Models.*;
 import generated.*;
 
+import javax.xml.bind.JAXBElement;
 import java.lang.String;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -30,11 +31,14 @@ public class Parser {
     Tab tab;
     String timeSignature;
     int tempo;
+    HashMap<Integer, Integer> repeatMap = new HashMap<>();
+    List<String> timeSigs;
 
     public Parser() {
     }
 
-    public ScorePartwise readTab(String tab, String timeSignature, int tempo) {
+    public ScorePartwise readTab(String tab, String timeSignature, int tempo, ArrayList<String> timeSigs) {
+        this.timeSigs = timeSigs;
         //TODO Determine if tab is guitar, bass, or drum
         StringBuilder alteredTab = new StringBuilder();
         for (String s : tab.split("\n")) {
@@ -62,13 +66,14 @@ public class Parser {
         boolean DTab = false;
         
         for (String s : tab.split("\n")) {
-        	if (s.contains("-x") || s.contains("-o")) {
-        		DTab = true;
-        	}
+            if (s.contains("-x") || s.contains("-o")) {
+                DTab = true;
+                break;
+            }
         }
         
         
-    	if (DTab == true) {		//check if note is x and o
+    	if (DTab) {		//check if note is x and o
     		return parseDrumTab(tab);
     	} else if (tabString.split("\n+\\s*\n+")[0].split("\n").length == 6) {
             return parseGuitarTab(tabString, false);
@@ -85,6 +90,7 @@ public class Parser {
         else {
             standard = new String[]{"G", "D", "A", "E"};
         }
+
         List<TabLine> tabLines = new ArrayList<>();
         List<GuitarString> tuning = new ArrayList<>();
         var tab = t.strip();
@@ -101,16 +107,31 @@ public class Parser {
                 var firstPipeIndex = l.indexOf('|');
                 barDelimiterIndex.set(l.indexOf('|', 2));
                 var split = new FunctionalList<>(Arrays.asList(l.substring(firstPipeIndex + 1).split("\\|")));
+                split.removeIf(s -> s.equals(""));
                 var label = GuitarString.parse(!l.substring(0, firstPipeIndex).equals("") ? l.substring(0, firstPipeIndex): standard[row]);
                 tuning.add(label);
-                return split.mapIndexed((col, it) -> new IntermediaryGarbage(label, row, col, it));
+                return split.mapIndexed((col, it) -> new IntermediaryGarbage(label, row, col, it, 0));
             });
 
             var grouped = mapped.groupBy(intermediaryGarbage -> intermediaryGarbage.col);
-
+            for (var val : grouped.values()) {
+                var list = new ArrayList<>(val);
+                for (var v : list) {
+                    if (v.val.contains("*")) {
+                        v.val = v.val.replaceAll("\\*", "-");
+                        int repeats = list.get(0).val.charAt(list.get(0).val.length() - 1) - '0';
+                        list.get(0).repeats = repeats;
+                        repeatMap.put(v.col, repeats);
+                        break;
+                    }
+                }
+                if (val.get(0).repeats > 0) {
+                    list.get(0).val = list.get(0).val.substring(0, list.get(0).val.length() - 2) + "-";
+                }
+            }
             var bars = grouped.values().stream().map(list -> list.stream().map(intermediaryGarbage -> {
                 var map = new HashMap<GuitarString, AtomicInteger>();
-                var matches = Pattern.compile("([\\dhpb\\[\\]/])*")
+                var matches = Pattern.compile("(g?[\\dhpb\\[\\]/])*")
                         .matcher(intermediaryGarbage.val)
                         .results()
                         .map(MatchResult::group);
@@ -122,7 +143,7 @@ public class Parser {
                         int prev = intermediaryGarbage.val.indexOf(match,map.getOrDefault(intermediaryGarbage.label, new AtomicInteger(0)).get());
                         map.put(intermediaryGarbage.label, new AtomicInteger(prev + 1));
                         return new Note(List.of(Integer.parseInt(match.substring(match.indexOf('[') + 1, match.indexOf(']')))),
-                                intermediaryGarbage.label, true, null, intermediaryGarbage.col,  prev - 1);
+                                intermediaryGarbage.label, true, null, intermediaryGarbage.col,  prev - 1, false);
                     }
                     //bend chain eg. 5b7b9
                     else if (match.matches("^[\\db]+$")) {
@@ -130,33 +151,72 @@ public class Parser {
                         map.put(intermediaryGarbage.label, new AtomicInteger(prev + 1));
                         var frets = Arrays.stream(match.split("b")).map(Integer::parseInt).collect(Collectors.toList());
                         return new Note(frets, intermediaryGarbage.label, false, frets.size() == 1 ? null : IntStream.range(0, frets.size() - 1)
-                                .mapToObj(i -> NoteRelationship.BEND).collect(Collectors.toList()), intermediaryGarbage.col, prev - 1);
+                                .mapToObj(i -> NoteRelationship.BEND).collect(Collectors.toList()), intermediaryGarbage.col, prev - 1, false);
                     }
                     //hammer chain eg. 5h7h9
-                    else if (match.matches("^[\\dh]+$")) {
+                    else if (match.matches("^g?[\\dh]+$")) {
+                        boolean isGrace = false;
+                        if (match.charAt(0) == 'g') {
+                            isGrace = true;
+                            match = match.substring(1);
+                        }
                         int prev = intermediaryGarbage.val.indexOf(match,map.getOrDefault(intermediaryGarbage.label, new AtomicInteger(0)).get());
                         var frets = Arrays.stream(match.split("h")).map(Integer::parseInt).collect(Collectors.toList());
                         return new Note(frets, intermediaryGarbage.label, false, frets.size() == 1 ? null : IntStream.range(0, frets.size() - 1)
-                                .mapToObj(i -> NoteRelationship.HAMMERON).collect(Collectors.toList()), intermediaryGarbage.col, prev - 1);
+                                .mapToObj(i -> NoteRelationship.HAMMERON).collect(Collectors.toList()), intermediaryGarbage.col, prev - 1, isGrace);
                     }
                     //pulloff chain eg. 7p5p3
-                    else if (match.matches("^[\\dp]+$")) {
+                    else if (match.matches("^g?[\\dp]+$")) {
+                        boolean isGrace = false;
+                        if (match.charAt(0) == 'g') {
+                            isGrace = true;
+                            match = match.substring(1);
+                        }
                         int prev = intermediaryGarbage.val.indexOf(match,map.getOrDefault(intermediaryGarbage.label, new AtomicInteger(0)).get());
                         var frets = Arrays.stream(match.split("p")).map(Integer::parseInt).collect(Collectors.toList());
                         return new Note(frets, intermediaryGarbage.label, false, frets.size() == 1 ? null : IntStream.range(0, frets.size() - 1)
-                                .mapToObj(i -> NoteRelationship.PULLOFF).collect(Collectors.toList()), intermediaryGarbage.col, prev - 1);
+                                .mapToObj(i -> NoteRelationship.PULLOFF).collect(Collectors.toList()), intermediaryGarbage.col, prev - 1, isGrace);
                     }
                     //slide eg. 5/9
                     else if (match.matches("^[\\d/]+$")) {
                         var frets = Arrays.stream(match.split("/")).map(Integer::parseInt).collect(Collectors.toList());
                         return new Note(frets, intermediaryGarbage.label, false, frets.size() == 1 ? null : IntStream.range(0, frets.size() - 1)
-                                .mapToObj(i -> NoteRelationship.SLIDE).collect(Collectors.toList()), intermediaryGarbage.col, intermediaryGarbage.val.indexOf(match, map.getOrDefault(intermediaryGarbage.label, new AtomicInteger(0)).get()) - 1);
-                    } else {
-                        return new Note(null, intermediaryGarbage.label, false, null, intermediaryGarbage.col, intermediaryGarbage.val.indexOf(match, map.getOrDefault(intermediaryGarbage.label, new AtomicInteger(0)).get()) - 1);
+                                .mapToObj(i -> NoteRelationship.SLIDE).collect(Collectors.toList()), intermediaryGarbage.col, intermediaryGarbage.val.indexOf(match, map.getOrDefault(intermediaryGarbage.label, new AtomicInteger(0)).get()) - 1, false);
                     }
+                    else if(match.matches("g?(\\d+[^\\d]+)+\\d+")) {
+                        boolean isGrace = false;
+                        if (match.charAt(0) == 'g') {
+                            isGrace = true;
+                            match = match.substring(1);
+                        }
+                        var frets = new ArrayList<Integer>();
+                        var relationships = new ArrayList<NoteRelationship>();
+                        var matchChars = match.toCharArray();
 
-
-                    //TODO Handle cases of mixed hammeron, pullofs, bends and slides
+                        String fret = "";
+                        for (char c : matchChars) {
+                            if (c >= '0' && c <='9') {
+                                fret += c;
+                            }
+                            else {
+                                //figure out what the char is
+                                switch (c) {
+                                    case ('h') -> relationships.add(NoteRelationship.HAMMERON);
+                                    case ('p') -> relationships.add(NoteRelationship.PULLOFF);
+                                    case ('b') -> relationships.add(NoteRelationship.BEND);
+                                    case ('/') -> relationships.add(NoteRelationship.SLIDE);
+                                    default -> throw new IllegalStateException();
+                                }
+                                frets.add(Integer.parseInt(fret));
+                                fret = "";
+                            }
+                        }
+                        frets.add(Integer.parseInt(fret));
+                        return new Note(frets, intermediaryGarbage.label, false, relationships, intermediaryGarbage.col, intermediaryGarbage.val.indexOf(match, map.getOrDefault(intermediaryGarbage.label, new AtomicInteger(0)).get()) - 1, isGrace);
+                    }
+                    else {
+                        return new Note(null, intermediaryGarbage.label, false, null, intermediaryGarbage.col, intermediaryGarbage.val.indexOf(match, map.getOrDefault(intermediaryGarbage.label, new AtomicInteger(0)).get()) - 1, false);
+                    }
 
                 }).collect(Collectors.groupingBy(note -> note.inBar));
             }).collect(Collectors.toList())).collect(Collectors.toCollection(ArrayList::new));
@@ -225,10 +285,39 @@ public class Parser {
         for (var line : tab.tabLines) {
             for (int i = 0; i < line.bars.size(); i++) {
 
-                double quarterNoteLength = (double) line.bars.get(i).barLength / Integer.parseInt(this.timeSignature.split("/")[0]);
+                double quarterNoteLength;
+                String timeSig = null;
+                if (i + 1 < this.timeSigs.size()) {
+                    timeSig = this.timeSigs.get(i + 1);
+                    quarterNoteLength = (double) line.bars.get(i).barLength / Integer.parseInt(timeSig.split("/")[0]);
+                }
+                else {
+                    quarterNoteLength = (double) line.bars.get(i).barLength / Integer.parseInt(this.timeSignature.split("/")[0]);
+                }
+
+
                 int divisions = (int) Math.ceil(quarterNoteLength);
 
                 ScorePartwise.Part.Measure measure = new ScorePartwise.Part.Measure();
+                if (repeatMap.containsKey(i)) {
+                    var dir = factory.createDirection();
+                    dir.setPlacement(AboveBelow.ABOVE);
+                    var dtype = factory.createDirectionType();
+                    var ft = factory.createFormattedText();
+                    ft.setValue("Repeat " + repeatMap.get(i) + " times.");
+                    dtype.getWords().add(ft);
+                    dir.getDirectionType().add(dtype);
+                    var bl = factory.createBarline();
+                    var blstylecolor = factory.createBarStyleColor();
+                    blstylecolor.setValue(BarStyle.HEAVY_LIGHT);
+                    var repeat = factory.createRepeat();
+                    repeat.setDirection(BackwardForward.FORWARD);
+                    bl.setRepeat(repeat);
+                    bl.setBarStyle(blstylecolor);
+                    measure.getNoteOrBackupOrForward().add(dir);
+                    measure.setBarline(bl);
+                }
+
                 measure.setNumber(Integer.toString(currMeasure + 1));
                 var sound = factory.createSound();
                 sound.setTempo(BigDecimal.valueOf(this.tempo));
@@ -245,8 +334,16 @@ public class Parser {
                 attributes.getClef().add(clef);
 
                 Time time = factory.createTime();
-                var beats = factory.createTimeBeats(this.timeSignature.split("/")[0]);
-                var beatType = factory.createTimeBeatType(this.timeSignature.split("/")[1]);
+                JAXBElement<String> beats = null;
+                JAXBElement<String> beatType = null;
+                if (timeSig != null) {
+                    beats = factory.createTimeBeats(timeSig.split("/")[0]);
+                    beatType = factory.createTimeBeatType(timeSig.split("/")[1]);
+                }
+                else {
+                    beats = factory.createTimeBeats(this.timeSignature.split("/")[0]);
+                    beatType = factory.createTimeBeatType(this.timeSignature.split("/")[1]);
+                }
                 time.getTimeSignature().add(beats);
                 time.getTimeSignature().add(beatType);
                 if (currMeasure == 0) {
@@ -262,72 +359,17 @@ public class Parser {
                         tuning.setLine(BigInteger.valueOf(j + 1));
                         Step step;
                         int octave;
-                        if (!isBass) {
-                            switch (tab.tuning.get(j)) {
-                                case HIGH_E -> {
-                                    step = Step.E;
-                                    octave = 4;
-                                }
-                                case B -> {
-                                    step = Step.B;
-                                    octave = 3;
-                                }
-                                case G -> {
-                                    step = Step.G;
-                                    octave = 3;
-                                }
-                                case D -> {
-                                    step = Step.D;
-                                    octave = 3;
-                                }
-                                case A -> {
-                                    step = Step.A;
-                                    octave = 2;
-                                }
-                                case LOW_E -> {
-                                    step = Step.E;
-                                    octave = 2;
-                                }
-                                default -> {
-                                    step = Step.E;
-                                    octave = 3;
-                                }
-                            }
-                        } else {
-                            switch (tab.tuning.get(j)) {
-                                case G -> {
-                                    step = Step.G;
-                                    octave = 2;
-                                }
-                                case D -> {
-                                    step = Step.D;
-                                    octave = 2;
-                                }
-                                case A -> {
-                                    step = Step.A;
-                                    octave = 1;
-                                }
-                                case LOW_E -> {
-                                    step = Step.E;
-                                    octave = 1;
-                                }
-                                default -> {
-                                    step = Step.E;
-                                    octave = 3;
-                                }
-                            }
-                        }
+                        step = fretboard[fretboard.length - j - 1][0].getStep();
+                        octave = fretboard[fretboard.length - j - 1][0].getOctave();
                         tuning.setTuningStep(step);
                         tuning.setTuningOctave(octave);
-                        //
                         details.getStaffTuning().add(tuning);
                     }
                     attributes.getStaffDetails().add(details);
-                    attributes.getTime().add(time);
                 }
-                if (i == 0) {
-                    measure.getNoteOrBackupOrForward().add(attributes);
-                }
+                attributes.getTime().add(time);
+                measure.getNoteOrBackupOrForward().add(attributes);
+
                 int noteIndex = 0;
                 var distanceMap = new HashMap<Integer, List<Note>>();
                 for (var n : line.bars.get(i).notes) {
@@ -347,7 +389,7 @@ public class Parser {
                             t.getUpBowOrDownBowOrHarmonic().add(th);
                         }
 
-                        int string = -1;
+                        int string;
                         if (!isBass) {
                             string = standardTuningStringToIntGuitar(n.string);
                         } else {
@@ -437,6 +479,7 @@ public class Parser {
                             note.getNotations().add(notations);
                             Pitch p = fretboard[string - 1][n.frets.get(index)];
                             note.setPitch(p);
+
                             noteList.add(note);
                             if (index != n.frets.size() - 1) {
                                 relationships.add(n.relationships.get(index));
@@ -445,6 +488,9 @@ public class Parser {
                         int pairIndex = 1;
                         for (int nIndex = 0; nIndex < noteList.size() - 1; nIndex++) {
                             createHammerPulloffHelper(noteList.get(nIndex), noteList.get(nIndex + 1), relationships.get(nIndex),  pairIndex);
+                            if (pairIndex == 1 && n.isGrace) {
+                                noteList.get(nIndex).setGrace(factory.createGrace());
+                            }
                             pairIndex++;
                         }
                         for (generated.Note note : noteList) {
@@ -471,15 +517,15 @@ public class Parser {
                             }
 
                             String noteTypeString;
-                            if (duration == divisions) {
+                            if (duration == (double)divisions) {
                                 noteTypeString = "quarter";
-                            } else if (duration == divisions / 2) {
+                            } else if (duration == divisions / 2d) {
                                 noteTypeString = "eighth";
-                            } else if (duration == divisions / 4) {
+                            } else if (duration == divisions / 4d) {
                                 noteTypeString = "16th";
-                            } else if (duration == divisions * 2) {
+                            } else if (duration == divisions * 2d) {
                                 noteTypeString = "half";
-                            } else if (duration == divisions * 4) {
+                            } else if (duration == divisions * 4d) {
                                 noteTypeString = "whole";
                             } else {
                                 noteTypeString = "quarter";
@@ -706,10 +752,8 @@ public class Parser {
             }
         }
     }
-    
-static ArrayList<String> drumTab;
-	
-	public ScorePartwise parseDrumTab(String drumTab) {
+
+    public ScorePartwise parseDrumTab(String drumTab) {
 		String[] standard = {"CC", "HH", "SD", "HT", "MT", "BD"};
         List<DrumTabLine> tabLines = new ArrayList<>();
         List<DrumInstrument> device = new ArrayList<>();
@@ -760,7 +804,6 @@ static ArrayList<String> drumTab;
                     } else {
                         return new DrumNote(null, null, intermediaryGarbage2.col, intermediaryGarbage2.val.indexOf(match, map.getOrDefault(intermediaryGarbage2.label, new AtomicInteger(0)).get()));
                     }
-                    //TODO Handle cases of mixed hammeron, pullofs, bends and slides
 
                 }).collect(Collectors.groupingBy(note -> note.inBar));
             }).collect(Collectors.toList())).collect(Collectors.toCollection(ArrayList::new));   //bars measure 2 line 3 (3), line 4 (1), 5 (1)
@@ -790,13 +833,6 @@ static ArrayList<String> drumTab;
                 DrumBar b = new DrumBar(notes, bar.barLength);
                 barList.add(b);
             }
-            //System.out.println("measure0: " + barList.get(0).notes.size() + "\tmeasure1: " + barList.get(1).notes.size());
-            
-            for (var bar: barList) {
-            	for (var note: bar.notes) {
-            		//System.out.println("note: " + note);
-            	}
-            }
             DrumTabLine tabLine = new DrumTabLine(barList);
             tabLines.add(tabLine);
             
@@ -818,13 +854,12 @@ static ArrayList<String> drumTab;
         partName.setValue("Drumset");
         scorePart.setPartName(partName);		//how to set score-instrument?
         
-        ArrayList<String> InstrumentNames = new ArrayList<String>(Arrays.asList("Bass Drum 1", "Bass Drum 2",
-				"Side Stick", "Snare", "Low Floor Tom", "Closed Hi-Hat", "High Floor Tom", "Pedal Hi-Hat",
-				"Low Tom", "Open Hi-Hat", "Low-Mid Tom", "Hi-Mid Tom", "Crash Cymbal 1", "High Tom",
-				"Ride Cymbal 1", "Chinese Cymbal", "Ride Bell", "Tambourine", "Splash Cymbal", "Cowbell",
-				"Crash Cymbal 2", "Ride Cymbal 2", "Open Hi Conga", "Low Conga"));
-		ArrayList<Integer> ScoreInstrumentID = new ArrayList<Integer>(Arrays.asList(36, 37, 38, 39, 42, 43, 44, 45,
-				46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 60, 64, 65));
+        ArrayList<String> InstrumentNames = new ArrayList<>(Arrays.asList("Bass Drum 1", "Bass Drum 2",
+                "Side Stick", "Snare", "Low Floor Tom", "Closed Hi-Hat", "High Floor Tom", "Pedal Hi-Hat",
+                "Low Tom", "Open Hi-Hat", "Low-Mid Tom", "Hi-Mid Tom", "Crash Cymbal 1", "High Tom",
+                "Ride Cymbal 1", "Chinese Cymbal", "Ride Bell", "Tambourine", "Splash Cymbal", "Cowbell",
+                "Crash Cymbal 2", "Ride Cymbal 2", "Open Hi Conga", "Low Conga"));
+		List<Integer> ScoreInstrumentID = IntStream.range(36, 66).boxed().collect(Collectors.toList());
 		
 		for (int i = 0; i < InstrumentNames.size(); i++) {			
 			ScoreInstrument instruments = factory.createScoreInstrument();
@@ -913,12 +948,12 @@ static ArrayList<String> drumTab;
                     String noteTypeString;
                     if (duration == divisions) {
                         noteTypeString = "quarter";
-                    } else if (duration == divisions / 2) {
+                    } else if (duration == divisions / 2d) {
                         noteTypeString = "eighth";
                         Beam beam = new Beam();
                         beam.setNumber(1);
                         note.getBeam().add(beam);
-                    } else if (duration == divisions/4) {
+                    } else if (duration == divisions/4d) {
                         noteTypeString = "16th";
                         Beam beam1 = new Beam();
                         beam1.setNumber(1);
@@ -926,7 +961,7 @@ static ArrayList<String> drumTab;
                         Beam beam2 = new Beam();
                         beam2.setNumber(2);
                         note.getBeam().add(beam2);
-                    } else if (duration == divisions/8) {
+                    } else if (duration == divisions/8d) {
                         noteTypeString = "32nd";
                         Beam beam1 = new Beam();
                         beam1.setNumber(1);
@@ -938,7 +973,7 @@ static ArrayList<String> drumTab;
                         beam3.setNumber(3);
                         note.getBeam().add(beam3);
                         
-                    } else if (duration == divisions/16) {
+                    } else if (duration == divisions/16d) {
                         noteTypeString = "64th";
                         Beam beam1 = new Beam();
                         beam1.setNumber(1);
@@ -1024,88 +1059,77 @@ static ArrayList<String> drumTab;
                     
                     System.out.println(n.instrument.toString().replaceAll("(.)([A-Z])", "$1 $2"));
                     
-                    note.setStem(new Stem());                    
+                    note.setStem(new Stem());
+                    //Wow! This is a beefy switch statement!
                     switch (n.instrument.toString().replaceAll("(.)([A-Z])", "$1 $2")) {
-                    	case "Hi Hat":
-                    		variable.setDisplayStep(Step.G);
-                    		variable.setDisplayOctave(5);
-                    		if (n.value.equals("x")) {
-                    			instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Closed Hi-Hat")));
-                    		} else if (n.value.equals("o")) {
-                    			instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Open Hi-Hat")));
-                    		}
-                    		note.setInstrument(instru);
-                    		note.setUnpitched(variable);
-                    		note.getStem().setValue(StemValue.UP);
-                    		break;
-                    	
-                    	case "Bass Drum":
-                    	case "Kick Drum":
-                    		variable.setDisplayStep(Step.F);
-                    		variable.setDisplayOctave(4);
-                    		instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Bass Drum 1")));
-                    		note.setInstrument(instru);
-                    		note.setUnpitched(variable);
-                    		note.getStem().setValue(StemValue.DOWN);
-                    		break;
-                    		
-                    	case "Snare Drum":
-                    		variable.setDisplayStep(Step.C);
-                    		variable.setDisplayOctave(5);
-                    		instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Snare")));
-                    		note.setInstrument(instru);
-                    		note.setUnpitched(variable);
-                    		note.getStem().setValue(StemValue.UP);
-                    		break;
-                    		
-                    	case "Ride Cymbal":
-                    		variable.setDisplayStep(Step.F);
-                    		variable.setDisplayOctave(5);
-                    		instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Ride Cymbal 1")));
-                    		note.setInstrument(instru);
-                    		note.setUnpitched(variable);
-                    		note.getStem().setValue(StemValue.UP);
-                    		break;
-                    		
-                    	case "Crash Cymbal":
-                    	case "Crash Crystal":
-                    		variable.setDisplayStep(Step.A);
-                    		variable.setDisplayOctave(5);
-                    		instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Crash Cymbal 1")));
-                    		note.setInstrument(instru);
-                    		note.setUnpitched(variable);
-                    		note.getStem().setValue(StemValue.UP);
-                    		break;
-                    		
-                    	case "High Tom":
-                    		variable.setDisplayStep(Step.E);
-                    		variable.setDisplayOctave(5);
-                    		instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Low-Mid Tom")));
-                    		note.setInstrument(instru);
-                    		note.setUnpitched(variable);
-                    		note.getStem().setValue(StemValue.UP);
-                    		break;
-                    		
-                    	case "Medium Tom":
-                    	case "Middle Tom":
-                    		variable.setDisplayStep(Step.D);
-                    		variable.setDisplayOctave(5);
-                    		instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Low Tom")));
-                    		note.setInstrument(instru);
-                    		note.setUnpitched(variable);
-                    		note.getStem().setValue(StemValue.UP);
-                    		break;
-                    		
-                    	case "Floor Tom":
-                    	case "Low Tom":
-                    		variable.setDisplayStep(Step.A);
-                    		variable.setDisplayOctave(4);
-                    		instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Low Floor Tom")));
-                    		note.setInstrument(instru);
-                    		note.setUnpitched(variable);
-                    		note.getStem().setValue(StemValue.UP);
-                    		break;
-                    	
+                        case "Hi Hat" -> {
+                            variable.setDisplayStep(Step.G);
+                            variable.setDisplayOctave(5);
+                            if (n.value.equals("x")) {
+                                instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Closed Hi-Hat")));
+                            } else if (n.value.equals("o")) {
+                                instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Open Hi-Hat")));
+                            }
+                            note.setInstrument(instru);
+                            note.setUnpitched(variable);
+                            note.getStem().setValue(StemValue.UP);
+                        }
+                        case "Bass Drum", "Kick Drum" -> {
+                            variable.setDisplayStep(Step.F);
+                            variable.setDisplayOctave(4);
+                            instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Bass Drum 1")));
+                            note.setInstrument(instru);
+                            note.setUnpitched(variable);
+                            note.getStem().setValue(StemValue.DOWN);
+                        }
+                        case "Snare Drum" -> {
+                            variable.setDisplayStep(Step.C);
+                            variable.setDisplayOctave(5);
+                            instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Snare")));
+                            note.setInstrument(instru);
+                            note.setUnpitched(variable);
+                            note.getStem().setValue(StemValue.UP);
+                        }
+                        case "Ride Cymbal" -> {
+                            variable.setDisplayStep(Step.F);
+                            variable.setDisplayOctave(5);
+                            instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Ride Cymbal 1")));
+                            note.setInstrument(instru);
+                            note.setUnpitched(variable);
+                            note.getStem().setValue(StemValue.UP);
+                        }
+                        case "Crash Cymbal", "Crash Crystal" -> {
+                            variable.setDisplayStep(Step.A);
+                            variable.setDisplayOctave(5);
+                            instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Crash Cymbal 1")));
+                            note.setInstrument(instru);
+                            note.setUnpitched(variable);
+                            note.getStem().setValue(StemValue.UP);
+                        }
+                        case "High Tom" -> {
+                            variable.setDisplayStep(Step.E);
+                            variable.setDisplayOctave(5);
+                            instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Low-Mid Tom")));
+                            note.setInstrument(instru);
+                            note.setUnpitched(variable);
+                            note.getStem().setValue(StemValue.UP);
+                        }
+                        case "Medium Tom", "Middle Tom" -> {
+                            variable.setDisplayStep(Step.D);
+                            variable.setDisplayOctave(5);
+                            instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Low Tom")));
+                            note.setInstrument(instru);
+                            note.setUnpitched(variable);
+                            note.getStem().setValue(StemValue.UP);
+                        }
+                        case "Floor Tom", "Low Tom" -> {
+                            variable.setDisplayStep(Step.A);
+                            variable.setDisplayOctave(4);
+                            instru.setId(scorePart.getScoreInstrument().get(InstrumentNames.indexOf("Low Floor Tom")));
+                            note.setInstrument(instru);
+                            note.setUnpitched(variable);
+                            note.getStem().setValue(StemValue.UP);
+                        }
                     }
                     
                     measure.getNoteOrBackupOrForward().add(note);

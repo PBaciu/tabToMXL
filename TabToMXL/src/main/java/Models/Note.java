@@ -10,14 +10,16 @@ public class Note implements Comparable{
     public final List<NoteRelationship> relationships;
     public final int inBar;
     public final int absoluteDistance;
+    public final boolean isGrace;
 
-    public Note(List<Integer> frets, GuitarString string, boolean isHarmonic, List<NoteRelationship> relationships, int inBar, int absoluteDistance) {
+    public Note(List<Integer> frets, GuitarString string, boolean isHarmonic, List<NoteRelationship> relationships, int inBar, int absoluteDistance, boolean isGrace) {
         this.frets = frets;
         this.string = string;
         this.isHarmonic = isHarmonic;
         this.relationships = relationships;
         this.inBar = inBar;
         this.absoluteDistance = absoluteDistance;
+        this.isGrace = isGrace;
     }
 
     @Override

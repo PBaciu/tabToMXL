@@ -6,14 +6,16 @@ public class IntermediaryGarbage {
     final GuitarString label;
     final int row;
     final int col;
-    final String val;
+    public String val;
+    public int repeats;
 
     //TODO Refactor the name of this class into something more relevant. (Even though it really is intermediary garbage)
-    public IntermediaryGarbage(GuitarString label, int row, int col, String val) {
+    public IntermediaryGarbage(GuitarString label, int row, int col, String val, int repeats) {
         this.label = label;
         this.row = row;
         this.col = col;
         this.val = val;
+        this.repeats = repeats;
     }
 
     @Override

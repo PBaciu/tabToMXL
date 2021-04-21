@@ -39,21 +39,4 @@ class ParserTest {
         assertEquals(p.standardTuningStringToIntGuitar(GuitarString.B), 2);
         assertEquals(p.standardTuningStringToIntGuitar(GuitarString.A_FLAT), 0);
     }
-
-    @Test
-    void testBadInputHandled() {
-        Parser p = new Parser();
-
-        assertThrows(Exception.class, () -> p.readTab("a"));
-        assertThrows(Exception.class, () -> p.readTab("this should fail"));
-        assertDoesNotThrow(() -> p.readTab("""                
-                |-----------0-----|-0---------------|
-                |---------0---0---|-0---------------|
-                |-------1-------1-|-1---------------|
-                |-----2-----------|-2---------------|
-                |---2-------------|-2---------------|
-                |-0---------------|-0---------------|
-                
-                """));
-    }
 }
